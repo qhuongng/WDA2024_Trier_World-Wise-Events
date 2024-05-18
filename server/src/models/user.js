@@ -4,8 +4,8 @@ const { hash, compare } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
 
 
-const userInfo = new Schema({
-    userName: {
+const user = new Schema({
+    username: {
         type: String,
         required: true,
     },
@@ -14,21 +14,23 @@ const userInfo = new Schema({
         required: true,
         unique: true
     },
-    phoneNumber: {
-        type: String,
-        required: true
-    },
     password: {
         type: String,
         required: true
     },
-    role: {
-        type: String,
-        default: "user"
+    avatar: {
+        data: {
+            type: Buffer,
+            required: true
+        },
+        contentType: {
+            type: String,
+            required: true
+        }
     }
 }, { timestamps: false });
 
-userInfo.pre('save', async function (next) {
+user.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await hash(this.password, 10);
         return next();
@@ -36,16 +38,16 @@ userInfo.pre('save', async function (next) {
     return next();
 });
 
-userInfo.methods.generateJWT = async function () {
+user.methods.generateJWT = async function () {
     return await sign({ id: this._id }, process.env.USER_TOKEN, { expiresIn: '30d', });
 };
 
-userInfo.methods.generateJWTSeller = async function () {
+user.methods.generateJWTSeller = async function () {
     return await sign({ id: this._id }, process.env.SELLER_TOKEN, { expiresIn: '30d', });
 };
 
-userInfo.methods.comparePassword = async function (enteredPassword) {
+user.methods.comparePassword = async function (enteredPassword) {
     return await compare(enteredPassword, this.password);
 }
 
-module.exports = mongoose.model('UserInfo', userInfo);
+module.exports = mongoose.model('User', user);
