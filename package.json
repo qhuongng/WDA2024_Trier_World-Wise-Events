@@ -1,0 +1,17 @@
+{
+    "name": "wda2024-trier",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "concurrently \"cd server && npm run dev\" \"cd seller && npm start\" \"cd user && npm start\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^8.2.2",
+        "history": "^5.3.0",
+        "react-router": "^6.23.0"
+    }
+}
