@@ -1,5 +1,6 @@
 // services/userService.js
-
+const fs = require("fs");
+const path = require("path");
 const User = require("../models/user");
 
 const findUserByEmail = async (email) => {
@@ -14,20 +15,44 @@ const getUserName = async (id) => {
   }
   return {
     _id: user._id,
-    userName: user.userName
+    userName: user.username
   }
 }
 
-
+//adding image here
 const createUser = async (userDetails) => {
-  const { userName, email, phoneNumber, password } = userDetails;
+  const { username, email, password } = userDetails;
+  // change image into buffer
+  let defaultImage = "../server/public/defautUser.jpeg";
+
+  let imagedata = new ArrayBuffer(64);
+  const imagetype = "image/jpeg";
+  const promise = fs.promises.readFile(path.join(defaultImage));
+  imagedata = (await promise).buffer;
+
+  const avatar = {
+    data: Buffer.from(imagedata),
+    contentType: imagetype
+  };
+
   const user = await User.create({
-    userName,
+    username,
     email,
-    phoneNumber,
     password,
+    avatar
   });
   return user;
+};
+
+const updateAvatar = async (file,userId) => {
+  const user = await User.findById(userId);
+  const newAvatar = {
+    data: file.buffer,
+    contentType: file.mimetype
+  };
+
+  user.avatar = newAvatar;
+  return await user.save();
 };
 
 const registerUser = async (userDetails) => {
@@ -44,9 +69,8 @@ const updateProfile = async (userId, userDetails) => {
     throw new Error("User not found");
   }
 
-  user.userName = userDetails.userName || user.userName;
+  user.username = userDetails.username || user.username;
   user.email = userDetails.email || user.email;
-  user.phoneNumber = userDetails.phoneNumber || user.phoneNumber;
 
   return await user.save();
 };
@@ -65,5 +89,6 @@ module.exports = {
   registerUser,
   updateProfile,
   resetPassword,
-  getUserName
+  getUserName,
+  updateAvatar
 };

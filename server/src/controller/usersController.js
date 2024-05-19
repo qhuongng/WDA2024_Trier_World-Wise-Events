@@ -5,7 +5,8 @@ const {
     registerUser,
     updateProfile,
     resetPassword,
-    getUserName
+    getUserName,
+    updateAvatar
 } = require("../services/users.services");
 
 const registerUserController = async (req, res, next) => {
@@ -13,9 +14,8 @@ const registerUserController = async (req, res, next) => {
         const user = await registerUser(req.body);
         return res.status(201).json({
             _id: user._id,
-            userName: user.userName,
+            userName: user.username,
             email: user.email,
-            phoneNumber: user.phoneNumber,
             token: await user.generateJWT(),
         });
     } catch (error) {
@@ -155,6 +155,22 @@ const registerAdminController = async (req, res, next) => {
     }
 };
 
+const updateAvatarController = async (req,res,next) => {
+    try {
+        const userId = req.params.id;
+        const file = req.file;
+        const updatedAvatar = await updateAvatar(file,userId);
+        return res.status(201).json({
+            _id: updatedAvatar._id,
+            userName: updatedAvatar.username,
+            email: updatedAvatar.email,
+            avatar: updatedAvatar.avatar
+        });
+    } catch(error) {
+        next(error);
+    }
+}
+
 module.exports = {
     registerUserController,
     loginUserController,
@@ -163,5 +179,6 @@ module.exports = {
     loginAdminController,
     registerAdminController,
     resetPasswordController,
-    getUserDetail
+    getUserDetail,
+    updateAvatarController
 };
