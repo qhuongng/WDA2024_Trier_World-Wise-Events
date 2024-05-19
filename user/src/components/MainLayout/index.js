@@ -1,16 +1,16 @@
 import React from "react";
-import Header from "../Header";
+// import Header from "../Header";
 import { Outlet } from "react-router-dom";
 import { Layout } from "antd";
-import Footer from "../Footer";
+// import Footer from "../Footer";
 
 const MainLayout = ({ children }) => {
   return (
     <Layout hasSider="false">
-      <Header />
+      {/* <Header /> */}
       {children}
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </Layout>
   );
 };
