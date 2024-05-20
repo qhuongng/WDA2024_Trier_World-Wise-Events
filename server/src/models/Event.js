@@ -6,10 +6,6 @@ const event = new Schema({
         type: String,
         required: true
     },
-    idType: {
-        type: String,
-        require: true
-    },
     city: {
         type: String,
         required: true
@@ -29,14 +25,14 @@ const event = new Schema({
     images: [{
         data: {
             type: Buffer,
-            required: true      
-            },        
+            required: true
+        },
         contentType: {
             type: String,
             required: true
-            }
+        }
     }],
-    description: { 
+    description: {
         type: String,
         required: true
     },
