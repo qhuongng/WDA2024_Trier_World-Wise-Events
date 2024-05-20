@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
-import { Outlet, Link } from "react-router-dom";
-import { Layout, Menu, Button, ConfigProvider } from "antd";
+import { Outlet } from "react-router-dom";
+import { Layout, Menu, ConfigProvider } from "antd";
 import {
   HomeOutlined,
   CalendarOutlined,
@@ -37,21 +37,20 @@ const MainLayout = ({ children }) => {
       <ConfigProvider
         theme={{
           token: {
-            // Seed Token
             colorPrimary: '#2000bb',
             borderRadius: 12,
-
-            // Alias Token
             colorBgContainer: '#ffffff',
+            colorSplit: 'rgba(0,0,0,0)'
           },
         }}
       >
+
         <Sider
           trigger={null}
           collapsible
           collapsed={collapsed}
           theme={'light'}
-          style={{ padding: 8, height: '100vh' }}
+          style={{ padding: 8, height: '100vh', overflow: 'auto', position: 'fixed', left: 0, zIndex: 10 }}
         >
           <div>
             <div className="logo" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 16 }}>
@@ -91,7 +90,7 @@ const MainLayout = ({ children }) => {
         </Sider>
       </ConfigProvider>
 
-      <Layout style={{ flex: 1 }}>
+      <Layout style={{ flex: 1, marginLeft: '5.25%' }}>
         {children}
         <Outlet />
         <Footer />

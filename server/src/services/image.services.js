@@ -15,6 +15,7 @@ const saveImage = async (files) => {
 const getImage = async (id) => {
     try {
         const check = await Image.findById(id);
+
         if (!check) {
             throw new Error('The ImgPoint not found')
         } else {
