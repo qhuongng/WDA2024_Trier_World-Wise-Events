@@ -45,9 +45,7 @@ const Profile = () => {
   };
   return (
     <div>
-      <BreadcrumbCustom />
-
-      <FormWrapper>
+      {/* <FormWrapper>
         <div>
           <FormTitleWrapper style={{ width: "100%", position: "relative" }}>
             <FormTitle>Profile</FormTitle>
@@ -108,7 +106,7 @@ const Profile = () => {
             )}
           </FormInputWrapper>
         </div>
-      </FormWrapper>
+      </FormWrapper> */}
     </div>
   );
 };

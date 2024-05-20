@@ -1,16 +1,18 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Form, Input } from "antd";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../features/user/userSlice";
 import {
-  FormButton,
-  FormError,
-  FormInputWrapper,
-  FormTitle,
-  FormWrapper,
-} from "../Login/styles";
+  RegisterBox,
+  RegisterButton,
+  RegisterError,
+  RegisterForm,
+  RegisterLogo,
+  RegisterTitle,
+  RegisterWrapper,
+} from "./styles";
+import Input from "../../components/Input";
 
 const phoneRegExp = /^[0-9]*$/;
 
@@ -20,10 +22,6 @@ const registerSchema = yup.object({
     .string()
     .email("Email should be valid!")
     .required("Email address is required!"),
-  phoneNumber: yup
-    .string()
-    .required("Mobile number is required!")
-    .matches(phoneRegExp, "Mobile number is not valid"),
   password: yup.string().required("Password is required"),
 });
 
@@ -34,8 +32,8 @@ const Register = () => {
     initialValues: {
       userName: "",
       email: "",
-      phoneNumber: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
@@ -44,83 +42,70 @@ const Register = () => {
   });
 
   return (
-    <FormWrapper>
-      <div style={{ width: "40%", margin: "3rem" }}>
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={formik.handleSubmit}
-          autoComplete="off"
-        >
-          <FormTitle>Create Account</FormTitle>
-          <Form.Item label="Username" name="userName">
+    <RegisterWrapper>
+      <RegisterLogo>
+        <img src="logo.png" alt="" />
+        <div>World-Wise Events</div>
+      </RegisterLogo>
+      <RegisterBox>
+        <RegisterForm action="" onSubmit={formik.handleSubmit}>
+          <RegisterTitle>Join us!</RegisterTitle>
+          <div>
             <Input
-              values={formik.values.userName}
+              type="text"
+              label="Username"
+              id="userName"
+              name="userName"
               onChange={formik.handleChange("userName")}
-              onPressEnter={formik.handleBlur("userName")}
+              value={formik.values.userName}
             />
-            <FormError>
+            <RegisterError>
               {formik.touched.userName && formik.errors.userName}
-            </FormError>
-          </Form.Item>
-
-          <Form.Item label="Email" name="email">
+            </RegisterError>
+          </div>
+          <div>
             <Input
-              values={formik.values.email}
+              type="text"
+              label="Email address"
+              id="email"
+              name="email"
               onChange={formik.handleChange("email")}
-              onPressEnter={formik.handleBlur("email")}
-              type="email"
+              value={formik.values.email}
             />
-            <FormError>{formik.touched.email && formik.errors.email}</FormError>
-          </Form.Item>
-
-          <Form.Item label="Phone" name="phoneNumber">
+            <RegisterError>
+              {formik.touched.email && formik.errors.email}
+            </RegisterError>
+          </div>
+          <div>
             <Input
-              values={formik.values.phoneNumber}
-              onChange={formik.handleChange("phoneNumber")}
-              onPressEnter={formik.handleBlur("phoneNumber")}
-              type="tel"
-            />
-            <FormError>
-              {formik.touched.phoneNumber && formik.errors.phoneNumber}
-            </FormError>
-          </Form.Item>
-
-          <Form.Item label="Password" name="password">
-            <Input.Password
-              values={formik.values.password}
+              type="text"
+              label="Password"
+              id="password"
+              name="password"
               onChange={formik.handleChange("password")}
-              onPressEnter={formik.handleBlur("password")}
+              value={formik.values.password}
             />
-            <FormError>
+            <RegisterError>
               {formik.touched.password && formik.errors.password}
-            </FormError>
-          </Form.Item>
-
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <FormButton type="primary" htmlType="submit">
-              Register
-            </FormButton>
-          </Form.Item>
-        </Form>
-      </div>
-    </FormWrapper>
+            </RegisterError>
+          </div>
+          <div>
+            <Input
+              type="password"
+              label="Confirm password"
+              id="confirmPassword"
+              name="confirmPassword"
+              onChange={formik.handleChange("confirmPassword")}
+              value={formik.values.confirmPassword}
+            />
+            <RegisterError>
+              {formik.touched.confirmPassword && formik.errors.confirmPassword}
+            </RegisterError>
+          </div>
+          <RegisterButton type="submit">Sign Up</RegisterButton>
+        </RegisterForm>
+      </RegisterBox>
+    </RegisterWrapper>
   );
 };
 
