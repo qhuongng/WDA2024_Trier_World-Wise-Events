@@ -1,14 +1,34 @@
 body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: 'Poppins', sans-serif;
-  font-size: 62.5%;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "Inter", sans-serif;
+    font-size: 62.5%;
 }
 
 code {
-  font-family: 'Montserrat', sans-serif;
-  font-family: 'Poppins', sans-serif;
+    font-family: "Inter", sans-serif;
+}
+
+.logo {
+    margin: 16px;
+}
+
+.sm-logo {
+    height: 32px;
+    width: 32px;
+    display: none;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-image: url("../public/logo.svg");
+}
+
+.ant-layout-sider-collapsed .sm-logo {
+    display: block;
+}
+
+.ant-layout-sider-collapsed .lg-logo {
+    display: none;
 }
 
 /* 10px = 0.625rem

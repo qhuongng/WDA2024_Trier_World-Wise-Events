@@ -6,7 +6,6 @@ import {
   removeAccessToken,
 } from "../../utils/authStorage";
 
-
 const register = async (userData) => {
   const response = await axios.post(
     `${process.env.REACT_APP_SERVER_URL}/user/register`,
