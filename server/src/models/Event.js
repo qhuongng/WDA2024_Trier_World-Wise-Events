@@ -6,10 +6,6 @@ const event = new Schema({
         type: String,
         required: true
     },
-    idType: {
-        type: String,
-        require: true
-    },
     city: {
         type: String,
         required: true
@@ -26,17 +22,11 @@ const event = new Schema({
         type: Date,
         required: true
     },
-    images: [{
-        data: {
-            type: Buffer,
-            required: true      
-            },        
-        contentType: {
-            type: String,
-            required: true
-            }
-    }],
-    description: { 
+    images: {
+        type: Array,
+        required: true
+    },
+    description: {
         type: String,
         required: true
     },
@@ -44,6 +34,6 @@ const event = new Schema({
         type: Boolean,
         required: true
     }
-}, { timestamps: false });
+}, { timestamps: false, toJSON: { virtuals: true } });
 
 module.exports = mongoose.model('Event', event);
