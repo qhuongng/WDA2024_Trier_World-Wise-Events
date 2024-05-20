@@ -184,7 +184,7 @@ export const authSlice = createSlice({
         setRefreshToken(state.user.refreshToken);
         notification.success({
           message: "Hello User",
-          description: "Welcome to Future Furniture!",
+          description: "Welcome to World-Wise Events!",
           duration: "1",
         });
         setTimeout(() => {
