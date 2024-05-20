@@ -21,6 +21,7 @@ const addEvent = async (data) => {
 }
 
 const getListEvent = async (queryStr, page, limit) => {
+    checkDate
     try {
         const projection = {
             eventName: 1,
@@ -46,7 +47,32 @@ const getListEvent = async (queryStr, page, limit) => {
     }
 }
 
+const getEvent = async (id) => {
+    checkDate
+    try {
+        const event = Event.findById(id);
+        if (!event) throw new Error("Event is not exist")
+        return event
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const checkDate = async () => {
+    try {
+        const allEvent = await Event.find();
+        allEvent.map((event) => {
+            if (new Date(event.startDate) <= new Date() && new Date(event.startDate) <= new Date()) event.isOngoing = true
+            else event.isOngoing = false
+        })
+        await allEvent.save();
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 module.exports = {
     addEvent,
-    getListEvent
+    getListEvent,
+    getEvent
 }

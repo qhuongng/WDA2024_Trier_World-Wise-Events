@@ -53,7 +53,20 @@ const getListEvent = async (req, res, next) => {
     }
 }
 
+const getEvent = async (req, res, next) => {
+    try {
+        const eventId = req.params.id;
+        if (!eventId) {
+            throw new Error('The eventId is required');
+        }
+        const event = await eventServices.getEvent(eventId);
+        if (event) res.status(200).json(event)
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 module.exports = {
-    createEvent, getListEvent
+    createEvent, getListEvent, getEvent
 }
