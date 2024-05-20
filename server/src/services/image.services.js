@@ -16,7 +16,7 @@ const getImage = async (id) => {
     try {
         const check = await Image.findById(id);
         if (!check) {
-            throw new Error('The ImgPoint not found')
+            throw new Error('The Image not found')
         } else {
             return check
         }
