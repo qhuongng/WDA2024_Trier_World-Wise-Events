@@ -32,7 +32,6 @@ app.use('/api/otp', otpRoute)
 app.use('/api/picture', express.static('public'));
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);
-// đường dẫn của 1 file ảnh là: /Livingroom/maimz_Sofa/img1.webp
 //-----------------------------------
 
 mongoose
