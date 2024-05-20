@@ -1,24 +1,52 @@
 const Event = require('../models/Event')
 
-const addEvent = (data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            //console.log(data);
-            const existEvent = await Event.findOne({ eventName: data.eventName })
-            if (existEvent) reject({ message: "Event already exists" })
+const addEvent = async (data) => {
+    try {
+        const existEvent = await Event.findOne({ eventName: data.eventName })
+        if (existEvent) throw new Error("Event already exists");
+        else {
+            if (new Date(data.startDate) < new Date() && new Date(data.startDate) < new Date()) data.isOngoing = true
+            else data.isOngoing = false
+            const newEvent = await Event.create(data);
+            if (!newEvent) throw new Error("Can't create new event, try againt")
             else {
-                if (new Date(data.startDate) < new Date() && new Date(data.startDate) < new Date()) data.isOngoing = true
-                else data.isOngoing = false
-                const newEvent = await Event.create(data);
-                if (!newEvent) reject("Can't create new event, try againt")
-                else resolve({ data: newEvent })
+                return {
+                    data: newEvent
+                }
             }
-        } catch (error) {
-            reject(error)
         }
-    })
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+const getListEvent = async (queryStr, page, limit) => {
+    try {
+        const projection = {
+            eventName: 1,
+            city: 1,
+            country: 1,
+            startDate: 1,
+            endDate: 1,
+            images: { $slice: 1 }, // Lấy ảnh đầu tiên (nếu có)
+            isOngoing: 1
+        };
+        const skip = (page - 1) * limit;
+        const productCount = await Event.countDocuments();
+        if (skip >= productCount) throw new Error("This page does not exists")
+
+        const events = await Event.find(queryStr, projection)
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        return { data: events }
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
 module.exports = {
-    addEvent
+    addEvent,
+    getListEvent
 }

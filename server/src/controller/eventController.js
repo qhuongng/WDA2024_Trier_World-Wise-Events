@@ -1,4 +1,5 @@
 const eventServices = require('../services/event.services')
+const imageServices = require('../services/image.services')
 
 const createEvent = async (req, res, next) => {
     try {
@@ -10,6 +11,10 @@ const createEvent = async (req, res, next) => {
             data: file.buffer,
             contentType: file.mimetype
         }));
+        const savedFiles = await Promise.all(files.map(file => imageServices.saveImage(file)));
+
+        const savedFileIds = savedFiles.map(savedFile => savedFile._id.toString());
+
         const data = {
             eventName: eventName,
             city: city,
@@ -17,11 +22,32 @@ const createEvent = async (req, res, next) => {
             startDate: new Date(startDate),
             endDate: new Date(endDate),
             description: description,
-            images: files,
+            images: savedFileIds,
             isOngoing: false
         }
         const newEvent = await eventServices.addEvent(data);
-        res.status(200).json(newEvent.data.images[0].data);
+        res.status(200).json(newEvent);
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getListEvent = async (req, res, next) => {
+    try {
+        const page = req.query.page;
+        const limit = req.query.limit;
+        if (!page || !limit) throw new Error("Query is required")
+        let queryObj = {}
+        if (req.query.keyword) {
+            const keyword = JSON.parse(JSON.stringify(req.query.keyword));
+            queryObj.$or = [
+                { eventName: { $regex: keyword, $options: 'i' } },
+                { city: { $regex: keyword, $options: 'i' } },
+                { country: { $regex: keyword, $options: 'i' } }
+            ];
+        }
+        const listEvent = await eventServices.getListEvent(queryObj, page, limit);
+        res.status(200).json(listEvent);
     } catch (error) {
         next(error)
     }
@@ -29,5 +55,5 @@ const createEvent = async (req, res, next) => {
 
 
 module.exports = {
-    createEvent
+    createEvent, getListEvent
 }

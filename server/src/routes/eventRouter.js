@@ -5,6 +5,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.post('/createEvent', upload.array('images', 5), eventController.createEvent)
+router.post('/createEvent', upload.array('images', 5), eventController.createEvent);
+router.get('/getListEvent', eventController.getListEvent);
 
 module.exports = router
