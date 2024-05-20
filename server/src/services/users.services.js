@@ -2,6 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 const User = require("../models/user");
+const Image = require("../models/Image");
+const imageService = require("../services/image.services")
 
 const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
@@ -35,11 +37,13 @@ const createUser = async (userDetails) => {
     contentType: imagetype
   };
 
+  const imageId = await imageService.saveImage(avatar);
+  console.log(imageId);
   const user = await User.create({
     username,
     email,
     password,
-    avatar
+    avatar: imageId._id.toString()
   });
   return user;
 };
@@ -50,8 +54,11 @@ const updateAvatar = async (file,userId) => {
     data: file.buffer,
     contentType: file.mimetype
   };
-
-  user.avatar = newAvatar;
+  const imageId = await imageService.saveImage(newAvatar);
+  
+  // delete old avatar
+  const deleteImage = await Image.findByIdAndDelete(user.avatar);
+  user.avatar = imageId._id.toString();
   return await user.save();
 };
 
