@@ -20,7 +20,16 @@ const getListReply = async (idPost) => {
         const post = await Post.findById(idPost);
         if (!post) throw new Error("Post not found");
         const replyList = await PostReply.find({ idPost: idPost });
-        if (replyList) return { data: replyList }
+
+        const data = await Promise.all(replyList.map(async (reply) => {
+            const user = await User.findById(reply.idUser);
+            return {
+                ...reply.toObject(),
+                username: user.username,
+                avatar: user.avatar
+            }
+        }));
+        return { data: data }
     } catch (error) {
         throw new Error(error)
     }
