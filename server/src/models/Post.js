@@ -1,29 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const event = new Schema({
+const post = new Schema({
     idEvent: {
-        Type: String,
+        type: String,
         required: true
     },
     idUser: {
-        Type: String,
+        type: String,
         required: true
     },
     text: {
-        Type: String,
+        type: String,
         required: true
     },
-    image: [{
-        data: {
-            type: Buffer,
-            required: true      
-            },        
-        contentType: {
-            type: String,
-            required: true
-            }
-    }]
+    image: {
+        type: String,
+        required: false
+    }
 }, { timestamps: false })
 
 module.exports = mongoose.model('Post', post);
