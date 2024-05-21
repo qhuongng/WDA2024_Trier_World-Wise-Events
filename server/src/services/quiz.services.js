@@ -22,7 +22,7 @@ const addQuiz = async (quizDetail) => {
         throw new Error(error);
     }
 }
-
+//off
 const getQuiz = async (id) => {
     try {
         const quiz = await Quiz.findOne({idEvent: id});
@@ -38,8 +38,8 @@ const getQuiz = async (id) => {
 const addQuestion = async (questionDetail) => {
     try {
         const existedQuestion = await QuizQuestion.findOne({idQuiz: questionDetail.idQuiz, text: questionDetail.text});
-        const quiz = await Quiz.findOne({_id: questionDetail.idQuiz});
-        if(!quiz) throw new Error("Quiz does not exist!");
+        const event = await Event.findOne({_id: questionDetail.idEvent});
+        if(!event) throw new Error("Event does not exist!");
         if(existedQuestion) throw new Error("Question has already exist!");
 
         const newQuestion = await QuizQuestion.create(questionDetail);
@@ -51,7 +51,7 @@ const addQuestion = async (questionDetail) => {
 
 const getQuestion = async(id) => {
     try {
-        const question = QuizQuestion.findOne({_id: id});
+        const question = await QuizQuestion.findOne({_id: id});
         if(!question) throw new Error("Question does not exist.");
 
         return question;
@@ -62,8 +62,9 @@ const getQuestion = async(id) => {
 
 const getListQuestion = async (id) => {
     try {
-        const questions = QuizQuestion.find({idQuiz: id});
-        if(!questions) throw new Error("Quiz does not exist.");
+        const event = await Event.findById(id);
+        if(!event) throw new Error("Event does not exist.")
+        const questions = await QuizQuestion.find({idEvent: id});
 
         return questions;
     } catch (error) {

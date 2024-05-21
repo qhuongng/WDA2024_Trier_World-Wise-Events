@@ -1,6 +1,6 @@
 const quizService = require("../services/quiz.services");
 
-
+//off
 const createQuiz = async (req,res,next) => {
     try {
         const {idEvent} = req.body;
@@ -11,7 +11,7 @@ const createQuiz = async (req,res,next) => {
         next(error);
     }
 };
-
+//off
 const getQuiz = async (req,res,next) => {
     try {
         const eventId = req.params.id;
@@ -25,16 +25,16 @@ const getQuiz = async (req,res,next) => {
         next(error)
     }
 }
-
+//================================================================================================================================
 const createQuestion = async (req,res,next) => {
     try {
-        const {idQuiz, textQuestion, answerA, answerB, answerC, answerD, correctAnswer} = req.body;
+        const {idEvent, textQuestion, answerA, answerB, answerC, answerD, correctAnswer} = req.body;
 
-        if(!idQuiz || !textQuestion || !answerA || !answerB || !answerC || !answerD || !correctAnswer) {
+        if(!idEvent || !textQuestion || !answerA || !answerB || !answerC || !answerD || !correctAnswer) {
             throw new Error("Input is required");
         }
         const questionDetail = {
-            idQuiz: idQuiz,
+            idEvent: idEvent,
             text: textQuestion,
             correctAnswer: correctAnswer,
             answers: [answerA,answerB, answerC, answerD]
@@ -59,10 +59,11 @@ const getQuestion = async(req,res,next) => {
     }
 };
 
+// get list question base on EventID
 const getListQuestion = async (req,res,next) => {
     try {
         const quizId = req.params.quizId;
-        if(!quizId) throw new Error("QuizId is required");
+        if(!quizId) throw new Error("EventID is required");
 
         const questions = await quizService.getListQuestion(quizId);
         res.status(200).json(questions);
