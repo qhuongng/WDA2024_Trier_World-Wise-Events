@@ -26,14 +26,26 @@ export const LoginTitle = styled.div`
 `;
 
 export const LoginButton = styled.button`
+  box-sizing: border-box;
   background: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
   border: none;
-  border-radius: 50px;
-  padding: 0.5rem 2rem;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
   color: #fff;
   font-size: 1rem;
-  font-weight: 500;
   margin-top: 2rem;
+
+  cursor: pointer;
+
+  &:hover {
+  background: #4a00e0;
+  }
+
+  &:active {
+  background: #00008b;
+  }
 `;
 
 export const LoginForm = styled.form`
@@ -72,13 +84,27 @@ export const LoginError = styled.div`
 export const LoginLink = styled(Link)`
   background: #fff;
   color: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
   border: 1px solid #2000bb;
-  border-radius: 50px;
-  padding: 0.5rem 2rem;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
   font-size: 1rem;
-  font-weight: 500;
   margin-top: 2rem;
   margin-right: 2rem;
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid #4a00e0;
+    color: #4a00e0;
+  }
+
+  &:active {
+    border: 1px solid #00008b;
+    color: #00008b;
+  }
 `;
 
 export const LoginButtonWrapper = styled.div`

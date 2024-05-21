@@ -4,6 +4,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-family: "Inter", sans-serif;
     font-size: 62.5%;
+    overflow: visible;
 }
 
 code {

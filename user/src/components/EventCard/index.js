@@ -3,11 +3,13 @@ import {
   EventCardImage,
   EventCardInfo,
   EventCardDuration,
-  EventCardDesc,
+  EventCardLocation,
   EventCardTitle,
   OngoingEventCardTitle,
   EventCardWrapper,
-  OngoingEventCardWrapper
+  OngoingEventCardWrapper,
+  EventCardOngoingTag,
+  EventCardDurationWrapper
 } from "./styles";
 
 function formatDuration(startDate, endDate) {
@@ -36,10 +38,13 @@ const EventCard = ({ item, style }) => {
 
         <EventCardInfo>
           <OngoingEventCardTitle>{item.eventName}</OngoingEventCardTitle>
-          <EventCardDuration>{duration} • Ongoing</EventCardDuration>
-          <EventCardDesc>{item.description}</EventCardDesc>
+          <EventCardLocation>{item.city}, {item.country}</EventCardLocation>
+          <EventCardDurationWrapper>
+            <EventCardDuration>{duration} •</EventCardDuration>
+            <EventCardOngoingTag>Ongoing</EventCardOngoingTag>
+          </EventCardDurationWrapper>
         </EventCardInfo>
-      </OngoingEventCardWrapper>
+      </OngoingEventCardWrapper >
     );
   }
   else {
@@ -53,8 +58,10 @@ const EventCard = ({ item, style }) => {
 
         <EventCardInfo>
           <EventCardTitle>{item.eventName}</EventCardTitle>
-          <EventCardDuration>{duration}</EventCardDuration>
-          <EventCardDesc>{item.description}</EventCardDesc>
+          <EventCardLocation>{item.city}, {item.country}</EventCardLocation>
+          <EventCardDurationWrapper>
+            <EventCardDuration>{duration}</EventCardDuration>
+          </EventCardDurationWrapper>
         </EventCardInfo>
       </EventCardWrapper>
     );

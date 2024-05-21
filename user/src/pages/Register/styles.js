@@ -26,13 +26,24 @@ export const RegisterTitle = styled.div`
 
 export const RegisterButton = styled.button`
   background: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
   border: none;
-  border-radius: 50px;
-  padding: 0.5rem 2rem;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
   color: #fff;
   font-size: 1rem;
-  font-weight: 500;
   margin-top: 2rem;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #4a00e0;
+  }
+
+  &:active {
+    background: #00008b;
+  }
 `;
 
 export const RegisterForm = styled.form`

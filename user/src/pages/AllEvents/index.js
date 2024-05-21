@@ -34,7 +34,7 @@ const AllEvents = () => {
             <EventsRow>
                 {pagedEvents && pagedEvents.length !== 0 ? (
                     chunk(pagedEvents.data, 4).map((row) => (
-                        <Row gutter={[16, 16]} style={{ marginTop: 32 }}>
+                        <Row gutter={[20, 20]} style={{ marginTop: 20 }}>
                             {row.map((item) => (
                                 <Col span={6} key={item.id} flex={"auto"}>
                                     <EventCard item={item} />
