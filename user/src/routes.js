@@ -33,4 +33,22 @@ export const MAIN_NAVIGATION = [
     title: "",
     Component: React.lazy(() => import("./pages/AllEvents")),
   },
+  {
+    key: "quiz",
+    path: `/quiz`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizStart")),
+  },
+  {
+    key: "quiz2",
+    path: `/quiz2`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizMain")),
+  },
+  {
+    key: "quiz3",
+    path: `/quiz3`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizEnd")),
+  },
 ];
