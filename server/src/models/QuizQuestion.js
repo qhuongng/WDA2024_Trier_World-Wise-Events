@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const event = new Schema({
+const QuizQuestion = new Schema({
     idQuiz: {
-        Type: String,
+        type: String,
         required: true
     },
     text: {
-        Type: String,
+        type: String,
         required: true
     },
     correctAnswer: {
-        type: Boolean,
+        type: String,
         required: true
     },
     answers:[{
