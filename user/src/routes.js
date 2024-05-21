@@ -33,4 +33,10 @@ export const MAIN_NAVIGATION = [
     title: "",
     Component: React.lazy(() => import("./pages/AllEvents")),
   },
+  {
+    key: "events",
+    path: `/events/:id`,
+    title: "",
+    Component: React.lazy(() => import("./pages/EventBoard")),
+  },
 ];
