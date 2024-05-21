@@ -35,5 +35,39 @@ const getQuiz = async (id) => {
     }
 }
 // quizQuestion
+const addQuestion = async (questionDetail) => {
+    try {
+        const existedQuestion = await QuizQuestion.findOne({idQuiz: questionDetail.idQuiz, text: questionDetail.text});
+        const quiz = await Quiz.findOne({_id: questionDetail.idQuiz});
+        if(!quiz) throw new Error("Quiz does not exist!");
+        if(existedQuestion) throw new Error("Question has already exist!");
 
-module.exports = {addQuiz, getQuiz}
+        const newQuestion = await QuizQuestion.create(questionDetail);
+        return {data: newQuestion};
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+const getQuestion = async(id) => {
+    try {
+        const question = QuizQuestion.findOne({_id: id});
+        if(!question) throw new Error("Question does not exist.");
+
+        return question;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+const getListQuestion = async (id) => {
+    try {
+        const questions = QuizQuestion.find({idQuiz: id});
+        if(!questions) throw new Error("Quiz does not exist.");
+
+        return questions;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+module.exports = {addQuiz, getQuiz, addQuestion, getQuestion, getListQuestion}
