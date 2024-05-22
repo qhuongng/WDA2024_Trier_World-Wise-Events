@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const QuizResult = new Schema({
-    idQuiz: {
+    idEvent: {
         type: String,
         required: true
     },
