@@ -26,7 +26,7 @@ export const EventsMessage = styled.div`
 `;
 
 export const EventsPaginator = styled(Pagination)`
-  padding: 1.5rem 0;
+  padding: 3rem 0;
 `;
 
 export const EventsRow = styled(Row)`

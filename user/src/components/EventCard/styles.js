@@ -43,8 +43,8 @@ export const EventCardTitle = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
   text-overflow: ellipsis;
+  overflow: visible;
   width: 100%;
   max-width: 100%;
 `;
@@ -60,22 +60,24 @@ export const OngoingEventCardTitle = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
   width: 100%;
   max-width: 100%;
 `;
 
-export const EventCardDesc = styled.div`
+export const EventCardLocation = styled.div`
   /* Typography */
   color: #434343;
   font-family: Inter;
-  font-size: 0.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
   width: 100%;
   max-width: 100%;
@@ -87,12 +89,25 @@ export const EventCardDuration = styled.div`
   font-family: Inter;
   font-size: 0.8rem;
   font-weight: 500;
+`;
+
+export const EventCardOngoingTag = styled.div`
+  color: #bb0070;
+  font-family: Inter;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 0.25rem;
+`;
+
+export const EventCardDurationWrapper = styled.div`
+  display: flex;
+  margin-top: 0.25rem;
   margin-bottom: 1rem;
 `;
 
 export const EventCardInfo = styled.div`
   /* Visual */
-  margin: 1rem 1.5rem 1.5rem;
+  margin: 1rem 1.5rem auto;
   display: flex;
   flex-direction: column;
   height: 8rem;

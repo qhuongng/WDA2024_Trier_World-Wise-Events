@@ -1,12 +1,22 @@
-import 'mapbox-gl/dist/mapbox-gl.css'
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
-import React, { useState, useRef, useCallback } from 'react'
-import Map, { NavigationControl, GeolocateControl } from 'react-map-gl'
-import Geocoder from 'react-map-gl-geocoder'
+import 'mapbox-gl/dist/mapbox-gl.css';
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { getPagedEvents } from "../../features/event/eventSlice";
+import Map, { NavigationControl, Source, Layer } from 'react-map-gl';
+
+import Geocoder from 'react-map-gl-geocoder';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
 
-const Example = () => {
+const EventMap = () => {
+    const dispatch = useDispatch();
+    const pagedEvents = useSelector((state) => state.event.pagedEvents) || [];
+
+    useEffect(() => {
+        dispatch(getPagedEvents(`?page=1&limit=30`));
+    }, [dispatch]);
+
     const [viewport, setViewport] = useState({
         latitude: 10.75305989852285,
         longitude: 106.67908367285673,
@@ -29,7 +39,7 @@ const Example = () => {
                 ...geocoderDefaultOverrides
             });
         },
-        []
+        [handleViewportChange]
     );
 
     return (
@@ -58,4 +68,4 @@ const Example = () => {
     );
 };
 
-export default Example
+export default EventMap

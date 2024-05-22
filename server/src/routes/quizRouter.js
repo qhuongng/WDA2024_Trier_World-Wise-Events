@@ -10,8 +10,8 @@ router.get("/getQuiz/:id", getQuiz); // get by id
 router.post("/createQuestion", createQuestion);
 router.get("/getSingleQuestion/:id", getQuestion); // get single question by questionID
 router.get("/getListQuestions/:quizId", getListQuestion); // get all question by quizID
-// for quiz answer
-router.post("/createResult/:id");
+// for quiz result
+router.post("/createResult/:id"); // later add the req.user._id
 router.get("/getAllResult/:quizId");    // sort by point before sending result
 router.get("/getSingleAnswer"); // maybe can get from req.user._id
 
