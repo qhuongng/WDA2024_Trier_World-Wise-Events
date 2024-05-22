@@ -4,28 +4,28 @@ import { getPagedEvents } from "../../features/event/eventSlice";
 import { chunk } from "lodash";
 import { Row, Col, ConfigProvider } from "antd";
 import {
-    EventsRow,
-    EventsPaginator,
-    EventsTitle,
-    EventsWrapper,
-    EventsMessage,
+  EventsRow,
+  EventsPaginator,
+  EventsTitle,
+  EventsWrapper,
+  EventsMessage,
 } from "./styles";
 import EventCard from "../../components/EventCard";
 
 const AllEvents = () => {
-    const dispatch = useDispatch();
-    const pagedEvents = useSelector((state) => state.event.pagedEvents) || [];
+  const dispatch = useDispatch();
+  const pagedEvents = useSelector((state) => state.event.pagedEvents) || [];
 
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-    const onChange = (page) => {
-        document.documentElement.scrollTo(0, 0);
-        setCurrentPage(page);
-    };
+  const onChange = (page) => {
+    document.documentElement.scrollTo(0, 0);
+    setCurrentPage(page);
+  };
 
-    useEffect(() => {
-        dispatch(getPagedEvents(`?page=${currentPage}&limit=12`));
-    }, [dispatch, currentPage]);
+  useEffect(() => {
+    dispatch(getPagedEvents(`?page=${currentPage}&limit=12`));
+  }, [dispatch, currentPage]);
 
     return (
         <EventsWrapper>
@@ -47,26 +47,26 @@ const AllEvents = () => {
                 )}
             </EventsRow>
 
-            <ConfigProvider
-                theme={{
-                    token: {
-                        colorPrimary: '#2000bb',
-                        borderRadius: 12,
-                        colorBgContainer: '#ffffff',
-                        itemActiveBg: '#e1daff'
-                    },
-                }}
-            >
-                <EventsPaginator
-                    current={currentPage}
-                    total={30}
-                    defaultPageSize={12}
-                    onChange={onChange}
-                    style={{ marginBottom: 36 }}
-                />
-            </ConfigProvider>
-        </EventsWrapper>
-    );
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#2000bb",
+            borderRadius: 12,
+            colorBgContainer: "#ffffff",
+            itemActiveBg: "#e1daff",
+          },
+        }}
+      >
+        <EventsPaginator
+          current={currentPage}
+          total={30}
+          defaultPageSize={12}
+          onChange={onChange}
+          style={{ marginBottom: 36 }}
+        />
+      </ConfigProvider>
+    </EventsWrapper>
+  );
 };
 
 export default AllEvents;

@@ -17,6 +17,7 @@ const register = async (userData) => {
 };
 
 const login = async (userData) => {
+  console.log(userData);
   const response = await axios.post(
     `${process.env.REACT_APP_SERVER_URL}/user/login`,
     userData
@@ -28,9 +29,12 @@ const login = async (userData) => {
 
 const logout = async (refreshToken) => {
   Cookies.set("refreshToken", refreshToken);
-  const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/logout`, {
-    withCredentials: true,
-  });
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/user/logout`,
+    {
+      withCredentials: true,
+    }
+  );
   if (response.data) {
     return response.data;
   }
@@ -77,11 +81,14 @@ const resetPassword = async (password) => {
 
 const userCart = async () => {
   const user = getAuthUser();
-  const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/cart/info`, {
-    headers: {
-      Authorization: "Bearer " + user.token,
-    },
-  });
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/cart/info`,
+    {
+      headers: {
+        Authorization: "Bearer " + user.token,
+      },
+    }
+  );
   if (response.data) {
     return response.data;
   }

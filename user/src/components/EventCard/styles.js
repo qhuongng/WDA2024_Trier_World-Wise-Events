@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const EventCardWrapper = styled.div`
+export const EventCardWrapper = styled(Link)`
   /* Visual */
   background: #e1daff;
   display: flex;
@@ -9,7 +10,7 @@ export const EventCardWrapper = styled.div`
   height: 16rem;
 `;
 
-export const OngoingEventCardWrapper = styled.div`
+export const OngoingEventCardWrapper = styled(Link)`
   /* Visual */
   background: #f8d4ea;
   display: flex;
