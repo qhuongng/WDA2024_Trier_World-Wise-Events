@@ -1,71 +1,86 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { getPagedEvents } from "../../features/event/eventSlice";
-import Map, { NavigationControl, Source, Layer } from 'react-map-gl';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGeoFormattedEvents } from '../../features/event/eventSlice';
+import Map, { NavigationControl, GeolocateControl, ScaleControl, Marker, Popup } from 'react-map-gl';
+import GeocoderControl from '../GeocoderControl';
+import EventCard from '../EventCard'
 
-import Geocoder from 'react-map-gl-geocoder';
-
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const EventMap = () => {
+    const [mapRef, setMapRef] = useState(null);
+    const [popupInfo, setPopupInfo] = useState(null);
     const dispatch = useDispatch();
-    const pagedEvents = useSelector((state) => state.event.pagedEvents) || [];
+    const geoJsonEvents = useSelector((state) => state.event.geoJsonEvents) || [];
+
+    const eventMarkers = useMemo(
+        () =>
+            geoJsonEvents.map((event, index) => (
+                <Marker
+                    key={`marker-${index}`}
+                    longitude={event.geometry.coordinates[0]}
+                    latitude={event.geometry.coordinates[1]}
+                    anchor="bottom"
+                >
+                    <Link to={`/events/${event.properties.id}`}>
+                        <div
+                            onMouseEnter={e => {
+                                setPopupInfo(event);
+                            }}
+                            onMouseLeave={e => {
+                                setPopupInfo(null);
+                            }}>
+                            <img style={{ cursor: 'pointer' }}
+                                src={event.properties.isOngoing ? "./ongoing-marker.png" : "./marker.png"}
+                                alt=""
+                            />
+                        </div>
+                    </Link>
+                </Marker>
+            )),
+        [geoJsonEvents]
+    );
 
     useEffect(() => {
-        dispatch(getPagedEvents(`?page=1&limit=30`));
+        dispatch(getGeoFormattedEvents(`?page=1&limit=30`));
     }, [dispatch]);
-
-    const [viewport, setViewport] = useState({
-        latitude: 10.75305989852285,
-        longitude: 106.67908367285673,
-        zoom: 6
-    });
-
-    const mapRef = useRef();
-
-    const handleViewportChange = useCallback(
-        (newViewport) => setViewport(newViewport),
-        []
-    );
-
-    const handleGeocoderViewportChange = useCallback(
-        (newViewport) => {
-            const geocoderDefaultOverrides = { transitionDuration: 1000 };
-
-            return handleViewportChange({
-                ...newViewport,
-                ...geocoderDefaultOverrides
-            });
-        },
-        [handleViewportChange]
-    );
 
     return (
         <div style={{ height: '100vh' }}>
             <Map
-                ref={mapRef}
-                {...viewport}
+                ref={(ref) => setMapRef(ref)}
+                initialViewState={{
+                    longitude: 106.67908367285673,
+                    latitude: 10.75305989852285,
+                    zoom: 6
+                }}
                 width='100%'
                 height='100%'
-                onViewportChange={handleViewportChange}
-                mapboxApiAccessToken={MAPBOX_TOKEN}
-                mapStyle={'mapbox://styles/mapbox/streets-v12'}
-            >
-                <Geocoder
-                    mapRef={mapRef}
-                    onViewportChange={handleGeocoderViewportChange}
-                    mapboxApiAccessToken={MAPBOX_TOKEN}
-                    position='top-left'
-                />
+                mapboxAccessToken={MAPBOX_TOKEN}
+                mapStyle={'mapbox://styles/mapbox/streets-v12'}>
 
-                <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', bottom: 125, left: 12 }}>
-                    <NavigationControl />
-                </div>
+                <GeocoderControl mapboxAccessToken={MAPBOX_TOKEN} position='top-left' />
+
+                <GeolocateControl position="top-left" />
+                <NavigationControl position="top-left" />
+                <ScaleControl />
+
+                {eventMarkers}
+
+                {popupInfo && (
+                    <Popup
+                        anchor="top"
+                        longitude={Number(popupInfo.geometry.coordinates[0])}
+                        latitude={Number(popupInfo.geometry.coordinates[1])}
+                        onClose={() => setPopupInfo(null)}>
+                        <EventCard item={popupInfo.properties}></EventCard>
+                    </Popup>
+                )}
             </Map>
         </div>
     );
 };
 
-export default EventMap
+export default EventMap;
