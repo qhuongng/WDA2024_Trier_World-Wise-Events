@@ -2,6 +2,7 @@ const Quiz = require("../models/quiz");
 const QuizQuestion = require("../models/QuizQuestion");
 const QuizResult = require("../models/QuizResult");
 const Event = require("../models/Event");
+const User = require("../models/user");
 
 // quiz
 const addQuiz = async (quizDetail) => {
@@ -71,4 +72,40 @@ const getListQuestion = async (id) => {
         throw new Error(error);
     }
 }
-module.exports = {addQuiz, getQuiz, addQuestion, getQuestion, getListQuestion}
+
+// quiz result
+const addResult = async (resultDetail) => {
+    try {
+        const user = await User.findById(resultDetail.idUser);
+        const event = await Event.findById(resultDetail.idEvent);
+        if(!user || !event) {
+            throw new Error("User or Event not Exists!");
+        }
+
+        const result = await QuizResult.create(resultDetail);
+        return {data: result};
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+const getListResult = async (id) => {
+    try {
+        const event = await Event.findById(id);
+        if(!event) throw new Error("Event not Exists");
+        const results = await QuizResult.find({idEvent: id}).sort({score: -1, time: 1});
+        const data = await Promise.all(results.map(async (result) => {
+            const user = await User.findById(result.idUser);
+            return {
+                ...result.toObject(),
+                username: user.username,
+                avatar: user.avatar
+            }
+        }));
+
+        return {data: data}
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+module.exports = {addQuiz, getQuiz, addQuestion, getQuestion, getListQuestion, addResult, getListResult}
