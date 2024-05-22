@@ -24,19 +24,18 @@ const EventMap = () => {
                     latitude={event.geometry.coordinates[1]}
                     anchor="bottom"
                 >
-                    <Link to={`/events/${event.properties.id}`}>
-                        <div
-                            onMouseEnter={e => {
-                                setPopupInfo(event);
-                            }}
-                            onMouseLeave={e => {
-                                setPopupInfo(null);
-                            }}>
-                            <img style={{ cursor: 'pointer' }}
-                                src={event.properties.isOngoing ? "./ongoing-marker.png" : "./marker.png"}
-                                alt=""
-                            />
-                        </div>
+                    <Link
+                        to={`/events/${event.properties.id}`}
+                        onMouseEnter={e => {
+                            setPopupInfo(event);
+                        }}
+                        onMouseLeave={e => {
+                            setPopupInfo(null);
+                        }}>
+                        <img style={{ cursor: 'pointer' }}
+                            src={event.properties.isOngoing ? "./ongoing-marker.png" : "./marker.png"}
+                            alt=""
+                        />
                     </Link>
                 </Marker>
             )),
