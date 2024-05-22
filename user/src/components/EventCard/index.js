@@ -23,12 +23,12 @@ function formatDuration(startDate, endDate) {
   return `${formattedStartDate} - ${formattedEndDate}`;
 }
 
-const EventCard = ({ item, style }) => {
+const EventCard = ({ item }) => {
   const duration = formatDuration(item.startDate, item.endDate);
 
   if (item.isOngoing) {
     return (
-      <OngoingEventCardWrapper style={style} to={item.id}>
+      <OngoingEventCardWrapper to={item.id}>
         <EventCardImage
           style={{
             backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,
@@ -47,7 +47,7 @@ const EventCard = ({ item, style }) => {
     );
   } else {
     return (
-      <EventCardWrapper style={style} to={item.id}>
+      <EventCardWrapper to={item.id}>
         <EventCardImage
           style={{
             backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,
