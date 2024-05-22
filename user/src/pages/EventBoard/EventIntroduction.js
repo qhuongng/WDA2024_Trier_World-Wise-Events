@@ -3,6 +3,7 @@ import {
   EventIntroductionImage,
   EventIntroductionLeft,
   EventIntroductionWrapper,
+  EventIntroductionQuizButton,
 } from "./styles";
 import { Carousel, Row, Col } from "antd";
 import { useSelector } from "react-redux";
@@ -32,7 +33,7 @@ const EventIntroduction = () => {
               <div className="country">{item.city}</div>
               <div className="time">{duration}</div>
               <div className="description">{item.description}</div>
-              <button>Take quiz</button>
+              <EventIntroductionQuizButton item={item} to={`../../quiz/${item.id}/intro`}>Take quiz</EventIntroductionQuizButton>
             </EventIntroductionLeft>
           </Col>
           <Col>

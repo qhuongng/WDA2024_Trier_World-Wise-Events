@@ -34,20 +34,20 @@ export const MAIN_NAVIGATION = [
     Component: React.lazy(() => import("./pages/AllEvents")),
   },
   {
-    key: "quiz",
-    path: `/quiz`,
+    key: "quizstart",
+    path: `/quiz/:idEvent/intro`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizStart")),
   },
   {
-    key: "quiz2",
-    path: `/quiz2`,
+    key: "quizmain",
+    path: `/quiz/:idEvent`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizMain")),
   },
   {
-    key: "quiz3",
-    path: `/quiz3`,
+    key: "quizend",
+    path: `/quiz/:idEvent/results`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizEnd"))
   },

@@ -1,5 +1,6 @@
 import { Carousel } from "antd";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const EventBoardWrapper = styled.div`
   padding: 36px;
@@ -113,4 +114,29 @@ export const EventReplyCommentWrapper = styled.div`
 export const EventPost = styled.div`
   break-inside: avoid;
   margin: 0 0 1rem;
+`;
+
+export const EventIntroductionQuizButton = styled(Link)`
+  background: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-right: auto;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #4a00e0;
+    color: #fff;
+  }
+
+  &:active {
+    background: #00008b;
+    color: #fff;
+  }
 `;

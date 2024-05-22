@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const QuizStartWrapper = styled.div`
   background: #fff;
@@ -52,7 +53,7 @@ export const QuizStartDesc = styled.div`
   margin: 2rem auto 1rem 0;
 `;
 
-export const QuizStartButton = styled.button`
+export const QuizStartButton = styled(Link)`
   background: #2000bb;
   font-family: Inter;
   font-weight: 600;
@@ -67,10 +68,12 @@ export const QuizStartButton = styled.button`
 
   &:hover {
     background: #4a00e0;
+    color: #fff;
   }
 
   &:active {
     background: #00008b;
+    color:#fff;
   }
 `;
 
