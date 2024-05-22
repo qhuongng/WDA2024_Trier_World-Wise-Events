@@ -14,6 +14,10 @@ const event = new Schema({
         type: String,
         required: true
     },
+    location: {
+        type: Array,
+        required: true
+    },
     startDate: {
         type: Date,
         required: true
