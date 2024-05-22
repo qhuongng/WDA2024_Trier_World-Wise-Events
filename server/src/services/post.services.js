@@ -20,7 +20,18 @@ const getListPost = async (idEvent) => {
         const event = await Event.findById(idEvent);
         if (!event) throw new Error("Event not found");
         const existPosts = await Post.find({ idEvent: idEvent })
-        if (existPosts) return { data: existPosts }
+
+
+        const data = await Promise.all(existPosts.map(async (post) => {
+            const user = await User.findById(post.idUser);
+            return {
+                ...post.toObject(),
+                username: user.username,
+                avatar: user.avatar
+            }
+        }));
+
+        return { data: data }
     } catch (error) {
         throw new Error(error)
     }

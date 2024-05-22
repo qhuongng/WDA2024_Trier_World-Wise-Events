@@ -27,18 +27,18 @@ const userRoute = require('./routes/userRouter');
 const otpRoute = require('./routes/otpRouter');
 const eventRoute = require('./routes/eventRouter');
 const imageRoute = require('./routes/imageRouter');
+const quizRoute = require("./routes/quizRouter");
 const postRoute = require('./routes/postRouter');
 const postPeplyRoute = require('./routes/postReplyRouter');
-const quizRoute = require("./routes/quizRouter");
 //-----------------------------------
 
 app.use('/api/user', userRoute);
 app.use('/api/otp', otpRoute);
 app.use('/api/event', eventRoute);
 app.use('/api/image', imageRoute);
+app.use('/api/quiz', quizRoute);
 app.use('/api/post', postRoute);
 app.use('/api/postReply', postPeplyRoute);
-app.use('/api/quiz', quizRoute);
 app.use('/api/picture', express.static('public'));
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);

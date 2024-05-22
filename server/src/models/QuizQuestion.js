@@ -11,7 +11,7 @@ const QuizQuestion = new Schema({
         required: true
     },
     correctAnswer: {
-        type: Boolean,
+        type: String,
         required: true
     },
     answers:[{
