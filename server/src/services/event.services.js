@@ -34,8 +34,8 @@ const getListEvent = async (queryStr, page, limit) => {
             description: 1,
         };
         const skip = (page - 1) * limit;
-        const productCount = await Event.countDocuments();
-        if (skip >= productCount) throw new Error("This page does not exists")
+        const eventCount = await Event.countDocuments();
+        if (skip >= eventCount) throw new Error("This page does not exists")
 
         const events = await Event.find(queryStr, projection)
             .skip(skip)

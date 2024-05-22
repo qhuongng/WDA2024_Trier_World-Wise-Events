@@ -21,7 +21,7 @@ router.post("/register", registerUserController);
 router.post("/login", loginUserController);
 router.get("/profile", authGuard, userProfileController);
 // adding the authguard, this version for testing
-router.put("/updateAvatar/:id", upload.single("image"), updateAvatarController)
+router.put("/updateAvatar/:id", upload.single("image"), updateAvatarController);
 router.put("/updateProfile", authGuard, updateProfileController);
 router.post("/resetPassword", resetPasswordController);
 router.get("/getUser/:id", getUserDetail);

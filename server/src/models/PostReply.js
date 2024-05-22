@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const event = new Schema({
+const PostReply = new Schema({
     idPost: {
-        Type: String,
+        type: String,
         required: true
     },
     idUser: {
-        Type: String,
+        type: String,
         required: true
     },
     text: {
-        Type: String,
+        type: String,
         required: true
     }
 }, { timestamps: true })

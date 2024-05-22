@@ -7,27 +7,26 @@ import {
   EventCardTitle,
   OngoingEventCardTitle,
   EventCardWrapper,
-  OngoingEventCardWrapper
+  OngoingEventCardWrapper,
 } from "./styles";
 
 function formatDuration(startDate, endDate) {
-  const options = { month: 'short', day: 'numeric', year: 'numeric' };
+  const options = { month: "short", day: "numeric", year: "numeric" };
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  const formattedStartDate = start.toLocaleDateString('en-US', options);
-  const formattedEndDate = end.toLocaleDateString('en-US', options);
+  const formattedStartDate = start.toLocaleDateString("en-US", options);
+  const formattedEndDate = end.toLocaleDateString("en-US", options);
 
   return `${formattedStartDate} - ${formattedEndDate}`;
 }
-
 
 const EventCard = ({ item, style }) => {
   const duration = formatDuration(item.startDate, item.endDate);
 
   if (item.isOngoing) {
     return (
-      <OngoingEventCardWrapper style={style}>
+      <OngoingEventCardWrapper style={style} to={item.id}>
         <EventCardImage
           style={{
             backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,
@@ -41,10 +40,9 @@ const EventCard = ({ item, style }) => {
         </EventCardInfo>
       </OngoingEventCardWrapper>
     );
-  }
-  else {
+  } else {
     return (
-      <EventCardWrapper style={style}>
+      <EventCardWrapper style={style} to={item.id}>
         <EventCardImage
           style={{
             backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,

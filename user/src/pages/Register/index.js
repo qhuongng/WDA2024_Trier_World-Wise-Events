@@ -17,7 +17,7 @@ import Input from "../../components/Input";
 const phoneRegExp = /^[0-9]*$/;
 
 const registerSchema = yup.object({
-  userName: yup.string().required("Username is required!"),
+  username: yup.string().required("Username is required!"),
   email: yup
     .string()
     .email("Email should be valid!")
@@ -30,13 +30,14 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      userName: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
+      console.log(values);
       dispatch(registerUser(values));
     },
   });
@@ -54,13 +55,13 @@ const Register = () => {
             <Input
               type="text"
               label="Username"
-              id="userName"
-              name="userName"
-              onChange={formik.handleChange("userName")}
-              value={formik.values.userName}
+              id="username"
+              name="username"
+              onChange={formik.handleChange("username")}
+              value={formik.values.username}
             />
             <RegisterError>
-              {formik.touched.userName && formik.errors.userName}
+              {formik.touched.username && formik.errors.username}
             </RegisterError>
           </div>
           <div>
@@ -78,7 +79,7 @@ const Register = () => {
           </div>
           <div>
             <Input
-              type="text"
+              type="password"
               label="Password"
               id="password"
               name="password"
