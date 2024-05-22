@@ -31,7 +31,7 @@ const getListEvent = async (queryStr, page, limit) => {
             endDate: 1,
             images: { $slice: 1 }, // Lấy ảnh đầu tiên (nếu có)
             isOngoing: 1,
-            description: 1,
+            location: 1
         };
         const skip = (page - 1) * limit;
         const eventCount = await Event.countDocuments();

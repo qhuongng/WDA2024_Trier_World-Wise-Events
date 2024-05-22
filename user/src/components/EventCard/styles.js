@@ -8,6 +8,14 @@ export const EventCardWrapper = styled(Link)`
   flex-direction: column;
   border-radius: 12px;
   height: 16rem;
+
+  &:hover {
+    background: #d0c2ff;
+  }
+
+  &:active {
+    background: #b0a0ff;
+  }
 `;
 
 export const OngoingEventCardWrapper = styled(Link)`
@@ -17,6 +25,14 @@ export const OngoingEventCardWrapper = styled(Link)`
   flex-direction: column;
   border-radius: 12px;
   height: 16rem;
+
+  &:hover {
+    background: #f1b6d1;
+  }
+
+  &:active {
+    background: #e392b0;
+  }
 `;
 
 export const EventCardImage = styled.div`

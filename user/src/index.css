@@ -7,6 +7,41 @@ body {
     overflow: visible;
 }
 
+.mapboxgl-canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Marker tweaks */
+.mapboxgl-popup-close-button {
+    display: none;
+}
+
+.mapboxgl-popup-content {
+    font-family: "Inter";
+    padding: 0;
+    border-radius: 12px;
+    width: 320px;
+}
+
+.mapboxgl-popup-content div {
+    border-radius: 12px;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+    background: transparent;
+    padding: 0;
+    border-radius: 12px;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+    display: none;
+}
+
 code {
     font-family: "Inter", sans-serif;
 }
