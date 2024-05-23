@@ -134,6 +134,19 @@ const getListResult = async (req, res, next) => {
     next(error);
   }
 };
+
+const getUserResult = async (req, res, next) => {
+  try {
+    const id = req.params.userId;
+    if (!id) throw new Error("User ID is required!");
+
+    const listResult = await quizService.getUserResult(id);
+    if (listResult) res.status(200).json(listResult);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createQuiz,
   getQuiz,
@@ -142,4 +155,5 @@ module.exports = {
   getListQuestion,
   createResult,
   getListResult,
+  getUserResult,
 };
