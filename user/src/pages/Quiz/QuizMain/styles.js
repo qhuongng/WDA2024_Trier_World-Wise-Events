@@ -121,6 +121,15 @@ export const QuizMainSecondaryButton = styled.button`
   }
 `;
 
+export const QuizMainTopMenu = styled.div`
+  height: 15%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+`;
+
 export const QuizMainBottomMenu = styled.div`
   height: 15%;
   width: 100%;
