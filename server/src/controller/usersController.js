@@ -47,6 +47,7 @@ const loginUserController = async (req, res, next) => {
                 _id: user._id,
                 username: user.username,
                 email: user.email,
+                avatar: user.avatar,
                 token: await user.generateJWT(),
             });
         } else {
@@ -84,6 +85,7 @@ const updateProfileController = async (req, res, next) => {
             _id: updatedUser._id,
             username: updatedUser.username,
             email: updatedUser.email,
+            avatar: updatedUser.avatar
         });
     } catch (error) {
         next(error);
