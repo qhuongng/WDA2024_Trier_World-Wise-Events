@@ -19,8 +19,8 @@ const getListPost = async (idEvent) => {
     try {
         const event = await Event.findById(idEvent);
         if (!event) throw new Error("Event not found");
-        const existPosts = await Post.find({ idEvent: idEvent })
-
+        const existPosts = await Post.find({ idEvent: idEvent }) || []
+        if (existPosts.length == 0) return { data: [] }
 
         const data = await Promise.all(existPosts.map(async (post) => {
             const user = await User.findById(post.idUser);

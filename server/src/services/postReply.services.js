@@ -19,7 +19,8 @@ const getListReply = async (idPost) => {
     try {
         const post = await Post.findById(idPost);
         if (!post) throw new Error("Post not found");
-        const replyList = await PostReply.find({ idPost: idPost });
+        const replyList = await PostReply.find({ idPost: idPost }) || [];
+        if (replyList.length == 0) return { data: [] }
 
         const data = await Promise.all(replyList.map(async (reply) => {
             const user = await User.findById(reply.idUser);
