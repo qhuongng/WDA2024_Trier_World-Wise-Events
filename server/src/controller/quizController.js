@@ -85,4 +85,36 @@ const getRandomListQuestion = async (req, res, next) => {
     }
 }
 
-module.exports = { createQuiz, getQuiz, createQuestion, getQuestion, getListQuestion, getRandomListQuestion };
+// create quiz result
+const createResult = async (req, res, next) => {
+    try {
+        const { idUser, idEvent, score, time } = req.body;
+
+        if (!idUser || !idEvent || !score || !time) throw new Error("Input is required.");
+
+        const resutData = {
+            idUser: idUser,
+            idEvent: idEvent,
+            score: score,
+            time: time
+        };
+        const result = await quizService.addResult(resutData);
+        if (result) res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// get list result base on eventID
+const getListResult = async (req, res, next) => {
+    try {
+        const eventId = req.params.eventId;
+        if (!eventId) throw new Error("Event ID is required!");
+        const liResult = await quizService.getListResult(eventId);
+
+        if (liResult) res.status(200).json(liResult);
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports = { createQuiz, getQuiz, createQuestion, getQuestion, getListQuestion, createResult, getListResult, getRandomListQuestion };
