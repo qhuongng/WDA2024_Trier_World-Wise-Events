@@ -20,8 +20,6 @@ const QuizEnd = () => {
   const secs = parseInt(state.timeElapsed % 60);
   const score = parseInt(state.score);
 
-  console.log(state);
-
   return (
     <QuizEndWrapper>
       <QuizEndTitle>Quiz: {state.event} - Results</QuizEndTitle>
