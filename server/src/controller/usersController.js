@@ -59,7 +59,7 @@ const loginUserController = async (req, res, next) => {
 
 const userProfileController = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.params.id);
         if (user) {
             return res.status(201).json({
                 _id: user._id,
@@ -77,7 +77,9 @@ const userProfileController = async (req, res, next) => {
 
 const updateProfileController = async (req, res, next) => {
     try {
-        const updatedUser = await updateProfile(req.user._id, req.body);
+        const { id, username, email } = req.body
+        if (!id || !username || !email) throw new Error("Input is required")
+        const updatedUser = await updateProfile(id, username, email);
         return res.status(201).json({
             _id: updatedUser._id,
             username: updatedUser.username,
@@ -90,77 +92,33 @@ const updateProfileController = async (req, res, next) => {
 
 const resetPasswordController = async (req, res, next) => {
     try {
-        const { email, newPassword } = req.body;
-        if (!email || !newPassword) {
+        const { id, oldPassword, newPassword } = req.body;
+        if (!id || !oldPassword || !newPassword) {
             throw new Error("Inputs are required");
         }
-        const updatedUser = await resetPassword(email, newPassword);
-        return res.status(200).json("true");
+        const updatedUser = await resetPassword(id, oldPassword, newPassword);
+        return res.status(201).json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+        });
     } catch (e) {
         next(e);
     }
 };
 
-// const loginAdminController = async (req, res, next) => {
-//     try {
-//         const { email, password } = req.body;
-//         const user = await findUserByEmail(email);
-//         if (!user) {
-//             throw new Error("Email not found");
-//         }
-
-//         if (await user.comparePassword(password)) {
-//             return res.status(201).json({
-//                 _id: user._id,
-//                 username: user.username,
-//                 email: user.email,
-//                 token: await user.generateJWTSeller(),
-//             });
-//         } else {
-//             throw new Error("Invalid password");
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
-// const registerAdminController = async (req, res, next) => {
-//     try {
-//         const { username, email, password } = req.body;
-//         const user = await findUserByEmail(email);
-//         if (user) {
-//             throw new Error("Admin already exists");
-//         }
-
-//         const admin = await User.create({
-//             username,
-//             email,
-//             password,
-//             role: "admin",
-//         });
-
-//         return res.status(201).json({
-//             _id: admin._id,
-//             username: admin.username,
-//             email: admin.email,
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
-const updateAvatarController = async (req,res,next) => {
+const updateAvatarController = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const file = req.file;
-        const updatedAvatar = await updateAvatar(file,userId);
+        const updatedAvatar = await updateAvatar(file, userId);
         return res.status(201).json({
             _id: updatedAvatar._id,
             username: updatedAvatar.username,
             email: updatedAvatar.email,
             avatar: updatedAvatar.avatar
         });
-    } catch(error) {
+    } catch (error) {
         next(error);
     }
 }
@@ -170,8 +128,6 @@ module.exports = {
     loginUserController,
     userProfileController,
     updateProfileController,
-    // loginAdminController,
-    // registerAdminController,
     resetPasswordController,
     getUserDetail,
     updateAvatarController
