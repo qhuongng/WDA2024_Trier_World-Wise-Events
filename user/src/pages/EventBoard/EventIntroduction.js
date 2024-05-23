@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { getAuthUser } from "../../utils/authStorage";
 import {
   EventIntroductionImage,
   EventIntroductionLeft,
@@ -20,6 +21,7 @@ function formatDuration(startDate, endDate) {
 }
 
 const EventIntroduction = () => {
+  const user = getAuthUser();
   const item = useSelector((state) => state.event.singleEvent) || null;
   const duration = item ? formatDuration(item.startDate, item.endDate) : "";
 
@@ -33,7 +35,18 @@ const EventIntroduction = () => {
               <div className="country">{item.city}</div>
               <div className="time">{duration}</div>
               <div className="description">{item.description}</div>
-              <EventIntroductionQuizButton item={item} to={`../../quiz/${item.id}/intro`}>Take quiz</EventIntroductionQuizButton>
+              {user ? (
+                <EventIntroductionQuizButton
+                  item={item}
+                  to={`../../quiz/${item.id}/intro`}
+                >
+                  Take quiz
+                </EventIntroductionQuizButton>
+              ) : (
+                <EventIntroductionQuizButton item={null} to={`/login`}>
+                  Take quiz
+                </EventIntroductionQuizButton>
+              )}
             </EventIntroductionLeft>
           </Col>
           <Col>
