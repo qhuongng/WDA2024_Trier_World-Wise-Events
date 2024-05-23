@@ -115,13 +115,6 @@ const QuizMain = () => {
     }
     else {
       setCount(countMatches(correctAnswers, answers));
-
-      setResult({
-        idEvent: id,
-        idUser: user._id,
-        score: parseInt(score),
-        time: parseInt(timeElapsed)
-      });
     }
   };
 
@@ -162,6 +155,12 @@ const QuizMain = () => {
   useEffect(() => {
     let score = calcScore(count);
     setScore(score);
+    setResult({
+      idEvent: id,
+      idUser: user._id,
+      score: parseInt(score),
+      time: parseInt(timeElapsed)
+    });
   }, [count]);
 
   useEffect(() => {
