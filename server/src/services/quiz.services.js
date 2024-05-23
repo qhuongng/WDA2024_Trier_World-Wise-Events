@@ -108,4 +108,26 @@ const getListResult = async (id) => {
         throw new Error(error);
     }
 }
-module.exports = {addQuiz, getQuiz, addQuestion, getQuestion, getListQuestion, addResult, getListResult}
+
+const getUserResult = async (id) =>{
+    try {
+        const user = await User.findById(id);
+        if(!user) {
+            throw new Error("User not exists!");
+        }
+
+        const results = await QuizResult.find({idUser: id});
+        const data = await Promise.all(results.map(async (result) => {
+            const event = await Event.findById(result.idEvent);
+            return {
+                ...result.toObject(),
+                eventName: event.eventName
+            }
+        }));
+
+        return {data: data}
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+module.exports = {addQuiz, getQuiz, addQuestion, getQuestion, getListQuestion, addResult, getListResult, getUserResult}
