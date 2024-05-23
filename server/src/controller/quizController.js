@@ -93,7 +93,7 @@ const createResult = async (req, res, next) => {
   try {
     const { idUser, idEvent, score, time } = req.body;
 
-    if (!idUser || !idEvent || !score || !time)
+    if (!idUser || !idEvent || score === null || !time)
       throw new Error("Input is required.");
 
     const resutData = {
