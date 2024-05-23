@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useBlocker } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getQuestions } from '../../../features/quiz/quizSlice';
+import { getQuestions, createResult, resetResultSent } from '../../../features/quiz/quizSlice';
 import { getOneEvent } from '../../../features/event/eventSlice';
 import { getAuthUser } from "../../../utils/authStorage";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
@@ -48,11 +48,13 @@ const QuizMain = () => {
 
   const event = useSelector((state) => state.event.singleEvent) || null;
   const questions = useSelector((state) => state.quiz.questions) || null;
+  const resultSent = useSelector((state) => state.quiz.resultSent);
 
   const [deadline, setDeadline] = useState(Date.now() + 1000 * 60 * 20);
   const [countdownKey, setCountdownKey] = useState(Date.now());
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [answers, setAnswers] = useState(new Array(15).fill(''));
+  const [correctAnswers, setCorrectAnswers] = useState([]);
   const [qaPairs, setQaPairs] = useState([]);
   const [value, setValue] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -60,37 +62,74 @@ const QuizMain = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContent, setModalContent] = useState('');
+  const [pendingNavigation, setPendingNavigation] = useState(null);
+
+  const [count, setCount] = useState(0);
+  const [score, setScore] = useState(0);
+  const [result, setResult] = useState(null);
+
+  useBlocker((transition) => {
+    if (!abandon) {
+      setPendingNavigation(transition);
+      showModal('Leave quiz', 'Leave the current quiz? Your progress will NOT be saved.', false);
+    } else {
+      transition.retry();
+    }
+  }, !abandon);
 
   const showModal = (title, content, isSubmitting) => {
     setModalTitle(title);
     setModalContent(content);
 
-    if (isSubmitting) {
+    if (isSubmitting)
       setAbandon(false);
-    }
-    else {
+    else
       setAbandon(true);
-    }
 
     setModalOpen(true);
   };
 
+  const countMatches = (correctAnswers, answers) => {
+    let count = 0;
+    // count the matches
+    for (let i = 0; i < correctAnswers.length; i++) {
+      if (correctAnswers[i] === answers[i]) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  const calcScore = (count) => {
+    // calculate bonus time score
+    let bonus = 1 + ((1200 - timeElapsed) / 1200);
+    return count * bonus * 10;
+  }
+
   const handleOk = () => {
     setModalOpen(false);
-    blocker.proceed();
 
-    if (!abandon) {
-      navigate('results', { state: { id: id, timeElapsed: timeElapsed, questions: qaPairs, userAnswers: answers } })
+    if (pendingNavigation) {
+      setAbandon(true);
+      pendingNavigation.retry();
     }
     else {
-      navigate('/');
+      setCount(countMatches(correctAnswers, answers));
+      setScore(calcScore(count));
+
+      setResult({
+        idEvent: id,
+        idUser: user._id,
+        score: parseInt(score),
+        time: parseInt(timeElapsed)
+      });
     }
   };
 
   const handleCancel = () => {
     setModalOpen(false);
     setAbandon(false);
-    blocker.reset();
+    setPendingNavigation(null);
   };
 
   const onRadioChange = (e) => {
@@ -100,21 +139,9 @@ const QuizMain = () => {
     setValue(e.target.value);
   };
 
-  const onTimerFinish = () => {
-    console.log('finished!');
-  };
-
-  const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) =>
-      abandon === false &&
-      currentLocation.pathname !== nextLocation.pathname
-  );
-
   useEffect(() => {
     dispatch(getOneEvent(id));
     dispatch(getQuestions(id));
-    setDeadline(Date.now() + 1000 * 60 * 20);
-    setCountdownKey(Date.now());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -127,18 +154,42 @@ const QuizMain = () => {
         text: question.text,
         correctAnswer: question.correctAnswer
       })));
+
+    setCorrectAnswers(questions?.map(question => question.correctAnswer));
+    setDeadline(Date.now() + 1000 * 60 * 20);
+    setCountdownKey(Date.now());
   }, [questions]);
+
+  useEffect(() => {
+    if (result) {
+      // console.log(result);
+      dispatch(createResult(result));
+    }
+  }, [dispatch, result]);
+
+  useEffect(() => {
+    if (resultSent) {
+      navigate('results',
+        {
+          state:
+          {
+            event: event.eventName,
+            timeElapsed: timeElapsed,
+            questions: qaPairs,
+            userAnswers: answers,
+            score: score,
+            count: count
+          }
+        });
+
+      dispatch(resetResultSent());
+    }
+  }, [resultSent, navigate, event, qaPairs, timeElapsed, answers, dispatch]);
 
   useBeforeUnload({
     when: abandon === false,
     message: 'You have unsaved changes. Are you sure you want to leave?',
   });
-
-  useEffect(() => {
-    if (blocker.state === 'blocked') {
-      showModal('Leave quiz', 'Leave the current quiz? Your progress will NOT be saved.', false);
-    }
-  }, [blocker.state]);
 
   return (
     <QuizMainWrapper>
@@ -148,7 +199,7 @@ const QuizMain = () => {
           valueStyle={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '2rem', color: '#2000bb' }}
           value={deadline}
           format='mm:ss'
-          onFinish={onTimerFinish}
+          onFinish={handleOk}
           onChange={(time) => setTimeElapsed(((1000 * 60 * 20) - time) / 1000)} />
       </QuizMainTopMenu>
 
