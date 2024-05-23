@@ -3,7 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/user");
 const Image = require("../models/Image");
-const imageService = require("../services/image.services")
+const imageService = require("../services/image.services");
+const { use } = require("../routes/userRouter");
 
 const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
@@ -48,14 +49,14 @@ const createUser = async (userDetails) => {
   return user;
 };
 
-const updateAvatar = async (file,userId) => {
+const updateAvatar = async (file, userId) => {
   const user = await User.findById(userId);
   const newAvatar = {
     data: file.buffer,
     contentType: file.mimetype
   };
   const imageId = await imageService.saveImage(newAvatar);
-  
+
   // delete old avatar
   const deleteImage = await Image.findByIdAndDelete(user.avatar);
   user.avatar = imageId._id.toString();
@@ -70,25 +71,29 @@ const registerUser = async (userDetails) => {
   return await createUser(userDetails);
 };
 
-const updateProfile = async (userId, userDetails) => {
+const updateProfile = async (userId, username, email) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new Error("User not found");
   }
 
-  user.username = userDetails.username || user.username;
-  user.email = userDetails.email || user.email;
+  user.username = username || user.username;
+  user.email = email || user.email;
 
   return await user.save();
 };
 
-const resetPassword = async (email, newPassword) => {
-  const user = await findUserByEmail(email);
+const resetPassword = async (id, oldPassword, newPassword) => {
+  const user = await User.findById(id);
   if (!user) {
     throw new Error("User not found");
   }
-  user.password = newPassword
-  return await user.save();
+  if (await user.comparePassword(oldPassword)) {
+    user.password = newPassword
+    return await user.save();
+  } else {
+    throw new Error("Invalid Password");
+  }
 };
 
 module.exports = {
