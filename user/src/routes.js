@@ -35,19 +35,19 @@ export const MAIN_NAVIGATION = [
   },
   {
     key: "quizstart",
-    path: `/quiz/:idEvent/intro`,
+    path: `/quiz/:id/intro`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizStart")),
   },
   {
     key: "quizmain",
-    path: `/quiz/:idEvent`,
+    path: `/quiz/:id`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizMain")),
   },
   {
     key: "quizend",
-    path: `/quiz/:idEvent/results`,
+    path: `/quiz/:id/results`,
     title: "",
     Component: React.lazy(() => import("./pages/Quiz/QuizEnd"))
   },
