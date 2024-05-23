@@ -40,7 +40,7 @@ const getListEvent = async (queryStr, page, limit) => {
         const events = await Event.find(queryStr, projection)
             .skip(skip)
             .limit(limit)
-            .exec();
+            .exec() || [];
 
         return { data: events }
     } catch (error) {
