@@ -13,6 +13,10 @@ const QuizResult = new Schema({
     score: {
         type: Number,
         required:true
+    },
+    time: {
+        type: Number,
+        required: true
     }
 })
 

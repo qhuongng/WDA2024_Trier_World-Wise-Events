@@ -21,7 +21,7 @@ const addEvent = async (data) => {
 }
 
 const getListEvent = async (queryStr, page, limit) => {
-    checkDate
+    await checkDate()
     try {
         const projection = {
             eventName: 1,
@@ -49,7 +49,7 @@ const getListEvent = async (queryStr, page, limit) => {
 }
 
 const getEvent = async (id) => {
-    checkDate
+    await checkDate()
     try {
         const event = Event.findById(id);
         if (!event) throw new Error("Event is not exist")
@@ -61,12 +61,19 @@ const getEvent = async (id) => {
 
 const checkDate = async () => {
     try {
-        const allEvent = await Event.find();
-        allEvent.map((event) => {
-            if (new Date(event.startDate) <= new Date() && new Date(event.startDate) <= new Date()) event.isOngoing = true
-            else event.isOngoing = false
-        })
-        await allEvent.save();
+        const allEvents = await Event.find();
+        for (const event of allEvents) {
+            const startDate = new Date(event.startDate);
+            const endDate = new Date(event.endDate);
+            const now = new Date();
+
+            const isOngoing = startDate <= now && endDate > now;
+
+            await Event.updateOne(
+                { _id: event._id },
+                { $set: { isOngoing } }
+            );
+        }
     } catch (error) {
         throw new Error(error)
     }
