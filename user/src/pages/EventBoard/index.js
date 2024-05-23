@@ -1,29 +1,27 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getAuthUser } from "../../utils/authStorage";
 import { EventBoardWrapper } from "./styles";
 import EventIntroduction from "./EventIntroduction";
-import { useDispatch, useSelector } from "react-redux";
-import { getOneEvent } from "../../features/event/eventSlice";
 import EventCommentsList from "./EventCommentsList";
+import { useDispatch } from "react-redux";
+import { getOneEvent } from "../../features/event/eventSlice";
+import { setPosts } from "../../features/post/postSlice";
+import { setItem } from "../../features/event/eventSlice";
+
 const EventBoard = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const item = useSelector((state) => state.event.singleEvent) || null;
-
   useEffect(() => {
     dispatch(getOneEvent(id));
+    return () => {
+      dispatch(setItem());
+    };
   }, [dispatch, id]);
 
   return (
     <EventBoardWrapper>
-      {item && (
-        <>
-          <EventIntroduction item={item} />
-          <EventCommentsList item={item} />
-        </>
-      )}
+      <EventIntroduction />
+      <EventCommentsList />
     </EventBoardWrapper>
   );
 };

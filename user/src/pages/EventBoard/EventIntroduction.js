@@ -5,6 +5,7 @@ import {
   EventIntroductionWrapper,
 } from "./styles";
 import { Carousel, Row, Col } from "antd";
+import { useSelector } from "react-redux";
 
 function formatDuration(startDate, endDate) {
   const options = { month: "short", day: "numeric", year: "numeric" };
@@ -17,8 +18,10 @@ function formatDuration(startDate, endDate) {
   return `${formattedStartDate} - ${formattedEndDate}`;
 }
 
-const EventIntroduction = ({ item }) => {
-  const duration = formatDuration(item.startDate, item.endDate);
+const EventIntroduction = () => {
+  const item = useSelector((state) => state.event.singleEvent) || null;
+  const duration = item ? formatDuration(item.startDate, item.endDate) : "";
+
   return (
     <EventIntroductionWrapper>
       {item && (

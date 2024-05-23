@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getAuthUser } from "../../utils/authStorage";
 import { EventCommentsListWrapper } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPosts } from "../../features/post/postSlice";
+import { getAllPosts, setPosts } from "../../features/post/postSlice";
 import EventComment from "./EventComment";
 
-const EventCommentsList = ({ item }) => {
+const EventCommentsList = () => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.post.allPosts) || null;
+  const posts = useSelector((state) => state.post.allPosts) || [];
+  const item = useSelector((state) => state.event.singleEvent) || null;
 
   useEffect(() => {
-    dispatch(getAllPosts(item._id));
-  }, [dispatch, item._id]);
-
-  console.log(posts);
+    dispatch(setPosts([]));
+    if (!item) {
+      return;
+    }
+    dispatch(getAllPosts(item.id));
+  }, [dispatch, item]);
 
   return (
     <EventCommentsListWrapper>
-      {posts && posts.map((item) => <EventComment item={item} />)}
+      {posts && posts.map((post) => <EventComment post={post} />)}
     </EventCommentsListWrapper>
   );
 };

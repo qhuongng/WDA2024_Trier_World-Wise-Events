@@ -39,13 +39,17 @@ const initialState = {
   allEvents: null,
   pagedEvents: null,
   message: "",
-  isLoading: false,
+  isLoading: null,
 };
 
 export const eventSlice = createSlice({
   name: "event",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setItem: (state, action) => {
+      state.singleEvent = action.payload ?? null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllEvents.pending, (state) => {
@@ -76,9 +80,9 @@ export const eventSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getOneEvent.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.message = "";
         state.singleEvent = action.payload;
+        state.isLoading = false;
       })
       .addCase(getOneEvent.rejected, (state, action) => {
         state.isLoading = false;
@@ -87,4 +91,5 @@ export const eventSlice = createSlice({
   },
 });
 
+export const { setItem } = eventSlice.actions;
 export default eventSlice.reducer;
