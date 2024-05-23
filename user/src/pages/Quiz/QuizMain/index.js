@@ -115,7 +115,6 @@ const QuizMain = () => {
     }
     else {
       setCount(countMatches(correctAnswers, answers));
-      setScore(calcScore(count));
 
       setResult({
         idEvent: id,
@@ -161,8 +160,12 @@ const QuizMain = () => {
   }, [questions]);
 
   useEffect(() => {
+    let score = calcScore(count);
+    setScore(score);
+  }, [count]);
+
+  useEffect(() => {
     if (result) {
-      // console.log(result);
       dispatch(createResult(result));
     }
   }, [dispatch, result]);
