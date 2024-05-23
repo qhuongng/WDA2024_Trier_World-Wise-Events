@@ -61,18 +61,6 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-// API: Forgot password
-export const forgotPass = createAsyncThunk(
-  "auth/forgot",
-  async (email, thunkAPI) => {
-    try {
-      return await authService.forgotPassword(email);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 // API: Reset password
 export const resetPass = createAsyncThunk(
   "auth/reset",
@@ -85,60 +73,7 @@ export const resetPass = createAsyncThunk(
   }
 );
 
-// API: User cart
-export const getUserCart = createAsyncThunk(
-  "auth/user-cart",
-  async (_, thunkAPI) => {
-    try {
-      return await authService.userCart();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
-// API: add to cart
-export const addToCart = createAsyncThunk(
-  "product/addCart",
-  async (data, thunkAPI) => {
-    try {
-      return await authService.addCart(data);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
-// API: add to cart
-export const deleteProductCart = createAsyncThunk(
-  "product/deleteCard",
-  async (data, thunkAPI) => {
-    try {
-      return await authService.deleteCart(data);
-    } catch (error) {
-      notification.error({
-        message: "Delete not successfully!",
-        duration: "1",
-      });
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
-// API: delete all cart
-export const deleteAllCart = createAsyncThunk(
-  "product/deleteAllCard",
-  async (_, thunkAPI) => {
-    try {
-      return await authService.deleteCarts();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 const initialState = {
-  userCart: [],
   message: "",
   isLoading: false,
 };
@@ -224,28 +159,17 @@ export const authSlice = createSlice({
         console.log(action.payload);
         state.isLoading = false;
         state.message = "";
+        notification.success({
+          message: "Update profile",
+          description: "Update successfully",
+          duration: "1",
+        });
         state.user = { ...user, ...action.payload };
         setAuthUser(state.user);
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
-      })
-
-      // API: Forgot Password
-      .addCase(forgotPass.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(forgotPass.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = "";
-        state.token = action.payload;
-        setAccessToken(state.token);
-      })
-      .addCase(forgotPass.rejected, (state, action) => {
-        state.isLoading = false;
-        state.message = action.error;
-        notification.error({ message: "Email not existed" });
       })
 
       // API: Reset Password
@@ -255,81 +179,16 @@ export const authSlice = createSlice({
       .addCase(resetPass.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
-        window.location.assign("/login");
+        notification.success({
+          message: "Update password",
+          description: "Update successfully",
+          duration: "1",
+        });
       })
       .addCase(resetPass.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
-        notification.error(action.error);
       })
-
-      // API: User cart
-      .addCase(getUserCart.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getUserCart.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = "";
-        state.userCart = action.payload || [];
-      })
-      .addCase(getUserCart.rejected, (state, action) => {
-        state.isLoading = false;
-        state.message = action.error;
-      })
-
-      // API: add cart
-      .addCase(addToCart.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addToCart.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = "";
-        notification.success({
-          message: "Add to cart successfully!",
-          duration: "1",
-        });
-        state.userCart = action.payload;
-      })
-      .addCase(addToCart.rejected, (state, action) => {
-        state.isLoading = false;
-        state.message = action.error;
-      })
-
-      // API: delete cart
-      .addCase(deleteProductCart.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteProductCart.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = "";
-        notification.success({
-          message: "Deleted! This product has been deleted",
-          duration: "1",
-        });
-        state.userCart = action.payload;
-      })
-      .addCase(deleteProductCart.rejected, (state, action) => {
-        state.isLoading = false;
-        state.message = action.error;
-      })
-
-      // API: delete all cart
-      .addCase(deleteAllCart.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteAllCart.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.message = "";
-        notification.success({
-          message: "Your cart has been paid",
-          duration: "1",
-        });
-        state.userCart = action.payload;
-      })
-      .addCase(deleteAllCart.rejected, (state, action) => {
-        state.isLoading = false;
-        state.message = action.error;
-      });
   },
 });
 
