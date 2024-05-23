@@ -1,12 +1,16 @@
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppContainer from "./AppContainer";
 
-function App() {
-  return (
-    <BrowserRouter>
-      <AppContainer />
-    </BrowserRouter>
-  );
+const router = createBrowserRouter([
+  { path: "*", element: <Root /> },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
 
-export default App;
+function Root() {
+  return (
+    <AppContainer />
+  );
+}

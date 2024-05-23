@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate, useBlocker } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getQuestions, createResult, resetResultSent } from '../../../features/quiz/quizSlice';
+import { getOneEvent } from '../../../features/event/eventSlice';
+import { getAuthUser } from "../../../utils/authStorage";
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import {
   QuizMainBox,
@@ -6,6 +11,7 @@ import {
   QuizMainQuestion,
   QuizMainWrapper,
   QuizMainButton,
+  QuizMainTopMenu,
   QuizMainBottomMenu,
   QuizMainButtonGroup,
   QuizMainSecondaryButton,
@@ -13,81 +19,269 @@ import {
   QuizMainIndexer,
   QuizMainProgress
 } from './styles';
-import { Radio, Space, ConfigProvider } from 'antd';
+import { Radio, Space, ConfigProvider, Statistic, Modal } from 'antd';
 
-const questions = [
-  {
-    question: 'When is the Menton Lemon Festival held?',
-    answers: [
-      'Feb 12 - Feb 27',
-      'Feb 13 - Feb 28',
-      'Feb 12 - Feb 28',
-      'Feb 13 - Feb 27'
-    ],
-    correctAnswer: 'Feb 12 - Feb 27'
-  },
-  {
-    question: 'Where is the Menton Lemon Festival held?',
-    answers: [
-      'France',
-      'Belgium',
-      'Germany',
-      'Vietnam'
-    ],
-    correctAnswer: 'France'
-  },
-]
+const { Countdown } = Statistic;
+
+const useBeforeUnload = ({ when, message }) => {
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = message;
+      return message;
+    }
+
+    if (when) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [when, message]);
+}
 
 const QuizMain = () => {
-  const [value, setValue] = useState(1);
-  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const user = getAuthUser();
 
-  const onChange = (e) => {
-    console.log('radio checked', e.target.value);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const event = useSelector((state) => state.event.singleEvent) || null;
+  const questions = useSelector((state) => state.quiz.questions) || null;
+  const resultSent = useSelector((state) => state.quiz.resultSent);
+
+  const [deadline, setDeadline] = useState(Date.now() + 1000 * 60 * 20);
+  const [countdownKey, setCountdownKey] = useState(Date.now());
+  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [answers, setAnswers] = useState(new Array(15).fill(''));
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [qaPairs, setQaPairs] = useState([]);
+  const [value, setValue] = useState('');
+  const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [abandon, setAbandon] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalContent, setModalContent] = useState('');
+  const [pendingNavigation, setPendingNavigation] = useState(null);
+
+  const [count, setCount] = useState(0);
+  const [score, setScore] = useState(0);
+  const [result, setResult] = useState(null);
+
+  useBlocker((transition) => {
+    if (!abandon) {
+      setPendingNavigation(transition);
+      showModal('Leave quiz', 'Leave the current quiz? Your progress will NOT be saved.', false);
+    } else {
+      transition.retry();
+    }
+  }, !abandon);
+
+  const showModal = (title, content, isSubmitting) => {
+    setModalTitle(title);
+    setModalContent(content);
+
+    if (isSubmitting)
+      setAbandon(false);
+    else
+      setAbandon(true);
+
+    setModalOpen(true);
+  };
+
+  const countMatches = (correctAnswers, answers) => {
+    let count = 0;
+    // count the matches
+    for (let i = 0; i < correctAnswers.length; i++) {
+      if (correctAnswers[i] === answers[i]) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  const calcScore = (count) => {
+    // calculate bonus time score
+    let bonus = 1 + ((1200 - timeElapsed) / 1200);
+    return count * bonus * 10;
+  }
+
+  const handleOk = () => {
+    setModalOpen(false);
+
+    if (pendingNavigation) {
+      setAbandon(true);
+      pendingNavigation.retry();
+    }
+    else {
+      setCount(countMatches(correctAnswers, answers));
+      setScore(calcScore(count));
+
+      setResult({
+        idEvent: id,
+        idUser: user._id,
+        score: parseInt(score),
+        time: parseInt(timeElapsed)
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    setModalOpen(false);
+    setAbandon(false);
+    setPendingNavigation(null);
+  };
+
+  const onRadioChange = (e) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion - 1] = e.target.value;
+    setAnswers(newAnswers);
     setValue(e.target.value);
   };
 
+  useEffect(() => {
+    dispatch(getOneEvent(id));
+    dispatch(getQuestions(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    setValue(answers[currentQuestion - 1]);
+  }, [currentQuestion, answers]);
+
+  useEffect(() => {
+    setQaPairs(
+      questions?.map(question => ({
+        text: question.text,
+        correctAnswer: question.correctAnswer
+      })));
+
+    setCorrectAnswers(questions?.map(question => question.correctAnswer));
+    setDeadline(Date.now() + 1000 * 60 * 20);
+    setCountdownKey(Date.now());
+  }, [questions]);
+
+  useEffect(() => {
+    if (result) {
+      // console.log(result);
+      dispatch(createResult(result));
+    }
+  }, [dispatch, result]);
+
+  useEffect(() => {
+    if (resultSent) {
+      navigate('results',
+        {
+          state:
+          {
+            event: event.eventName,
+            timeElapsed: timeElapsed,
+            questions: qaPairs,
+            userAnswers: answers,
+            score: score,
+            count: count
+          }
+        });
+
+      dispatch(resetResultSent());
+    }
+  }, [resultSent, navigate, event, qaPairs, timeElapsed, answers, dispatch]);
+
+  useBeforeUnload({
+    when: abandon === false,
+    message: 'You have unsaved changes. Are you sure you want to leave?',
+  });
+
   return (
     <QuizMainWrapper>
-      <QuizMainTitle>Quiz: Menton Lemon Festival</QuizMainTitle>
+      <QuizMainTopMenu>
+        {event && <QuizMainTitle>Quiz: {event.eventName}</QuizMainTitle>}
+        <Countdown
+          valueStyle={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '2rem', color: '#2000bb' }}
+          value={deadline}
+          format='mm:ss'
+          onFinish={handleOk}
+          onChange={(time) => setTimeElapsed(((1000 * 60 * 20) - time) / 1000)} />
+      </QuizMainTopMenu>
 
-      <QuizMainBox>
-        <QuizMainQuestion>{questions[currentQuestion - 1].question}</QuizMainQuestion>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: '#2000bb',
-              borderRadius: 12,
-              colorBgContainer: '#ffffff',
-              colorSplit: 'rgba(0,0,0,0)'
-            },
-          }}>
-          <Radio.Group onChange={onChange} value={value}>
-            <Space size={'large'} direction='vertical'>
-              {questions[currentQuestion - 1].answers.map((answer) => <Radio value={answer}>{answer}</Radio>)}
-            </Space>
-          </Radio.Group>
-        </ConfigProvider>
-      </QuizMainBox>
+      {questions ? (
+        <>
+          <QuizMainBox>
+            <QuizMainQuestion>{questions[currentQuestion - 1].text}</QuizMainQuestion>
 
-      <QuizMainBottomMenu>
-        <QuizMainIndexer>
-          <QuizMainIndexerButton onClick={() => { setCurrentQuestion(currentQuestion === 1 ? 1 : currentQuestion - 1) }}>
-            <LeftOutlined />
-          </QuizMainIndexerButton>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: '#2000bb',
+                  borderRadius: 12,
+                  colorBgContainer: '#ffffff',
+                },
+              }}>
+              <Radio.Group onChange={onRadioChange} value={value}>
+                <Space size={'large'} direction='vertical'>
+                  {questions[currentQuestion - 1].answers.map((answer) => <Radio style={{ fontFamily: 'Inter', fontSize: '1.1rem' }} value={answer} key={answer}>{answer}</Radio>)}
+                </Space>
+              </Radio.Group>
+            </ConfigProvider>
+          </QuizMainBox>
 
-          <QuizMainProgress>{currentQuestion} / {questions.length} </QuizMainProgress>
+          <QuizMainBottomMenu>
+            <QuizMainIndexer>
+              <QuizMainIndexerButton
+                onClick={() => {
+                  setCurrentQuestion(currentQuestion === 1 ? 1 : currentQuestion - 1);
+                }}>
+                <LeftOutlined />
+              </QuizMainIndexerButton>
 
-          <QuizMainIndexerButton onClick={() => { setCurrentQuestion(currentQuestion === questions.length ? questions.length : currentQuestion + 1) }}>
-            <RightOutlined />
-          </QuizMainIndexerButton>
-        </QuizMainIndexer>
+              <QuizMainProgress>{currentQuestion} / {questions.length} </QuizMainProgress>
 
-        <QuizMainButtonGroup>
-          <QuizMainSecondaryButton>Leave</QuizMainSecondaryButton>
-          <QuizMainButton>Submit</QuizMainButton>
-        </QuizMainButtonGroup>
-      </QuizMainBottomMenu>
+              <QuizMainIndexerButton
+                onClick={() => {
+                  setCurrentQuestion(currentQuestion === questions.length ? questions.length : currentQuestion + 1);
+                }}>
+                <RightOutlined />
+              </QuizMainIndexerButton>
+            </QuizMainIndexer>
+
+            <QuizMainButtonGroup>
+              <QuizMainSecondaryButton
+                onClick={() => showModal('Leave quiz', 'Leave the current quiz? Your progress will NOT be saved.', false)}>
+                Leave</QuizMainSecondaryButton>
+              <QuizMainButton
+                onClick={() => showModal('Submit quiz', 'You are about to submit this quiz. Are you sure?', true)}>
+                Submit</QuizMainButton>
+            </QuizMainButtonGroup>
+          </QuizMainBottomMenu>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
+
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#2000bb',
+            borderRadius: 12,
+            titleColor: '#2000bb',
+          },
+        }}>
+        <Modal
+          style={{ fontFamily: 'Inter' }}
+          title={modalTitle}
+          open={modalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={[
+            <QuizMainSecondaryButton onClick={handleCancel}>
+              Cancel
+            </QuizMainSecondaryButton>,
+            <QuizMainButton onClick={handleOk}>
+              OK
+            </QuizMainButton>
+          ]}>
+          <p>{modalContent}</p>
+        </Modal>
+      </ConfigProvider>
     </QuizMainWrapper>
   );
 };
