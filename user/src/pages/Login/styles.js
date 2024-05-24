@@ -11,11 +11,14 @@ export const LoginWrapper = styled.div`
   justify-content: center;
 `;
 
+
+
 export const LoginBox = styled.div`
   background: #fff;
   border-radius: 10px;
   padding: 2rem;
   min-width: 50%;
+  display: flex;
 `;
 
 export const LoginTitle = styled.div`
@@ -45,6 +48,16 @@ export const LoginButton = styled.button`
 
   &:active {
   background: #00008b;
+  }
+`;
+export const Option = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    width: 100%;
   }
 `;
 
