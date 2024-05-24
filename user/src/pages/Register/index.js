@@ -17,11 +17,11 @@ import Input from "../../components/Input";
 const phoneRegExp = /^[0-9]*$/;
 
 const registerSchema = yup.object({
-  username: yup.string().required("Username is required!"),
+  username: yup.string().required("Username is required"),
   email: yup
     .string()
-    .email("Email should be valid!")
-    .required("Email address is required!"),
+    .email("Invalid email")
+    .required("Email address is required"),
   password: yup.string().required("Password is required"),
 });
 

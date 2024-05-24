@@ -19,7 +19,7 @@ import Input from "../../components/Input";
 const loginSchema = yup.object({
   email: yup
     .string()
-    .email("Email should be valid")
+    .email("Invalid email")
     .required("Email address is required"),
   password: yup.string().required("Password is required"),
 });

@@ -75,6 +75,6 @@ export const RegisterLogo = styled.div`
 `;
 
 export const RegisterError = styled.div`
-  color: red;
+  color: #bb0070;
   margin: 0.5rem 0;
 `;

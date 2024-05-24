@@ -77,7 +77,7 @@ export const LoginLogo = styled.div`
 `;
 
 export const LoginError = styled.div`
-  color: red;
+  color: #bb0070;
   margin: 0.5rem 0;
 `;
 
