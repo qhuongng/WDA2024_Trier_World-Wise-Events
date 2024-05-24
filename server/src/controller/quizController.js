@@ -11,6 +11,7 @@ const createQuiz = async (req, res, next) => {
     next(error);
   }
 };
+
 //off
 const getQuiz = async (req, res, next) => {
   try {
@@ -25,6 +26,7 @@ const getQuiz = async (req, res, next) => {
     next(error);
   }
 };
+
 //================================================================================================================================
 const createQuestion = async (req, res, next) => {
   try {
@@ -49,6 +51,7 @@ const createQuestion = async (req, res, next) => {
     ) {
       throw new Error("Input is required");
     }
+
     const questionDetail = {
       idEvent: idEvent,
       text: textQuestion,
@@ -93,16 +96,16 @@ const createResult = async (req, res, next) => {
   try {
     const { idUser, idEvent, score, time } = req.body;
 
-    if (!idUser || !idEvent || score === null || !time)
+    if (!idUser || !idEvent || score === null || score < 0 || time === null || time < 0)
       throw new Error("Input is required.");
 
-    const resutData = {
+    const resultData = {
       idUser: idUser,
       idEvent: idEvent,
       score: score,
       time: time,
     };
-    const result = await quizService.addResult(resutData);
+    const result = await quizService.addResult(resultData);
     if (result) res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -156,4 +159,5 @@ module.exports = {
   createResult,
   getListResult,
   getUserResult,
+  getRandomListQuestion
 };
