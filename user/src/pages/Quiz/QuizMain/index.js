@@ -56,7 +56,7 @@ const QuizMain = () => {
   const [answers, setAnswers] = useState(new Array(15).fill(''));
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [qaPairs, setQaPairs] = useState([]);
-  const [value, setValue] = useState('');
+  const [radioValue, setRadioValue] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [abandon, setAbandon] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -128,7 +128,7 @@ const QuizMain = () => {
     const newAnswers = [...answers];
     newAnswers[currentQuestion - 1] = e.target.value;
     setAnswers(newAnswers);
-    setValue(e.target.value);
+    setRadioValue(e.target.value);
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const QuizMain = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    setValue(answers[currentQuestion - 1]);
+    setRadioValue(answers[currentQuestion - 1]);
   }, [currentQuestion, answers]);
 
   useEffect(() => {
@@ -153,7 +153,7 @@ const QuizMain = () => {
   }, [questions]);
 
   useEffect(() => {
-    if (count) {
+    if (count !== null) {
       let score = calcScore(count);
       setScore(score);
       setResult({
@@ -166,7 +166,7 @@ const QuizMain = () => {
   }, [count]);
 
   useEffect(() => {
-    if (result) {
+    if (result !== null) {
       dispatch(createResult(result));
     }
   }, [dispatch, result]);
@@ -220,7 +220,7 @@ const QuizMain = () => {
                   colorBgContainer: '#ffffff',
                 },
               }}>
-              <Radio.Group onChange={onRadioChange} value={value}>
+              <Radio.Group onChange={onRadioChange} value={radioValue}>
                 <Space size={'large'} direction='vertical'>
                   {questions[currentQuestion - 1].answers.map((answer) => <Radio style={{ fontFamily: 'Inter', fontSize: '1.1rem' }} value={answer} key={answer}>{answer}</Radio>)}
                 </Space>
