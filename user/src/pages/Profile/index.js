@@ -97,7 +97,7 @@ const Profile = () => {
         <ProfileTitle>Account</ProfileTitle>
         <ProfilePhoto
           style={{
-            backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${user?.avatar}`,
+            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar}`,
           }} />
 
         <div style={{ marginBottom: '1rem' }}>

@@ -59,7 +59,7 @@ const EventIntroduction = () => {
               {item.images.map((image) => (
                 <EventIntroductionImage>
                   <img
-                    src={`${process.env.REACT_APP_SERVER_URL}/image/getImage/${image}`}
+                    src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${image}`}
                     alt=""
                   />
                 </EventIntroductionImage>

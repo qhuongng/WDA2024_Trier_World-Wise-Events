@@ -31,7 +31,7 @@ const EventCard = ({ item }) => {
       <OngoingEventCardWrapper to={item.id}>
         <EventCardImage
           style={{
-            backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,
+            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${item.images[0]})`,
           }}
         />
 
@@ -50,7 +50,7 @@ const EventCard = ({ item }) => {
       <EventCardWrapper to={item.id}>
         <EventCardImage
           style={{
-            backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]})`,
+            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${item.images[0]})`,
           }}
         />
 

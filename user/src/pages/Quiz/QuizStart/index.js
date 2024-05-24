@@ -47,7 +47,7 @@ const QuizStart = () => {
           </QuizStartInfo>
           <QuizStartImage
             style={{
-              backgroundImage: `url(${process.env.REACT_APP_SERVER_URL}/image/getImage/${item.images[0]}`,
+              backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${item.images[0]}`,
             }}
           />
         </QuizStartBox>
