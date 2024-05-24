@@ -29,6 +29,8 @@ const EventReplyComment = ({ id }) => {
   }, [dispatch, id]);
 
   const onPressEnter = (e) => {
+    console.log(user);
+    if (!user) return;
     const content = e.target.value;
     const data = {
       idPost: id,

@@ -10,7 +10,6 @@ const getListPost = async (idEvent) => {
 };
 
 const createPost = async (data) => {
-  console.log(`data: ${data}`);
   const response = await axios.post(
     `${process.env.REACT_APP_SERVER_API_URL}/post/createPost`,
     data

@@ -17,7 +17,7 @@ const EventCommentsList = () => {
     dispatch(getAllPosts(item.id));
   }, [dispatch, item]);
 
-  console.log(posts);
+  // console.log(posts);
 
   return (
     <EventCommentsListWrapper>

@@ -16,7 +16,9 @@ export const createSinglePost = createAsyncThunk(
   "post/createPost",
   async (data, thunkAPI) => {
     try {
-      return await postService.createPost(data);
+      const temp = await postService.createPost(data);
+      console.log(temp);
+      return temp;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -57,7 +59,7 @@ export const postSlice = createSlice({
       .addCase(createSinglePost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
-        state.allPosts = [...state.allPosts, action.payload.data];
+        state.allPosts = [...state.allPosts, action.payload];
       })
       .addCase(createSinglePost.rejected, (state, action) => {
         state.isLoading = false;

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  EventBoardWrapper,
-  EventCreatePost,
-  EventCreatePostButton,
-} from "./styles";
+import { EventBoardWrapper, EventCreatePostButton } from "./styles";
 import EventIntroduction from "./EventIntroduction";
 import EventCommentsList from "./EventCommentsList";
 import { useDispatch } from "react-redux";
 import { getOneEvent } from "../../features/event/eventSlice";
 import { setItem } from "../../features/event/eventSlice";
-import { Affix, Button, Modal, Upload } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { Affix, Modal, Upload } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { getAuthUser } from "../../utils/authStorage";
 import { createSinglePost } from "../../features/post/postSlice";
@@ -31,12 +27,13 @@ const EventBoard = () => {
     };
   }, [dispatch, id]);
 
-  console.log(typeof fileList[0]);
-
   const handleOk = () => {
     const formData = new FormData();
     formData.append("idEvent", id);
     formData.append("idUser", user._id);
+    if (value === "") {
+      return;
+    }
     formData.append("text", value);
     if (fileList.length === 1) {
       formData.append("image", fileList[0]);
@@ -86,7 +83,11 @@ const EventBoard = () => {
             marginBottom: "1rem",
           }}
         />
-        <Upload listType="picture-card" onChange={handleChange}>
+        <Upload
+          listType="picture-card"
+          onChange={handleChange}
+          showUploadList={{ showPreviewIcon: false }}
+        >
           {fileList.length < 1 ? uploadButton : null}
         </Upload>
       </Modal>
