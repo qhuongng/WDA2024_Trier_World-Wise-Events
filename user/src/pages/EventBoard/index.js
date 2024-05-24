@@ -14,12 +14,14 @@ import { Affix, Button, Modal, Upload } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { getAuthUser } from "../../utils/authStorage";
+import { createSinglePost } from "../../features/post/postSlice";
 
 const EventBoard = () => {
   const user = getAuthUser();
   const { id } = useParams();
   const [on, setOn] = useState(false);
   const [value, setValue] = useState("");
+  const [fileList, setFileList] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,15 +31,41 @@ const EventBoard = () => {
     };
   }, [dispatch, id]);
 
+  console.log(typeof fileList[0]);
+
   const handleOk = () => {
+    const formData = new FormData();
+    formData.append("idEvent", id);
+    formData.append("idUser", user._id);
+    formData.append("text", value);
+    if (fileList.length === 1) {
+      formData.append("image", fileList[0]);
+    }
+    dispatch(createSinglePost(formData));
     setOn(false);
     setValue("");
   };
 
   const handleCancel = () => {
     setOn(false);
-    setValue("");
   };
+
+  const handleChange = (e) => {
+    setFileList([e.file.originFileObj]);
+  };
+
+  const uploadButton = (
+    <button
+      type="button"
+      style={{
+        border: 0,
+        background: "none",
+      }}
+    >
+      <PlusOutlined />
+      <div>Upload</div>
+    </button>
+  );
 
   return (
     <>
@@ -51,32 +79,16 @@ const EventBoard = () => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Comment"
-          autoSize={{ minRows: 3, maxRows: 5 }}
-          style={{ background: "#F1F1F1", border: "none" }}
+          autoSize={{ minRows: 10, maxRows: 5 }}
+          style={{
+            background: "#F1F1F1",
+            border: "none",
+            marginBottom: "1rem",
+          }}
         />
-        <Upload
-          action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-          listType="picture-card"
-
-          // fileList={fileList}
-          // onPreview={handlePreview}
-          // onChange={handleChange}
-        >
-          {/* {fileList.length >= 8 ? null : uploadButton} */}
+        <Upload listType="picture-card" onChange={handleChange}>
+          {fileList.length < 1 ? uploadButton : null}
         </Upload>
-        {/* {previewImage && (
-          <Image
-            wrapperStyle={{
-              display: "none",
-            }}
-            preview={{
-              visible: previewOpen,
-              onVisibleChange: (visible) => setPreviewOpen(visible),
-              afterOpenChange: (visible) => !visible && setPreviewImage(""),
-            }}
-            src={previewImage}
-          />
-        )} */}
       </Modal>
       <EventBoardWrapper>
         <EventIntroduction />

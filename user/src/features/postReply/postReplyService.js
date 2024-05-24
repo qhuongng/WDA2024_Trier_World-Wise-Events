@@ -11,7 +11,7 @@ const getPostReply = async (idPost) => {
 
 const createPostReply = async (data) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_URL}/postReply/createPostReply`,
+    `${process.env.REACT_APP_SERVER_API_URL}/postReply/createPostReply`,
     data
   );
   if (response.data) {

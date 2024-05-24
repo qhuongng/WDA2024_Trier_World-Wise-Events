@@ -12,34 +12,20 @@ export const getAllPosts = createAsyncThunk(
   }
 );
 
-// export const getPagedEvents = createAsyncThunk(
-//   "post/functionProduct",
-//   async (url, thunkAPI) => {
-//     try {
-//       return await postService.getPagedEvents(url);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-
-// export const getOneEvent = createAsyncThunk(
-//   "post/oneEvent",
-//   async (id, thunkAPI) => {
-//     try {
-//       console.log(id);
-//       return await postService.getSingleEvent(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const createSinglePost = createAsyncThunk(
+  "post/createPost",
+  async (data, thunkAPI) => {
+    try {
+      return await postService.createPost(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   allPosts: null,
   isLoading: null,
-  // pagedEvents: null,
-  // message: "",
 };
 
 export const postSlice = createSlice({
@@ -62,6 +48,18 @@ export const postSlice = createSlice({
         state.allPosts = action.payload.data;
       })
       .addCase(getAllPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+      })
+      .addCase(createSinglePost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createSinglePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = "";
+        state.allPosts = [...state.allPosts, action.payload.data];
+      })
+      .addCase(createSinglePost.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       });
