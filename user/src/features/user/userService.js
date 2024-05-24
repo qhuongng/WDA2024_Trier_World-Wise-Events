@@ -24,10 +24,20 @@ const login = async (userData) => {
   }
 };
 
-const logout = async (refreshToken) => {
-  Cookies.set("refreshToken", refreshToken);
+const loginGoogle = async () => {
   const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/logout`,
+    `${process.env.REACT_APP_SERVER_BASE_URL}/login/success`,
+    { withCredentials: true }
+  );
+  if (response) {
+    console.log(response);
+    return response.data.user;
+  }
+}
+
+const logout = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_BASE_URL}/logout`,
     {
       withCredentials: true,
     }
@@ -73,6 +83,7 @@ const resetPassword = async (resetPasswordData) => {
 export const authService = {
   register,
   login,
+  loginGoogle,
   logout,
   update,
   resetPassword,

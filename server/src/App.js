@@ -109,7 +109,7 @@ app.get("/auth/google/callback", passport.authenticate("google", {
   failureRedirect: "http://localhost:3000/login"
 }))
 
-app.get("/login/sucess", async (req, res) => {
+app.get("/login/success", async (req, res) => {
   if (req.user) {
     const user = req.user;
     const existUser = await User.findById(user._id);
@@ -117,10 +117,17 @@ app.get("/login/sucess", async (req, res) => {
       ...user,
       token: await existUser.generateJWT()
     }
+    //res.status(200).json({ message: "user Login", user: currentUser })
     res.status(200).json({ message: "user Login", user: currentUser })
   } else {
     res.status(400).json({ message: "Not Authorized" })
   }
+})
+app.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) { return next(err) }
+    res.status(200).json({ message: "logout success" });
+  })
 })
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);
