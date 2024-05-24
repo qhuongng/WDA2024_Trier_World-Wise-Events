@@ -3,7 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../Footer";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, ConfigProvider, Affix } from "antd";
-import { getAuthUser, removeAuthUser } from "../../utils/authStorage";
+import { getAuthUser } from "../../utils/authStorage";
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from "../../features/user/userSlice";
 import {
   HomeOutlined,
   CalendarOutlined,
@@ -38,7 +40,7 @@ const items = [
 
 const MainLayout = ({ children }) => {
   const user = getAuthUser();
-
+  const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(true);
 
   const navigate = useNavigate();
@@ -59,6 +61,10 @@ const MainLayout = ({ children }) => {
       }
     }
   }, [location, current]);
+
+  const logOut = async () => {
+    dispatch(logoutUser());
+  }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -112,7 +118,7 @@ const MainLayout = ({ children }) => {
                     onClick={({ key }) => {
                       if (key === "signout") {
                         setCurrent('/');
-                        removeAuthUser();
+                        logOut();
                         navigate('/');
                       } else {
                         setCurrent(key);

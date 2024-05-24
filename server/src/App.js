@@ -69,7 +69,7 @@ passport.use(
       try {
         let user = await User.findOne({ googleID: profile.id });
         if (user) {
-          done(null, user);;
+          return done(null, user);
         }
         else {
           user = new User({
@@ -92,10 +92,12 @@ passport.use(
 )
 
 passport.serializeUser((user, done) => {
+  console.log("Serialize");
   done(null, user);
 })
 
 passport.deserializeUser((user, done) => {
+  console.log("Deserilize");
   done(null, user);
 });
 
@@ -107,17 +109,25 @@ app.get("/auth/google/callback", passport.authenticate("google", {
   failureRedirect: "http://localhost:3000/login"
 }))
 
-app.get("/login/sucess", async (req, res) => {
-
+app.get("/login/success", async (req, res) => {
   if (req.user) {
+    const user = req.user;
+    const existUser = await User.findById(user._id);
     const currentUser = {
-      ...req.user.toObject(),
-      token: await req.user.generateJWT()
+      ...user,
+      token: await existUser.generateJWT()
     }
+    //res.status(200).json({ message: "user Login", user: currentUser })
     res.status(200).json({ message: "user Login", user: currentUser })
   } else {
     res.status(400).json({ message: "Not Authorized" })
   }
+})
+app.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) { return next(err) }
+    res.status(200).json({ message: "logout success" });
+  })
 })
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);
