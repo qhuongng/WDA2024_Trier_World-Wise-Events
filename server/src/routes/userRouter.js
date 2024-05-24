@@ -10,6 +10,7 @@ const {
   updateAvatarController
 } = require("../controller/usersController");
 const { authGuard } = require("../middleware/authMiddleware");
+const passport = require('passport');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -24,4 +25,6 @@ router.put("/updateAvatar/:id", upload.single("image"), updateAvatarController);
 router.put("/updateProfile", updateProfileController);
 router.put("/resetPassword", resetPasswordController);
 //-----------------------------------------------------
+
+
 module.exports = router;
