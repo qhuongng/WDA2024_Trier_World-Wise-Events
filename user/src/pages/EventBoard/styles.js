@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Input } from "antd";
+import { Button, Input } from "antd";
 
 export const EventBoardWrapper = styled.div`
   padding: 36px;
@@ -145,4 +145,14 @@ export const EventCommentInput = styled(Input)`
   margin-top: 1rem;
   background: #e1daff;
   border-radius: 1rem;
+`;
+
+export const EventCreatePostButton = styled(Button)`
+  border-radius: 50%;
+  background: #2000bb;
+  font-weight: 700;
+  font-size: 1.5rem;
+  min-width: 3rem;
+  height: 3rem;
+  filter: drop-shadow(0px 0px 9px #2000bb);
 `;
