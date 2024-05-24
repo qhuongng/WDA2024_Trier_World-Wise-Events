@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { postService } from "./postService";
+import { postReplyService } from "./postReplyService";
 
-export const getAllPosts = createAsyncThunk(
-  "post/allPosts",
-  async (idEvent, thunkAPI) => {
+export const getReply = createAsyncThunk(
+  "postReply/getReply",
+  async (idPost, thunkAPI) => {
     try {
-      return await postService.getListPost(idEvent);
+      return await postReplyService.getPostReply(idPost);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -36,37 +36,37 @@ export const getAllPosts = createAsyncThunk(
 // );
 
 const initialState = {
-  allPosts: null,
+  allReply: {},
   isLoading: null,
   // pagedEvents: null,
   // message: "",
 };
 
-export const postSlice = createSlice({
-  name: "post",
+export const postReplySlice = createSlice({
+  name: "postReply",
   initialState: initialState,
   reducers: {
-    setPosts: (state, action) => {
-      state.allPosts = action.payload || [];
+    setReply: (state, action) => {
+      state.allReply = action.payload ?? {};
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllPosts.pending, (state) => {
+      .addCase(getReply.pending, (state) => {
         state.isLoading = true;
-        state.allPosts = [];
+        state.allReply = {};
       })
-      .addCase(getAllPosts.fulfilled, (state, action) => {
+      .addCase(getReply.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
-        state.allPosts = action.payload.data;
+        state.allReply[action.meta.arg] = action.payload.data;
       })
-      .addCase(getAllPosts.rejected, (state, action) => {
+      .addCase(getReply.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       });
   },
 });
 
-export const { setPosts } = postSlice.actions;
-export default postSlice.reducer;
+export const { setReply } = postReplySlice.actions;
+export default postReplySlice.reducer;

@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
-    createQuiz,
-    getQuiz,
-    createQuestion,
-    getListQuestion,
-    getRandomListQuestion,
-    getQuestion,
-    createResult,
-    getListResult,
-    getUserResult
+  createQuiz,
+  getQuiz,
+  createQuestion,
+  getListQuestion,
+  getRandomListQuestion,
+  getQuestion,
+  createResult,
+  getListResult,
+  getUserResult
 } = require("../controller/quizController");
 
 // for quiz
