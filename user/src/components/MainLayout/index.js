@@ -22,6 +22,7 @@ function getItem(label, key, icon, children) {
   };
 }
 
+
 const loggedInItems = [
   getItem('Home', '/', <HomeOutlined />),
   getItem('All Events', 'events', <CalendarOutlined />),

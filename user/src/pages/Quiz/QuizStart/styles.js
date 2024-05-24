@@ -41,14 +41,14 @@ export const QuizStartTitle = styled.div`
 `;
 
 export const QuizStartSubtitle = styled.div`
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #434343;
   font-weight: 600;
   margin: 0 auto 1rem 0;
 `;
 
 export const QuizStartDesc = styled.div`
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: #434343;
   margin: 2rem auto 1rem 0;
 `;

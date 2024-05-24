@@ -32,8 +32,22 @@ const EventIntroduction = () => {
         <Col span={12}>
           <EventIntroductionLeft>
             <div className="title">{item.eventName}</div>
-            <div className="country">{item.city}</div>
-            <div className="time">{duration}</div>
+            <div className="country">
+              {item.city}, {item.country}
+            </div>
+            <div className="time">
+              {duration}
+              {item.isOngoing ? (
+                <span className="ongoing-glyph">•</span>
+              ) : (
+                <></>
+              )}
+              {item.isOngoing ? (
+                <span className="ongoing">Ongoing</span>
+              ) : (
+                <></>
+              )}
+            </div>
             <div className="description">{item.description}</div>
             {user ? (
               <EventIntroductionQuizButton
@@ -50,7 +64,7 @@ const EventIntroduction = () => {
           </EventIntroductionLeft>
         </Col>
         <Col>
-          <Carousel autoplay autoplaySpeed={2000} dots={false}>
+          <Carousel autoplay autoplaySpeed={2000} dots={false} infinite>
             {item.images.map((image) => (
               <EventIntroductionImage>
                 <img

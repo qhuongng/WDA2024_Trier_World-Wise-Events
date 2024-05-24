@@ -68,6 +68,7 @@ const initialState = {
   allEvents: null,
   pagedEvents: null,
   geoJsonEvents: null,
+  eventsById: {},
   message: "",
   isLoading: null,
 };
@@ -124,6 +125,7 @@ export const eventSlice = createSlice({
       .addCase(getOneEvent.fulfilled, (state, action) => {
         state.message = "";
         state.singleEvent = action.payload;
+        state.eventsById[action.payload._id] = action.payload;
         state.isLoading = false;
       })
       .addCase(getOneEvent.rejected, (state, action) => {
