@@ -153,12 +153,18 @@ const QuizMain = () => {
   }, [questions]);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [dispatch, user, navigate]);
+
+  useEffect(() => {
     if (count !== null) {
       let score = calcScore(count);
       setScore(score);
       setResult({
         idEvent: id,
-        idUser: user._id,
+        idUser: user?._id,
         score: parseInt(score),
         time: parseInt(timeElapsed)
       });

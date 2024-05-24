@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getAuthUser } from "../../../utils/authStorage";
 import { getOneEvent } from "../../../features/event/eventSlice";
 import {
   QuizStartBox,
@@ -17,9 +18,18 @@ import { ConfigProvider, Spin } from 'antd';
 
 const QuizStart = () => {
   const { id } = useParams();
+  const user = getAuthUser();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const item = useSelector((state) => state.event.singleEvent) || null;
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [dispatch, user, navigate]);
 
   useEffect(() => {
     dispatch(getOneEvent(id));
