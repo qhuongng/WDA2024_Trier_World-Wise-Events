@@ -24,10 +24,16 @@ const getListPost = async (idEvent) => {
 
         const data = await Promise.all(existPosts.map(async (post) => {
             const user = await User.findById(post.idUser);
+            let apiString = ""
+            if (!user.avatar.startsWith("http")) {
+                apiString = `http://localhost:3600/api/image/getImage/${user.avatar}`
+            } else {
+                apiString = user.avatar
+            }
             return {
                 ...post.toObject(),
                 username: user.username,
-                avatar: user.avatar
+                avatar: apiString
             }
         }));
 
