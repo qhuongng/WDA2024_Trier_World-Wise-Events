@@ -9,7 +9,6 @@ export const EventBoardWrapper = styled.div`
 export const EventIntroductionWrapper = styled.div`
   background: #f1f1f1;
   border-radius: 10px;
-  padding: 2rem;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -18,26 +17,40 @@ export const EventIntroductionWrapper = styled.div`
 `;
 
 export const EventIntroductionLeft = styled.div`
+  height: 100%;
+  width: 45%
+  box-sizing: border-box;
+  padding: 48px;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  margin-right: 2rem;
+  align-items: flex-start;
+  justify-content: center;
 
   .title {
     color: #2000bb;
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 700;
+    margin-bottom: 1rem;
   }
 
   .country {
     color: #434343;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
   .time {
     color: #434343;
     font-size: 1rem;
+  }
+
+  .ongoing-glyph {
+    margin: 0 0.5rem;
+  }
+
+  .ongoing {
+    font-weight: 600;
+    color: #bb0070;
   }
 
   .description {
@@ -58,14 +71,12 @@ export const EventIntroductionLeft = styled.div`
 `;
 
 export const EventIntroductionImage = styled.div`
-  height: 25rem;
+  height: 30rem;
   max-width: 50%;
   margin-left: 1rem;
   & > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 1rem;
+    object-fit: contain;
+    border-radius: 0 12px 12px 0;
   }
 `;
 
@@ -124,7 +135,7 @@ export const EventIntroductionQuizButton = styled(Link)`
   padding: 0.5rem 3rem;
   color: #fff;
   font-size: 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-right: auto;
 
   cursor: pointer;

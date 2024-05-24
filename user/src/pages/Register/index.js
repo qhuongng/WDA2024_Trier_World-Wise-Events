@@ -11,17 +11,35 @@ import {
   RegisterLogo,
   RegisterTitle,
   RegisterWrapper,
+  Option,
+  RegisterLink,
+  RegisterOptionButton
 } from "./styles";
 import Input from "../../components/Input";
+import { notification, Divider } from "antd";
+import {
+  GoogleOutlined,
+  MailOutlined
+} from '@ant-design/icons';
 
-const phoneRegExp = /^[0-9]*$/;
+const signUpWithGoogle = () => {
+  try {
+    window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
+  } catch (error) {
+    console.log(error);
+    notification.error({
+      message: error,
+      duration: "1",
+    });
+  }
+}
 
 const registerSchema = yup.object({
-  username: yup.string().required("Username is required!"),
+  username: yup.string().required("Username is required"),
   email: yup
     .string()
-    .email("Email should be valid!")
-    .required("Email address is required!"),
+    .email("Invalid email")
+    .required("Email address is required"),
   password: yup.string().required("Password is required"),
 });
 
@@ -44,11 +62,25 @@ const Register = () => {
 
   return (
     <RegisterWrapper>
-      <RegisterLogo>
+      <RegisterLogo to='/'>
         <img src="logo.png" alt="" />
         <div>World-Wise Events</div>
       </RegisterLogo>
       <RegisterBox>
+        <Option>
+          <RegisterTitle style={{ marginBottom: '3rem' }}>Log in</RegisterTitle>
+          <RegisterOptionButton onClick={signUpWithGoogle} style={{ marginBottom: '2rem' }}>
+            <GoogleOutlined style={{ marginRight: '1rem' }} />
+            Continue with Google
+          </RegisterOptionButton>
+          <RegisterLink to="/login">
+            <MailOutlined style={{ marginRight: '1rem' }} />
+            Log in with email
+          </RegisterLink>
+        </Option>
+
+        <Divider type="vertical" style={{ height: '100%' }} />
+
         <RegisterForm action="" onSubmit={formik.handleSubmit}>
           <RegisterTitle>Join us!</RegisterTitle>
           <div>
@@ -103,7 +135,7 @@ const Register = () => {
               {formik.touched.confirmPassword && formik.errors.confirmPassword}
             </RegisterError>
           </div>
-          <RegisterButton type="submit">Sign Up</RegisterButton>
+          <RegisterButton type="submit">Sign up</RegisterButton>
         </RegisterForm>
       </RegisterBox>
     </RegisterWrapper>

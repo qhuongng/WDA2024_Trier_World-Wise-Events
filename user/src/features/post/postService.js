@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getListPost = async (idEvent) => {
   const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_URL}/post/getListPost/${idEvent}`
+    `${process.env.REACT_APP_SERVER_API_URL}/post/getListPost/${idEvent}`
   );
   if (response.data) {
     return response.data;

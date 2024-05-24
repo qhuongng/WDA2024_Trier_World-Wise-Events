@@ -9,6 +9,7 @@ export const LoginWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: Inter;
 `;
 
 export const LoginBox = styled.div`
@@ -16,13 +17,17 @@ export const LoginBox = styled.div`
   border-radius: 10px;
   padding: 2rem;
   min-width: 50%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
 
 export const LoginTitle = styled.div`
-  font-size: 2rem;
+  font-size: 1.4rem;
   color: #2000bb;
   font-weight: 600;
   text-align: center;
+  margin-bottom: 1rem;
 `;
 
 export const LoginButton = styled.button`
@@ -47,8 +52,8 @@ export const LoginButton = styled.button`
   background: #00008b;
   }
 `;
-
-export const LoginForm = styled.form`
+export const Option = styled.div`
+  width: 45%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,7 +64,19 @@ export const LoginForm = styled.form`
   }
 `;
 
-export const LoginLogo = styled.div`
+export const LoginForm = styled.form`
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    width: 100%;
+  }
+`;
+
+export const LoginLogo = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,12 +89,12 @@ export const LoginLogo = styled.div`
   div {
     color: #2000bb;
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 `;
 
 export const LoginError = styled.div`
-  color: red;
+  color: #bb0070;
   margin: 0.5rem 0;
 `;
 
@@ -88,11 +105,41 @@ export const LoginLink = styled(Link)`
   font-weight: 600;
   border: 1px solid #2000bb;
   border-radius: 12px;
-  padding: 0.5rem 3rem;
+  padding: 0.5rem 0;
   font-size: 1rem;
-  margin-top: 2rem;
-  margin-right: 2rem;
   box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid #4a00e0;
+    color: #4a00e0;
+  }
+
+  &:active {
+    border: 1px solid #00008b;
+    color: #00008b;
+  }
+`;
+
+export const LoginOptionButton = styled.button`
+  background: #fff;
+  color: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
+  border: 1px solid #2000bb;
+  border-radius: 12px;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   cursor: pointer;
 

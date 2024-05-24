@@ -1,24 +1,26 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authService } from "./userService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { authService } from './userService';
 import {
   clearAuthStorage,
   getAuthUser,
   setAccessToken,
   setAuthUser,
   setRefreshToken,
-} from "../../utils/authStorage";
-import { notification } from "antd";
+} from '../../utils/authStorage';
+import { notification } from 'antd';
 
 // API: Register
 export const registerUser = createAsyncThunk(
-  "auth/register",
+  'auth/register',
   async (userData, thunkAPI) => {
     try {
       const data = await authService.register(userData);
       return data;
     } catch (error) {
       notification.error({
-        message: `${error.response.data.message}`,
+        message: 'Failed to create account',
+        description: `${error.response.data.message}.`,
+        duration: '3'
       });
       return thunkAPI.rejectWithValue(error);
     }
@@ -27,14 +29,16 @@ export const registerUser = createAsyncThunk(
 
 // API: Login
 export const loginUser = createAsyncThunk(
-  "auth/login",
+  'auth/login',
   async (userData, thunkAPI) => {
     try {
       const data = await authService.login(userData);
       return data;
     } catch (error) {
       notification.error({
-        message: `${error.response.data.message}`,
+        message: 'Login failed',
+        description: `${error.response.data.message}.`,
+        duration: '3'
       });
       return thunkAPI.rejectWithValue(error);
     }
@@ -43,7 +47,7 @@ export const loginUser = createAsyncThunk(
 
 // API: Logout
 export const logoutUser = createAsyncThunk(
-  "auth/logout",
+  'auth/logout',
   async (refreshToken, thunkAPI) => {
     return;
   }
@@ -51,7 +55,7 @@ export const logoutUser = createAsyncThunk(
 
 // API: Update
 export const updateUser = createAsyncThunk(
-  "auth/update",
+  'auth/update',
   async (updatedUserData, thunkAPI) => {
     try {
       return await authService.update(updatedUserData);
@@ -63,7 +67,7 @@ export const updateUser = createAsyncThunk(
 
 // API: Reset password
 export const resetPass = createAsyncThunk(
-  "auth/reset",
+  'auth/reset',
   async (password, thunkAPI) => {
     try {
       return await authService.resetPassword(password);
@@ -74,12 +78,12 @@ export const resetPass = createAsyncThunk(
 );
 
 const initialState = {
-  message: "",
+  message: '',
   isLoading: false,
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -90,14 +94,15 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = "";
+        state.message = '';
         state.createdUser = action.payload;
         notification.success({
-          message: "Successfully Register",
-          duration: "1",
+          message: 'Account created successfully',
+          description: 'Welcome. Please log in to continue.',
+          duration: '3',
         });
         setTimeout(() => {
-          window.location.assign("/login");
+          window.location.assign('/login');
         }, 1000);
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -112,18 +117,18 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = "";
+        state.message = '';
         state.user = action.payload;
         setAuthUser(state.user);
         setAccessToken(state.user.token);
-        setRefreshToken(state.user.refreshToken);
+
         notification.success({
-          message: "Hello User",
-          description: "Welcome to World-Wise Events!",
-          duration: "1",
+          message: 'Login successfully',
+          description: 'Welcome back!',
+          duration: '3',
         });
         setTimeout(() => {
-          window.location.assign("/");
+          window.location.assign('/');
         }, 1000);
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -138,11 +143,11 @@ export const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = "";
+        state.message = '';
         clearAuthStorage();
         state.user = null;
-        if (state.user === null && state.message === "") {
-          window.location.assign("/");
+        if (state.user === null && state.message === '') {
+          window.location.assign('/');
         }
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -158,11 +163,11 @@ export const authSlice = createSlice({
         const user = getAuthUser();
         console.log(action.payload);
         state.isLoading = false;
-        state.message = "";
+        state.message = '';
         notification.success({
-          message: "Update profile",
-          description: "Update successfully",
-          duration: "1",
+          message: 'Update profile successfully',
+          description: 'Your account information has been updated.',
+          duration: '3',
         });
         state.user = { ...user, ...action.payload };
         setAuthUser(state.user);
@@ -178,16 +183,21 @@ export const authSlice = createSlice({
       })
       .addCase(resetPass.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = "";
+        state.message = '';
         notification.success({
-          message: "Update password",
-          description: "Update successfully",
-          duration: "1",
+          message: 'Update password successfully',
+          description: 'Your password has been reset.',
+          duration: '3',
         });
       })
       .addCase(resetPass.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
+        notification.error({
+          message: 'Failed to update password',
+          description: 'Check if you have correctly input your current password.',
+          duration: '3',
+        });
       })
   },
 });

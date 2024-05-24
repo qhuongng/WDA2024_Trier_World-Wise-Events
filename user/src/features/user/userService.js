@@ -6,7 +6,7 @@ import {
 
 const register = async (userData) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_URL}/user/register`,
+    `${process.env.REACT_APP_SERVER_API_URL}/user/register`,
     userData
   );
   if (response.data) {
@@ -16,7 +16,7 @@ const register = async (userData) => {
 
 const login = async (userData) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_URL}/user/login`,
+    `${process.env.REACT_APP_SERVER_API_URL}/user/login`,
     userData
   );
   if (response.data) {
@@ -27,7 +27,7 @@ const login = async (userData) => {
 const logout = async (refreshToken) => {
   Cookies.set("refreshToken", refreshToken);
   const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_URL}/user/logout`,
+    `${process.env.REACT_APP_SERVER_API_URL}/user/logout`,
     {
       withCredentials: true,
     }
@@ -40,7 +40,7 @@ const logout = async (refreshToken) => {
 const update = async (updatedUserData) => {
   const user = getAuthUser();
   const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_URL}/user/updateProfile`,
+    `${process.env.REACT_APP_SERVER_API_URL}/user/updateProfile`,
     updatedUserData,
     {
       headers: {
@@ -56,7 +56,7 @@ const update = async (updatedUserData) => {
 const resetPassword = async (resetPasswordData) => {
   const user = getAuthUser();
   const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_URL}/user/resetPassword`,
+    `${process.env.REACT_APP_SERVER_API_URL}/user/resetPassword`,
     resetPasswordData,
     {
       headers: {

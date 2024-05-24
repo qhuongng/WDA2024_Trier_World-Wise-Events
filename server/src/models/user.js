@@ -21,6 +21,10 @@ const user = new Schema({
     avatar: {
         type: String,
         required: true
+    },
+    googleID: {
+        type: String,
+        default: ""
     }
 }, { timestamps: false });
 
