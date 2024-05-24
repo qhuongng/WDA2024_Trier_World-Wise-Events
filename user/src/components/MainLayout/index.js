@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../Footer";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, ConfigProvider, Affix } from "antd";
-import { getAuthUser } from "../../utils/authStorage";
+import { getAuthUser, removeAuthUser } from "../../utils/authStorage";
 import {
   HomeOutlined,
   CalendarOutlined,
@@ -111,6 +111,8 @@ const MainLayout = ({ children }) => {
                     onClick={({ key }) => {
                       if (key === "signout") {
                         setCurrent('/');
+                        removeAuthUser();
+                        navigate('/');
                       } else {
                         setCurrent(key);
                         navigate(key);
