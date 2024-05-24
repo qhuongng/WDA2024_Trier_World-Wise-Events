@@ -16,9 +16,18 @@ import {
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/user/userSlice";
 import Input from "../../components/Input";
+import { notification } from "antd";
 
 const signUpWithGoogle = () => {
-  window.open("http://localhost:3600/auth/google/callback", "_self")
+  try {
+    window.open("http://localhost:3600/auth/google/callback", "_self")
+  } catch (error) {
+    console.log(error);
+    notification.error({
+      message: error,
+      duration: "1",
+    });
+  }
 }
 
 const loginSchema = yup.object({

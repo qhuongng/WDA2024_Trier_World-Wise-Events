@@ -50,7 +50,7 @@ export const LoginButton = styled.button`
   background: #00008b;
   }
 `;
-export const Option = styled.form`
+export const Option = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
