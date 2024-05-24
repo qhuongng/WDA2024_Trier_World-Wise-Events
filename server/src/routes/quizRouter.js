@@ -10,7 +10,6 @@ const {
   createResult,
   getListResult,
   getUserResult,
-  getRandomListQuestion,
 } = require("../controller/quizController");
 
 // for quiz
