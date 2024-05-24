@@ -2,7 +2,7 @@ import React from "react";
 import { InputItem, InputLabel, InputWrapper } from "./styles";
 
 const Input = (props) => {
-  const { type, placeholder, label, id, name, value, onChange, onBlur } = props;
+  const { type, placeholder, label, id, name, value, onChange, onBlur, disabled } = props;
   return (
     <InputWrapper>
       <InputLabel htmlFor={label}>{label}</InputLabel>
@@ -14,6 +14,7 @@ const Input = (props) => {
         value={value}
         onChange={onChange}
         onBlur={onBlur}
+        disabled={disabled}
       />
     </InputWrapper>
   );
