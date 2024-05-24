@@ -12,15 +12,20 @@ import {
   LoginLogo,
   LoginTitle,
   LoginWrapper,
+  LoginOptionButton
 } from "./styles";
+import {
+  GoogleOutlined,
+  MailOutlined
+} from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/user/userSlice";
 import Input from "../../components/Input";
-import { notification } from "antd";
+import { notification, Divider } from "antd";
 
 const signUpWithGoogle = () => {
   try {
-    window.open("http://localhost:3600/auth/google/callback", "_self")
+    window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
   } catch (error) {
     console.log(error);
     notification.error({
@@ -52,22 +57,26 @@ const Login = () => {
   });
   return (
     <LoginWrapper>
-      <LoginLogo>
+      <LoginLogo to={'/'}>
         <img src="logo.png" alt="" />
         <div>World-Wise Events</div>
       </LoginLogo>
+
       <LoginBox>
         <Option>
-          <LoginTitle>Sign up</LoginTitle>
-          <LoginButton onClick={signUpWithGoogle}>
-            <img src="google.png" alt="" />
+          <LoginTitle style={{ marginBottom: '3rem' }}>Sign up</LoginTitle>
+          <LoginOptionButton onClick={signUpWithGoogle} style={{ marginBottom: '2rem' }}>
+            <GoogleOutlined style={{ marginRight: '1rem' }} />
             Continue with Google
-          </LoginButton>
+          </LoginOptionButton>
           <LoginLink to="/register">
-            <img src="mail.png" alt="" />
+            <MailOutlined style={{ marginRight: '1rem' }} />
             Sign up with email
           </LoginLink>
         </Option>
+
+        <Divider type="vertical" style={{ height: '100%' }} />
+
         <LoginForm action="" onSubmit={formik.handleSubmit}>
           <LoginTitle>Welcome back!</LoginTitle>
           <div>
@@ -83,6 +92,7 @@ const Login = () => {
               {formik.touched.email && formik.errors.email}
             </LoginError>
           </div>
+
           <div>
             <Input
               type="password"
@@ -96,8 +106,9 @@ const Login = () => {
               {formik.touched.password && formik.errors.password}
             </LoginError>
           </div>
+
           <LoginButtonWrapper>
-            <LoginButton type="submit">Login</LoginButton>
+            <LoginButton type="submit">Log in</LoginButton>
           </LoginButtonWrapper>
         </LoginForm>
       </LoginBox>
