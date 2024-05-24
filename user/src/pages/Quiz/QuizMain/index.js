@@ -64,8 +64,8 @@ const QuizMain = () => {
   const [modalContent, setModalContent] = useState('');
   const [pendingNavigation, setPendingNavigation] = useState(null);
 
-  const [count, setCount] = useState(0);
-  const [score, setScore] = useState(0);
+  const [count, setCount] = useState(null);
+  const [score, setScore] = useState(null);
   const [result, setResult] = useState(null);
 
   useBlocker((transition) => {
@@ -153,14 +153,16 @@ const QuizMain = () => {
   }, [questions]);
 
   useEffect(() => {
-    let score = calcScore(count);
-    setScore(score);
-    setResult({
-      idEvent: id,
-      idUser: user._id,
-      score: parseInt(score),
-      time: parseInt(timeElapsed)
-    });
+    if (count) {
+      let score = calcScore(count);
+      setScore(score);
+      setResult({
+        idEvent: id,
+        idUser: user._id,
+        score: parseInt(score),
+        time: parseInt(timeElapsed)
+      });
+    }
   }, [count]);
 
   useEffect(() => {

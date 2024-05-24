@@ -1,9 +1,9 @@
-import { Carousel } from "antd";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const EventBoardWrapper = styled.div`
   padding: 36px;
+  background: #fff;
 `;
 
 export const EventIntroductionWrapper = styled.div`
@@ -77,11 +77,9 @@ export const EventCommentsListWrapper = styled.div`
 `;
 
 export const EventCommentWrapper = styled.div`
-  border-radius: 16px;
+  border-radius: 16px 16px 0 0;
   background: #e1daff;
-  margin: 5px;
   width: 100%;
-  break-inside: avoid;
   padding: 1.5rem;
   .text {
     margin: 1rem 0;
@@ -106,6 +104,17 @@ export const EventCommentPerson = styled.div`
   }
 `;
 
+export const EventReplyCommentWrapper = styled.div`
+  background: #f1f1f1;
+  padding: 1.5rem;
+  border-radius: 0 0 16px 16px;
+`;
+
+export const EventPost = styled.div`
+  break-inside: avoid;
+  margin: 0 0 1rem;
+`;
+
 export const EventIntroductionQuizButton = styled(Link)`
   background: #2000bb;
   font-family: Inter;
@@ -127,6 +136,6 @@ export const EventIntroductionQuizButton = styled(Link)`
 
   &:active {
     background: #00008b;
-    color:#fff;
+    color: #fff;
   }
 `;

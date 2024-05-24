@@ -27,25 +27,25 @@ const AllEvents = () => {
     dispatch(getPagedEvents(`?page=${currentPage}&limit=12`));
   }, [dispatch, currentPage]);
 
-    return (
-        <EventsWrapper>
-            <EventsTitle>All Events</EventsTitle>
+  return (
+    <EventsWrapper>
+      <EventsTitle>All Events</EventsTitle>
 
-            <EventsRow>
-                {pagedEvents && pagedEvents.length !== 0 ? (
-                    chunk(pagedEvents.data, 4).map((row) => (
-                        <Row gutter={[20, 20]} style={{ marginTop: 20 }}>
-                            {row.map((item) => (
-                                <Col span={6} key={item.id} flex={"auto"}>
-                                    <EventCard item={item} />
-                                </Col>
-                            ))}
-                        </Row>
-                    ))
-                ) : (
-                    <EventsMessage>No result.</EventsMessage>
-                )}
-            </EventsRow>
+      <EventsRow>
+        {pagedEvents && pagedEvents.length !== 0 ? (
+          chunk(pagedEvents.data, 4).map((row) => (
+            <Row gutter={[20, 20]} style={{ marginTop: 20 }}>
+              {row.map((item) => (
+                <Col span={6} key={item.id} flex={"auto"}>
+                  <EventCard item={item} />
+                </Col>
+              ))}
+            </Row>
+          ))
+        ) : (
+          <EventsMessage>Loading...</EventsMessage>
+        )}
+      </EventsRow>
 
       <ConfigProvider
         theme={{
