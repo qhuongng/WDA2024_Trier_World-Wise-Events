@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getQuestions, createResult, resetResultSent } from '../../../features/quiz/quizSlice';
 import { getOneEvent } from '../../../features/event/eventSlice';
 import { getAuthUser } from "../../../utils/authStorage";
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined, LoadingOutlined } from '@ant-design/icons';
 import {
   QuizMainBox,
   QuizMainTitle,
@@ -19,7 +19,7 @@ import {
   QuizMainIndexer,
   QuizMainProgress
 } from './styles';
-import { Radio, Space, ConfigProvider, Statistic, Modal } from 'antd';
+import { Radio, Space, ConfigProvider, Statistic, Modal, Spin } from 'antd';
 
 const { Countdown } = Statistic;
 
@@ -258,7 +258,18 @@ const QuizMain = () => {
           </QuizMainBottomMenu>
         </>
       ) : (
-        <p>Loading...</p>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#bb0070",
+              borderRadius: 12,
+              colorBgContainer: "#ffffff",
+              itemActiveBg: "#e1daff",
+            },
+          }}
+        >
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 36, marginTop: '3rem' }} spin />} />
+        </ConfigProvider>
       )}
 
       <ConfigProvider
