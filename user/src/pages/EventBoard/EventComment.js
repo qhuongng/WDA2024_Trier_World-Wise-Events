@@ -10,15 +10,12 @@ const EventComment = ({ post }) => {
         {post.image && (
           <Image
             width={"100%"}
-            src={`http://localhost:3600/api/image/getImage/${post.image}`}
+            src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${post.image}`}
           />
         )}
         <div className="text">{post.text}</div>
         <EventCommentPerson>
-          <img
-            src={`http://localhost:3600/api/image/getImage/${post.avatar}`}
-            alt=""
-          />
+          <img src={`${post.avatar}`} alt="" />
           <div className="name">{post.username}</div>
         </EventCommentPerson>
       </EventCommentWrapper>

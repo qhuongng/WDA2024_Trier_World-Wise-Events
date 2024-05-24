@@ -7,7 +7,7 @@ import {
   EventIntroductionQuizButton,
 } from "./styles";
 import { Carousel, Row, Col, ConfigProvider, Spin } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 function formatDuration(startDate, endDate) {
@@ -26,58 +26,60 @@ const EventIntroduction = () => {
   const item = useSelector((state) => state.event.singleEvent) || null;
   const duration = item ? formatDuration(item.startDate, item.endDate) : "";
 
-  return (
-    (item ?
-      <EventIntroductionWrapper>
-        <Row wrap={false}>
-          <Col span={12}>
-            <EventIntroductionLeft>
-              <div className="title">{item.eventName}</div>
-              <div className="country">{item.city}</div>
-              <div className="time">{duration}</div>
-              <div className="description">{item.description}</div>
-              {user ? (
-                <EventIntroductionQuizButton
-                  item={item}
-                  to={`../../quiz/${item.id}/intro`}
-                >
-                  Take quiz
-                </EventIntroductionQuizButton>
-              ) : (
-                <EventIntroductionQuizButton item={null} to={`/login`}>
-                  Take quiz
-                </EventIntroductionQuizButton>
-              )}
-            </EventIntroductionLeft>
-          </Col>
-          <Col>
-            <Carousel autoplay autoplaySpeed={2000} dots={false}>
-              {item.images.map((image) => (
-                <EventIntroductionImage>
-                  <img
-                    src={`http://localhost:3600/api/image/getImage/${image}`}
-                    alt=""
-                  />
-                </EventIntroductionImage>
-              ))}
-            </Carousel>
-          </Col>
-        </Row>
-      </EventIntroductionWrapper>
-      :
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#bb0070",
-            borderRadius: 12,
-            colorBgContainer: "#ffffff",
-            itemActiveBg: "#e1daff",
-          },
-        }}
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 36, marginTop: '3rem' }} spin />} />
-      </ConfigProvider>
-    )
+  return item ? (
+    <EventIntroductionWrapper>
+      <Row wrap={false}>
+        <Col span={12}>
+          <EventIntroductionLeft>
+            <div className="title">{item.eventName}</div>
+            <div className="country">{item.city}</div>
+            <div className="time">{duration}</div>
+            <div className="description">{item.description}</div>
+            {user ? (
+              <EventIntroductionQuizButton
+                item={item}
+                to={`../../quiz/${item.id}/intro`}
+              >
+                Take quiz
+              </EventIntroductionQuizButton>
+            ) : (
+              <EventIntroductionQuizButton item={null} to={`/login`}>
+                Take quiz
+              </EventIntroductionQuizButton>
+            )}
+          </EventIntroductionLeft>
+        </Col>
+        <Col>
+          <Carousel autoplay autoplaySpeed={2000} dots={false}>
+            {item.images.map((image) => (
+              <EventIntroductionImage>
+                <img
+                  src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${image}`}
+                  alt=""
+                />
+              </EventIntroductionImage>
+            ))}
+          </Carousel>
+        </Col>
+      </Row>
+    </EventIntroductionWrapper>
+  ) : (
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#bb0070",
+          borderRadius: 12,
+          colorBgContainer: "#ffffff",
+          itemActiveBg: "#e1daff",
+        },
+      }}
+    >
+      <Spin
+        indicator={
+          <LoadingOutlined style={{ fontSize: 36, marginTop: "3rem" }} spin />
+        }
+      />
+    </ConfigProvider>
   );
 };
 

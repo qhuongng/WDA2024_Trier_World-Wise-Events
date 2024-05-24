@@ -26,6 +26,7 @@ export const createReply = createAsyncThunk(
 const initialState = {
   allReply: {},
   isLoading: null,
+  loading: {},
   // pagedEvents: null,
   // message: "",
 };
@@ -40,27 +41,35 @@ export const postReplySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getReply.pending, (state) => {
+      .addCase(getReply.pending, (state, action) => {
         state.isLoading = true;
         state.allReply = {};
+        state.loading[action.meta.arg] = true;
       })
       .addCase(getReply.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
         state.allReply[action.meta.arg] = action.payload.data;
+        state.loading[action.meta.arg] = false;
       })
       .addCase(getReply.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
+        state.loading[action.meta.arg] = false;
       })
       .addCase(createReply.pending, (state) => {
         state.isLoading = true;
-        state.allReply = {};
       })
       .addCase(createReply.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
-        state.allReply[action.meta.arg] = action.payload.data;
+        state.allReply[action.meta.arg.idPost] = [
+          ...state.allReply[action.meta.arg.idPost],
+          {
+            ...action.payload.data,
+            ...action.meta.arg.user,
+          },
+        ];
       })
       .addCase(createReply.rejected, (state, action) => {
         state.isLoading = false;

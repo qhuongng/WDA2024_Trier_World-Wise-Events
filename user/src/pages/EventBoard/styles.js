@@ -156,3 +156,16 @@ export const EventCreatePostButton = styled(Button)`
   height: 3rem;
   filter: drop-shadow(0px 0px 9px #2000bb);
 `;
+
+export const EventCreatePost = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  cursor: pointer;
+`;
