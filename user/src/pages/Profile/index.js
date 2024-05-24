@@ -54,7 +54,7 @@ const Profile = () => {
 
   const [updateButtonDisabled, setUpdateButtonDisabled] = useState(true);
   const [updatePasswordButtonDisabled, setUpdatePasswordButtonDisabled] = useState(true);
-  const [updateEmailDisabled, setUpdateEmailDisabled] = useState(user?.googleID ? true : false);
+  const [updateEmailDisabled, setUpdateEmailDisabled] = useState(user?.googleID !== "" ? true : false);
 
   const updateProfileFormik = useFormik({
     initialValues: {
@@ -95,10 +95,17 @@ const Profile = () => {
     <ProfileWrapper>
       <ProfileLeft>
         <ProfileTitle>Account</ProfileTitle>
-        <ProfilePhoto
-          style={{
-            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar}`,
-          }} />
+        {user?.googleID === '' ?
+          <ProfilePhoto
+            style={{
+              backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar})`,
+            }} />
+          :
+          <ProfilePhoto
+            style={{
+              backgroundImage: `url(${user?.avatar})`,
+            }} />
+        }
 
         <div style={{ marginBottom: '1rem' }}>
           <Input
@@ -143,7 +150,7 @@ const Profile = () => {
           Update profile
         </ProfileButton>
 
-        {(user?.googleID === undefined || user?.googleID === null) &&
+        {(user?.googleID === undefined || user?.googleID === null || user?.googleID === "") &&
           <>
             <ProfileSubtitle>Reset Password</ProfileSubtitle>
 

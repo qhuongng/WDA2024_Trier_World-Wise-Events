@@ -121,7 +121,7 @@ export const authSlice = createSlice({
         state.user = action.payload;
         setAuthUser(state.user);
         setAccessToken(state.user.token);
-        setRefreshToken(state.user.refreshToken);
+
         notification.success({
           message: 'Login successfully',
           description: 'Welcome back!',

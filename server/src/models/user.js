@@ -23,7 +23,8 @@ const user = new Schema({
         required: true
     },
     googleID: {
-        type: String
+        type: String,
+        default: ""
     }
 }, { timestamps: false });
 

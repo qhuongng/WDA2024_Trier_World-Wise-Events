@@ -24,15 +24,9 @@ import Input from "../../components/Input";
 import { notification, Divider } from "antd";
 
 const signUpWithGoogle = () => {
-  try {
-    window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
-  } catch (error) {
-    console.log(error);
-    notification.error({
-      message: error,
-      duration: "1",
-    });
-  }
+
+  window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
+
 }
 
 const loginSchema = yup.object({

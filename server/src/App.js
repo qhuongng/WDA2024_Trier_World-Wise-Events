@@ -69,7 +69,7 @@ passport.use(
       try {
         let user = await User.findOne({ googleID: profile.id });
         if (user) {
-          throw new Error("User is already exist")
+          done(null, user);;
         }
         else {
           user = new User({
@@ -110,7 +110,11 @@ app.get("/auth/google/callback", passport.authenticate("google", {
 app.get("/login/sucess", async (req, res) => {
 
   if (req.user) {
-    res.status(200).json({ message: "user Login", user: req.user })
+    const currentUser = {
+      ...req.user.toObject(),
+      token: await req.user.generateJWT()
+    }
+    res.status(200).json({ message: "user Login", user: currentUser })
   } else {
     res.status(400).json({ message: "Not Authorized" })
   }
