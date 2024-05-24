@@ -1,6 +1,13 @@
 const express = require("express");
 const cors = require("cors");
+const passportSetup = require("./passport")
 const mongoose = require('mongoose');
+
+const session = require("express-session");
+const passport = require("passport");
+const OAuth2Strategy = require("passport-google-oauth2").Strategy;
+const User = require("./models/user");
+//--------------
 const {
   errorResposerHandler,
   invalidPathHandler,
@@ -30,8 +37,8 @@ const imageRoute = require('./routes/imageRouter');
 const quizRoute = require("./routes/quizRouter");
 const postRoute = require('./routes/postRouter');
 const postPeplyRoute = require('./routes/postReplyRouter');
-//-----------------------------------
 
+//-----------------------------------
 app.use('/api/user', userRoute);
 app.use('/api/otp', otpRoute);
 app.use('/api/event', eventRoute);
@@ -40,10 +47,77 @@ app.use('/api/quiz', quizRoute);
 app.use('/api/post', postRoute);
 app.use('/api/postReply', postPeplyRoute);
 app.use('/api/picture', express.static('public'));
+//-----------------------------------
+// google api
+app.use(session({
+  secret: "121212121",
+  resave: false,
+  saveUninitialized: true
+}))
+
+app.use(passport.session());
+app.use(passport.initialize());
+
+passport.use(
+  new OAuth2Strategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "/auth/google/callback",
+    scope: ["profile", "email"]
+  },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await User.findOne({ googleID: profile.id });
+        if (user) {
+          throw new Error("User is already exist")
+        }
+        else {
+          user = new User({
+            googleID: profile.id,
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            avatar: profile.photos[0].value,
+            password: "ahihi"
+          });
+
+          await user.save();
+        }
+
+        return done(null, user)
+      } catch (error) {
+        return done(error, null)
+      }
+    }
+  )
+)
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+})
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+// initial google ouath login
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+app.get("/auth/google/callback", passport.authenticate("google", {
+  successRedirect: "http://localhost:3000",
+  failureRedirect: "http://localhost:3000/login"
+}))
+
+app.get("/login/sucess", async (req, res) => {
+
+  if (req.user) {
+    res.status(200).json({ message: "user Login", user: req.user })
+  } else {
+    res.status(400).json({ message: "Not Authorized" })
+  }
+})
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);
 //-----------------------------------
-
 mongoose
   .connect(process.env.MONGO_URL)
   .then(console.log("Connected to MongoDB"))

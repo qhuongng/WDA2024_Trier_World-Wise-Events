@@ -6,6 +6,7 @@ import {
   LoginButton,
   LoginButtonWrapper,
   LoginError,
+  Option,
   LoginForm,
   LoginLink,
   LoginLogo,
@@ -15,6 +16,19 @@ import {
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/user/userSlice";
 import Input from "../../components/Input";
+import { notification } from "antd";
+
+const signUpWithGoogle = () => {
+  try {
+    window.open("http://localhost:3600/auth/google/callback", "_self")
+  } catch (error) {
+    console.log(error);
+    notification.error({
+      message: error,
+      duration: "1",
+    });
+  }
+}
 
 const loginSchema = yup.object({
   email: yup
@@ -43,6 +57,17 @@ const Login = () => {
         <div>World-Wise Events</div>
       </LoginLogo>
       <LoginBox>
+        <Option>
+          <LoginTitle>Sign up</LoginTitle>
+          <LoginButton onClick={signUpWithGoogle}>
+            <img src="google.png" alt="" />
+            Continue with Google
+          </LoginButton>
+          <LoginLink to="/register">
+            <img src="mail.png" alt="" />
+            Sign up with email
+          </LoginLink>
+        </Option>
         <LoginForm action="" onSubmit={formik.handleSubmit}>
           <LoginTitle>Welcome back!</LoginTitle>
           <div>
@@ -72,7 +97,6 @@ const Login = () => {
             </LoginError>
           </div>
           <LoginButtonWrapper>
-            <LoginLink to="/register">Sign Up</LoginLink>
             <LoginButton type="submit">Login</LoginButton>
           </LoginButtonWrapper>
         </LoginForm>
