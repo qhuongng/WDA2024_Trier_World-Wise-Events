@@ -6,7 +6,8 @@ import {
   EventIntroductionWrapper,
   EventIntroductionQuizButton,
 } from "./styles";
-import { Carousel, Row, Col } from "antd";
+import { Carousel, Row, Col, ConfigProvider, Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 
 function formatDuration(startDate, endDate) {
@@ -26,8 +27,8 @@ const EventIntroduction = () => {
   const duration = item ? formatDuration(item.startDate, item.endDate) : "";
 
   return (
-    <EventIntroductionWrapper>
-      {item && (
+    (item ?
+      <EventIntroductionWrapper>
         <Row wrap={false}>
           <Col span={12}>
             <EventIntroductionLeft>
@@ -62,8 +63,21 @@ const EventIntroduction = () => {
             </Carousel>
           </Col>
         </Row>
-      )}
-    </EventIntroductionWrapper>
+      </EventIntroductionWrapper>
+      :
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#bb0070",
+            borderRadius: 12,
+            colorBgContainer: "#ffffff",
+            itemActiveBg: "#e1daff",
+          },
+        }}
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 36, marginTop: '3rem' }} spin />} />
+      </ConfigProvider>
+    )
   );
 };
 

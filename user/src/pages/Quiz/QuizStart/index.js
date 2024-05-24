@@ -12,6 +12,8 @@ import {
   QuizStartButton,
   QuizStartImage
 } from "./styles";
+import { LoadingOutlined } from '@ant-design/icons';
+import { ConfigProvider, Spin } from 'antd';
 
 const QuizStart = () => {
   const { id } = useParams();
@@ -40,7 +42,18 @@ const QuizStart = () => {
           />
         </QuizStartBox>
       </QuizStartWrapper>
-      : <p>Loading...</p>)
+      : <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#bb0070",
+            borderRadius: 12,
+            colorBgContainer: "#ffffff",
+            itemActiveBg: "#e1daff",
+          },
+        }}
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 36, marginLeft: '36px', marginTop: '3rem' }} spin />} />
+      </ConfigProvider>)
   );
 };
 
