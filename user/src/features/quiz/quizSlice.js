@@ -29,9 +29,10 @@ export const getUserResult = createAsyncThunk(
   'quiz/getUserResult',
   async(id, thunkAPI) => {
     try {
-      return await quizService.getAllResult(id);
+      const response = await quizService.getAllResult(id);
+      return response;
     } catch (error) {
-      
+      return thunkAPI.rejectWithValue(error);
     }
   }
 )
@@ -81,12 +82,12 @@ export const quizSlice = createSlice({
       .addCase(getUserResult.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getUserResult.fulfilled, (state) => {
-        state.isLoading = fasle;
+      .addCase(getUserResult.fulfilled, (state,action) => {
+        state.isLoading = false;
         state.results = action.payload;
         state.message = '';
       })
-      .addCase(getUserResult.rejected, (state) => {
+      .addCase(getUserResult.rejected, (state,action) => {
         state.isLoading = false;
         state.message = action.error;
       })
