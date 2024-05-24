@@ -9,7 +9,8 @@ const {
   getQuestion,
   createResult,
   getListResult,
-  getUserResult
+  getUserResult,
+  getRandomListQuestion,
 } = require("../controller/quizController");
 
 // for quiz
@@ -23,7 +24,7 @@ router.get("/getListQuestions/:quizId", getRandomListQuestion); // get all quest
 
 // for quiz result
 router.post("/createResult", createResult); // adding the user id into bodt => req.user._id
-router.get("/getListResult/:eventId", getListResult);    // sort by time before sending result
+router.get("/getListResult/:eventId", getListResult); // sort by time before sending result
 router.get("/getUserResult/:userId", getUserResult); // maybe can get from req.user._id
 
 module.exports = router;

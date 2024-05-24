@@ -12,28 +12,16 @@ export const getReply = createAsyncThunk(
   }
 );
 
-// export const getPagedEvents = createAsyncThunk(
-//   "post/functionProduct",
-//   async (url, thunkAPI) => {
-//     try {
-//       return await postService.getPagedEvents(url);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-
-// export const getOneEvent = createAsyncThunk(
-//   "post/oneEvent",
-//   async (id, thunkAPI) => {
-//     try {
-//       console.log(id);
-//       return await postService.getSingleEvent(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const createReply = createAsyncThunk(
+  "postReply/createReply",
+  async (data, thunkAPI) => {
+    try {
+      return await postReplyService.createPostReply(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   allReply: {},
@@ -62,6 +50,19 @@ export const postReplySlice = createSlice({
         state.allReply[action.meta.arg] = action.payload.data;
       })
       .addCase(getReply.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+      })
+      .addCase(createReply.pending, (state) => {
+        state.isLoading = true;
+        state.allReply = {};
+      })
+      .addCase(createReply.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = "";
+        state.allReply[action.meta.arg] = action.payload.data;
+      })
+      .addCase(createReply.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       });

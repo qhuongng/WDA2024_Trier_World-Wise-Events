@@ -1,10 +1,19 @@
-import React, { useEffect } from "react";
-import { EventCommentPerson, EventReplyCommentWrapper } from "./styles";
-import { Input } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  EventCommentInput,
+  EventCommentPerson,
+  EventReplyCommentWrapper,
+} from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getReply, setReply } from "../../features/postReply/postReplySlice";
+import {
+  createReply,
+  getReply,
+  setReply,
+} from "../../features/postReply/postReplySlice";
+import { getAuthUser } from "../../utils/authStorage";
 
 const EventReplyComment = ({ id }) => {
+  const user = getAuthUser();
   const dispatch = useDispatch();
   const postReply = useSelector((state) => state.postReply.allReply) || {};
 
@@ -14,6 +23,16 @@ const EventReplyComment = ({ id }) => {
       dispatch(setReply({}));
     };
   }, [dispatch, id]);
+
+  const onPressEnter = (e) => {
+    const content = e.target.value;
+    const data = {
+      idPost: id,
+      idUser: user._id,
+      text: content,
+    };
+    dispatch(createReply(data));
+  };
 
   return (
     <EventReplyCommentWrapper>
@@ -25,7 +44,7 @@ const EventReplyComment = ({ id }) => {
           <div>{reply.text}</div>
         </EventCommentPerson>
       ))}
-      <Input placeholder="Comment" style={{ marginTop: "1rem" }} />
+      <EventCommentInput placeholder="Comment" onPressEnter={onPressEnter} />
     </EventReplyCommentWrapper>
   );
 };

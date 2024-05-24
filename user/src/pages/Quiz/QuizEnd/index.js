@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   QuizEndTitle,
@@ -9,9 +9,10 @@ import {
   QuizEndCorrectCount,
   QuizEndTimeTaken,
   QuizEndScore,
-  QuizEndMinorStats
+  QuizEndMinorStats,
 } from "./styles";
 import QuizResultItem from "../../../components/QuizResultItem";
+import { setItem } from "../../../features/event/eventSlice";
 
 const QuizEnd = () => {
   const { state } = useLocation();
@@ -28,17 +29,24 @@ const QuizEnd = () => {
         <QuizEndStats>
           <QuizEndMinorStats>
             <QuizEndCorrectCount>{state.count} / 15</QuizEndCorrectCount>
-            <QuizEndTimeTaken>{mins}m {secs}s</QuizEndTimeTaken>
+            <QuizEndTimeTaken>
+              {mins}m {secs}s
+            </QuizEndTimeTaken>
           </QuizEndMinorStats>
           <QuizEndScore>{score} pts</QuizEndScore>
         </QuizEndStats>
       </QuizEndTopBar>
-      {state.questions && state.userAnswers ?
-        state.questions.map((question, index) =>
-          <QuizResultItem qaPair={question} answer={state.userAnswers[index]}></QuizResultItem>
-        ) :
-        <></>}
-    </QuizEndWrapper >
+      {state.questions && state.userAnswers ? (
+        state.questions.map((question, index) => (
+          <QuizResultItem
+            qaPair={question}
+            answer={state.userAnswers[index]}
+          ></QuizResultItem>
+        ))
+      ) : (
+        <></>
+      )}
+    </QuizEndWrapper>
   );
 };
 

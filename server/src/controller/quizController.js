@@ -96,7 +96,14 @@ const createResult = async (req, res, next) => {
   try {
     const { idUser, idEvent, score, time } = req.body;
 
-    if (!idUser || !idEvent || score === null || score < 0 || time === null || time < 0)
+    if (
+      !idUser ||
+      !idEvent ||
+      score === null ||
+      score < 0 ||
+      time === null ||
+      time < 0
+    )
       throw new Error("Input is required.");
 
     const resultData = {
@@ -159,5 +166,5 @@ module.exports = {
   createResult,
   getListResult,
   getUserResult,
-  getRandomListQuestion
+  getRandomListQuestion,
 };

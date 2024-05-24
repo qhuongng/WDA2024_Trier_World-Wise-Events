@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Input } from "antd";
 
 export const EventBoardWrapper = styled.div`
   padding: 36px;
@@ -138,4 +139,10 @@ export const EventIntroductionQuizButton = styled(Link)`
     background: #00008b;
     color: #fff;
   }
+`;
+
+export const EventCommentInput = styled(Input)`
+  margin-top: 1rem;
+  background: #e1daff;
+  border-radius: 1rem;
 `;
