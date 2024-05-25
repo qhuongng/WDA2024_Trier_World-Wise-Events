@@ -13,6 +13,32 @@ export const InputWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const InputLabel = styled.label`
+export const InputLabelGroup = styled.label`
   margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const InputLabel = styled.label`  
+`;
+
+export const InputShowPasswordButton = styled.button`
+  background: transparent;
+  font-family: Inter;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  color: #2000bb;
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  &:hover {
+    color: #4a00e0;
+  }
+
+  &:active {
+    color: #00008b;
+  }
 `;
