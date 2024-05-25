@@ -22,9 +22,8 @@ import {
 import QuizHistoryItem from '../../components/QuizHistoryItem';
 import Input from '../../components/Input';
 
-
-
 const imgTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/bmp', 'image/tiff'];
+
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -82,6 +81,7 @@ const Profile = () => {
     setOn(false);
     setFileList([]);
   };
+
   const props = {
     listType: "picture-circle",
     showUploadList: { showPreviewIcon: false },
@@ -111,6 +111,7 @@ const Profile = () => {
     },
     fileList,
   };
+
   const uploadButton = (
     <button
       type="button"
@@ -123,7 +124,6 @@ const Profile = () => {
       <div>Upload a photo</div>
     </button>
   );
-
 
   const updateProfileFormik = useFormik({
     initialValues: {
