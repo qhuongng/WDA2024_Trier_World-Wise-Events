@@ -75,7 +75,7 @@ const EventMap = () => {
                         longitude={Number(popupInfo.geometry.coordinates[0])}
                         latitude={Number(popupInfo.geometry.coordinates[1])}
                         onClose={() => setPopupInfo(null)}>
-                        <EventCard item={popupInfo.properties}></EventCard>
+                        <EventCard style={{ width: '15rem' }} item={popupInfo.properties}></EventCard>
                     </Popup>
                 )}
             </Map>

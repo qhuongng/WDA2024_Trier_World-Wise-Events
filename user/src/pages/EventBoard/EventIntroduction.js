@@ -67,16 +67,18 @@ const EventIntroduction = () => {
             </EventIntroductionLeft>
           </Col>
           <Col>
-            <Carousel autoplay autoplaySpeed={2000} dots={false} infinite>
-              {item.images.map((image) => (
-                <EventIntroductionImage>
-                  <img
-                    src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${image}`}
-                    alt=""
-                  />
-                </EventIntroductionImage>
-              ))}
-            </Carousel>
+            {item.images &&
+              <Carousel autoplay autoplaySpeed={2000} dots={false} infinite>
+                {item.images.map((image, index) => (
+                  <EventIntroductionImage key={index}>
+                    <img
+                      src={`${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${image}`}
+                      alt={item.eventName}
+                    />
+                  </EventIntroductionImage>
+                ))}
+              </Carousel>}
+
           </Col>
         </Row>
       </EventIntroductionWrapper>
