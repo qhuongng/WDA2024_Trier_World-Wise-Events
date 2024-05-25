@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/user");
 const Image = require("../models/Image");
-const imageService = require("../services/image.services");
+const imageService = require("./image.services");
 const { use } = require("../routes/userRouter");
 
 const findUserByEmail = async (email) => {
@@ -26,7 +26,7 @@ const getUserName = async (id) => {
 const createUser = async (userDetails) => {
   const { username, email, password } = userDetails;
   // change image into buffer
-  let defaultImage = "../server/public/defautUser.jpeg";
+  let defaultImage = path.resolve('public/defaultUser.jpeg');
 
   let imagedata = new ArrayBuffer(64);
   const imagetype = "image/jpeg";
@@ -39,7 +39,6 @@ const createUser = async (userDetails) => {
   };
 
   const imageId = await imageService.saveImage(avatar);
-  console.log(imageId);
   const user = await User.create({
     username,
     email,
