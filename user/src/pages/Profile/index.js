@@ -95,10 +95,10 @@ const Profile = () => {
     <ProfileWrapper>
       <ProfileLeft>
         <ProfileTitle>Account</ProfileTitle>
-        {user?.googleID === '' ?
+        {(user?.googleID === '' || user?.googleID === null || user?.googleID === undefined) ?
           <ProfilePhoto
             style={{
-              backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar})`,
+              backgroundImage: `url(${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user?.avatar})`,
             }} />
           :
           <ProfilePhoto

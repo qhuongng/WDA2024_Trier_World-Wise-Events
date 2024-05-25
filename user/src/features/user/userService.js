@@ -6,7 +6,7 @@ import {
 
 const register = async (userData) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/register`,
+    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/register`,
     userData
   );
   if (response.data) {
@@ -16,7 +16,7 @@ const register = async (userData) => {
 
 const login = async (userData) => {
   const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/login`,
+    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/login`,
     userData
   );
   if (response.data) {
@@ -49,7 +49,7 @@ const logout = async () => {
 const update = async (updatedUserData) => {
   const user = getAuthUser();
   const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/updateProfile`,
+    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/updateProfile`,
     updatedUserData,
     {
       headers: {
@@ -65,7 +65,7 @@ const update = async (updatedUserData) => {
 const resetPassword = async (resetPasswordData) => {
   const user = getAuthUser();
   const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/resetPassword`,
+    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/resetPassword`,
     resetPasswordData,
     {
       headers: {
