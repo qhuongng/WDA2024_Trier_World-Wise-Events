@@ -13,7 +13,7 @@ const createPost = async (data) => {
         const newPost = await Post.create(data)
         let apiString = ""
         if (!user.avatar.startsWith("http")) {
-            apiString = `http://localhost:3600/api/image/getImage/${user.avatar}`
+            apiString = `${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user.avatar}`
         } else {
             apiString = user.avatar
         }
@@ -38,7 +38,7 @@ const getListPost = async (idEvent) => {
             const user = await User.findById(post.idUser);
             let apiString = ""
             if (!user.avatar.startsWith("http")) {
-                apiString = `http://localhost:3600/api/image/getImage/${user.avatar}`
+                apiString = `${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user.avatar}`
             } else {
                 apiString = user.avatar
             }
