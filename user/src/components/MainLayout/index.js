@@ -24,7 +24,6 @@ function getItem(label, key, icon, children) {
   };
 }
 
-
 const loggedInItems = [
   getItem('Home', '/', <HomeOutlined />),
   getItem('All Events', 'events', <CalendarOutlined />),
@@ -39,9 +38,12 @@ const items = [
 ];
 
 const MainLayout = ({ children }) => {
-  const user = getAuthUser();
   const dispatch = useDispatch();
+
   const [collapsed, setCollapsed] = useState(true);
+  const [menuItems, setMenuItems] = useState(items);
+  const [user, setUser] = useState(getAuthUser());
+  const googleUser = useSelector((state) => state.auth.user);
 
   const navigate = useNavigate();
   let location = useLocation();
@@ -61,6 +63,15 @@ const MainLayout = ({ children }) => {
       }
     }
   }, [location, current]);
+
+  useEffect(() => {
+    if (user || googleUser) {
+      setMenuItems(loggedInItems);
+    }
+    else {
+      setMenuItems(items);
+    }
+  }, [user, googleUser]);
 
   const logOut = async () => {
     dispatch(logoutUser());
@@ -113,7 +124,7 @@ const MainLayout = ({ children }) => {
                   <Menu
                     selectedKeys={current}
                     mode="inline"
-                    items={user ? loggedInItems : items}
+                    items={menuItems}
                     style={{ width: '100%' }}
                     onClick={({ key }) => {
                       if (key === "signout") {

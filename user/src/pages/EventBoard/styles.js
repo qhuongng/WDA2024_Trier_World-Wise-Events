@@ -1,20 +1,28 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Button, Input } from "antd";
 
 export const EventBoardWrapper = styled.div`
   padding: 36px;
   background: #fff;
+  min-height: 100vh;
+  font-family: Inter;
+`;
+
+export const EventBoardTop = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  height: 30rem;
 `;
 
 export const EventIntroductionWrapper = styled.div`
   background: #f1f1f1;
   border-radius: 10px;
-  width: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: Inter;
 `;
 
 export const EventIntroductionLeft = styled.div`
@@ -73,11 +81,11 @@ export const EventIntroductionLeft = styled.div`
 
 export const EventIntroductionImage = styled.div`
   height: 30rem;
-  max-width: 50%;
-  margin-left: 1rem;
-  & > img {
-    object-fit: contain;
-    border-radius: 0 12px 12px 0;
+  
+  &>img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -111,7 +119,7 @@ export const EventCommentPerson = styled.div`
     margin-right: 0.75rem;
   }
   .name {
-    font-weight: 700;
+    font-weight: 600;
     color: #434343;
   }
 `;
@@ -120,6 +128,37 @@ export const EventReplyCommentWrapper = styled.div`
   background: #f1f1f1;
   padding: 1.5rem;
   border-radius: 0 0 16px 16px;
+`;
+
+export const EventReplyInputGroup = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const EventReplyButton = styled.button`
+  box-sizing: border-box;
+  background: #bb0070;
+  font-family: Inter;
+  font-weight: 600;
+  border: none;
+  border-radius: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: #fff;
+  font-size: 1rem;
+  margin-left: 1rem;
+
+  cursor: pointer;
+
+  &:hover {
+  background: #e0639d;
+  }
+
+  &:active {
+  background: #9e005f;
+  }
 `;
 
 export const EventPost = styled.div`
@@ -152,22 +191,6 @@ export const EventIntroductionQuizButton = styled(Link)`
   }
 `;
 
-export const EventCommentInput = styled(Input)`
-  margin-top: 1rem;
-  background: #e1daff;
-  border-radius: 1rem;
-`;
-
-export const EventCreatePostButton = styled(Button)`
-  border-radius: 50%;
-  background: #2000bb;
-  font-weight: 700;
-  font-size: 1.5rem;
-  min-width: 3rem;
-  height: 3rem;
-  filter: drop-shadow(0px 0px 9px #2000bb);
-`;
-
 export const EventCreatePost = styled.div`
   position: fixed;
   width: 100%;
@@ -179,4 +202,110 @@ export const EventCreatePost = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
   cursor: pointer;
+`;
+
+export const ModalButton = styled.button`
+  background: #2000bb;
+  font-family: Inter;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
+  color: #fff;
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #4a00e0;
+  }
+
+  &:active {
+    background: #00008b;
+  }
+`;
+
+export const ModalSecondaryButton = styled.button`
+  background: transparent;
+  font-family: Inter;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 0.5rem 3rem;
+  color: #434343;
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  &:hover {
+    color: #4a00e0;
+  }
+
+  &:active {
+    color: #00008b;
+  }
+`;
+
+export const EventQuizLeaderboardWrapper = styled.div`
+  background: #f8d4ea;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  min-width: 23%;
+  margin-left: 1rem;
+  padding: 36px 0;
+`;
+
+export const EventQuizLeaderboardItemGroup = styled.div`
+  background: #f8d4ea;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 0 36px;
+`;
+
+export const EventQuizLeaderboardTitle = styled.div`
+  font-size: 2rem;
+  color: #bb0070;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  padding: 0 36px;
+`;
+
+export const EventQuizLeaderboardItem = styled.div`
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+`;
+
+export const EventQuizLeaderboardRank = styled.div`
+  font-size: 1.5rem;
+  color: #bb0070;
+  font-weight: 700;
+  margin-right: 1rem;
+`;
+
+export const EventQuizLeaderboardScore = styled.div`
+  font-size: 1.1rem;
+  color: #bb0070;
+  font-weight: 700;
+`;
+
+export const EventQuizLeaderboardStats = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
+
+export const EventQuizLeaderboardTime = styled.div`
+  font-size: 1rem;
+  color: #434343;
+`;
+
+export const EventQuizLeaderboardName = styled.div`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #434343;
 `;

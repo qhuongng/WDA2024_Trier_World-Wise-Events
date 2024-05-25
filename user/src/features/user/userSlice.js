@@ -44,6 +44,7 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
 //API Login google
 export const loginGoogle = createAsyncThunk(
   'auth/loginGoogle',
@@ -196,7 +197,6 @@ export const authSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         const user = getAuthUser();
-        console.log(action.payload);
         state.isLoading = false;
         state.message = '';
         notification.success({

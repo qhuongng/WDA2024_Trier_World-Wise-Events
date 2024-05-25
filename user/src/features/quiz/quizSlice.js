@@ -27,9 +27,21 @@ export const createResult = createAsyncThunk(
 
 export const getUserResult = createAsyncThunk(
   'quiz/getUserResult',
-  async(id, thunkAPI) => {
+  async (id, thunkAPI) => {
     try {
       const response = await quizService.getAllResult(id);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+export const getLeaderboard = createAsyncThunk(
+  'quiz/getLeaderboard',
+  async (id, thunkAPI) => {
+    try {
+      const response = await quizService.getLeaderBoard(id);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -41,6 +53,7 @@ const initialState = {
   questions: null,
   results: null,
   resultSent: false,
+  leaderboard: null,
   message: "",
   isLoading: false,
 };
@@ -82,12 +95,24 @@ export const quizSlice = createSlice({
       .addCase(getUserResult.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getUserResult.fulfilled, (state,action) => {
+      .addCase(getUserResult.fulfilled, (state, action) => {
         state.isLoading = false;
         state.results = action.payload;
         state.message = '';
       })
-      .addCase(getUserResult.rejected, (state,action) => {
+      .addCase(getUserResult.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+      })
+      .addCase(getLeaderboard.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getLeaderboard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.leaderboard = action.payload;
+        state.message = '';
+      })
+      .addCase(getLeaderboard.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       })

@@ -120,10 +120,12 @@ const getListResult = async (id) => {
     const results = await QuizResult.find({ idEvent: id }).sort({ score: -1, time: 1 });
     const data = await Promise.all(results.map(async (result) => {
       const user = await User.findById(result.idUser);
-      return {
-        ...result.toObject(),
-        username: user.username,
-        avatar: user.avatar
+      if (user) {
+        return {
+          ...result.toObject(),
+          username: user.username,
+          avatar: user.avatar
+        }
       }
     }));
 

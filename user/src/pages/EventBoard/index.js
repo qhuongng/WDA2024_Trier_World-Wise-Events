@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { EventBoardWrapper, EventCreatePostButton } from "./styles";
+import { EventBoardWrapper, ModalButton, ModalSecondaryButton } from "./styles";
 import EventIntroduction from "./EventIntroduction";
 import EventCommentsList from "./EventCommentsList";
 import { useDispatch } from "react-redux";
 import { getOneEvent } from "../../features/event/eventSlice";
 import { setItem } from "../../features/event/eventSlice";
-import { Affix, Modal, Upload } from "antd";
+import { notification, FloatButton, Modal, Upload, ConfigProvider } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { getAuthUser } from "../../utils/authStorage";
 import { createSinglePost } from "../../features/post/postSlice";
+
+const imgTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/bmp', 'image/tiff'];
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const EventBoard = () => {
   const user = getAuthUser();
@@ -45,10 +55,37 @@ const EventBoard = () => {
 
   const handleCancel = () => {
     setOn(false);
+    setFileList([]);
   };
 
-  const handleChange = (e) => {
-    setFileList([e.file.originFileObj]);
+  const props = {
+    listType: "picture-card",
+    showUploadList: { showPreviewIcon: false },
+    maxCount: 1,
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: async (file) => {
+      const isImg = imgTypes.includes(file.type);
+
+      if (!isImg) {
+        notification.error({
+          message: 'Incorrect file type',
+          description: `${file.name} is not an image file.`,
+          duration: '3'
+        });
+      }
+      else {
+        file.url = await getBase64(file);
+        setFileList([...fileList, file]);
+      }
+
+      return false;
+    },
+    fileList,
   };
 
   const uploadButton = (
@@ -60,51 +97,75 @@ const EventBoard = () => {
       }}
     >
       <PlusOutlined />
-      <div>Upload</div>
+      <div>Upload a photo</div>
     </button>
   );
 
   return (
     <>
-      <Modal
-        title="Make a post"
-        open={on}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <TextArea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Comment"
-          autoSize={{ minRows: 10, maxRows: 5 }}
-          style={{
-            background: "#F1F1F1",
-            border: "none",
-            marginBottom: "1rem",
-          }}
-        />
-        <Upload
-          listType="picture-card"
-          onChange={handleChange}
-          showUploadList={{ showPreviewIcon: false }}
-        >
-          {fileList.length < 1 ? uploadButton : null}
-        </Upload>
-      </Modal>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#2000bb',
+            borderRadius: 12,
+            titleColor: '#2000bb',
+            fontFamily: 'Inter',
+            titleFontSize: '1.1rem'
+          },
+        }}>
+        <Modal
+          title="Make a post"
+          style={{ fontFamily: 'Inter' }}
+          open={on}
+          onCancel={handleCancel}
+          footer={[
+            <ModalSecondaryButton onClick={handleCancel}>
+              Cancel
+            </ModalSecondaryButton>,
+            <ModalButton onClick={handleOk}>
+              Post
+            </ModalButton>
+          ]}>
+          <TextArea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Comment"
+            autoSize={{ minRows: 10, maxRows: 5 }}
+            style={{
+              background: "#e1daff",
+              border: "none",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+          />
+
+          <Upload {...props}>
+            {fileList.length < 1 ? uploadButton : null}
+          </Upload>
+        </Modal>
+      </ConfigProvider >
+
       <EventBoardWrapper>
         <EventIntroduction />
+
         <EventCommentsList />
+
         {!on && (
-          <Affix
-            offsetTop={100}
-            style={{ position: "absolute", top: "70%", right: 50 }}
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: '#bb0070'
+              },
+            }}
           >
-            <EventCreatePostButton
+            <FloatButton
+              tooltip={<div>Create post</div>}
               type="primary"
               icon={<PlusOutlined />}
               onClick={() => setOn(!on)}
+              style={{ width: '3.5rem', height: '3.5rem', marginRight: '1rem', marginBottom: '1rem' }}
             />
-          </Affix>
+          </ConfigProvider>
         )}
       </EventBoardWrapper>
     </>

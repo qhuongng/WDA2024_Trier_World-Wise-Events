@@ -136,6 +136,7 @@ const getRandomListQuestion = async (req, res, next) => {
 const getListResult = async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
+    console.log(eventId);
     if (!eventId) throw new Error("Event ID is required!");
     const liResult = await quizService.getListResult(eventId);
 

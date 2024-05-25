@@ -30,7 +30,6 @@ const loginGoogle = async () => {
     { withCredentials: true }
   );
   if (response) {
-    console.log(response);
     return response.data.user;
   }
 }

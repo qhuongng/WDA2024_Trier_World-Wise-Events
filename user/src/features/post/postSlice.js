@@ -17,7 +17,6 @@ export const createSinglePost = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const temp = await postService.createPost(data);
-      console.log(temp);
       return temp;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

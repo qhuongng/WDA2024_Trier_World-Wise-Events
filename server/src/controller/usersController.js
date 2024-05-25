@@ -38,8 +38,13 @@ const loginUserController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await findUserByEmail(email);
+
         if (!user) {
             throw new Error("Email not found");
+        }
+
+        if (user && user.googleID !== "") {
+            throw new Error("This email is already associated with another account. Try logging in using your Google account");
         }
 
         if (await user.comparePassword(password)) {

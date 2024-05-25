@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const ProfileWrapper = styled.div`
   width: 100%;
+  min-height: 100vh;
   background: #fff;
   padding: 36px;
   box-sizing: border-box;
