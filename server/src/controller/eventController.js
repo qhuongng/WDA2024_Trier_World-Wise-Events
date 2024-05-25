@@ -53,6 +53,33 @@ const getListEvent = async (req, res, next) => {
     }
 }
 
+const getAllEvent = async (req, res, next) => {
+    try {
+        const event = await eventServices.getAllEvent();
+        res.status(200).json(event);
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getListEventByKeyword = async (req, res, next) => {
+    try {
+        let queryObj = {}
+        if (req.query.keyword) {
+            const keyword = JSON.parse(JSON.stringify(req.query.keyword));
+            queryObj.$or = [
+                { eventName: { $regex: keyword, $options: 'i' } },
+                { city: { $regex: keyword, $options: 'i' } },
+                { country: { $regex: keyword, $options: 'i' } }
+            ];
+        }
+        const listEvent = await eventServices.getListEventByKeyword(queryObj);
+        res.status(200).json(listEvent);
+    } catch (error) {
+        next(error)
+    }
+}
+
 const getEvent = async (req, res, next) => {
     try {
         const eventId = req.params.id;
@@ -68,5 +95,5 @@ const getEvent = async (req, res, next) => {
 
 
 module.exports = {
-    createEvent, getListEvent, getEvent
+    createEvent, getListEvent, getEvent, getAllEvent, getListEventByKeyword
 }

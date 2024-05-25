@@ -48,6 +48,50 @@ const getListEvent = async (queryStr, page, limit) => {
     }
 }
 
+const getAllEvent = async () => {
+    await checkDate()
+    try {
+        const Events = await Event.find(
+            {},
+            {
+                eventName: 1,
+                city: 1,
+                country: 1,
+                startDate: 1,
+                endDate: 1,
+                images: { $slice: 1 },
+                isOngoing: 1,
+                location: 1,
+                _id: 0
+            })
+        return { data: Events }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+const getListEventByKeyword = async (queryStr) => {
+    await checkDate()
+    try {
+        const projection = {
+            eventName: 1,
+            city: 1,
+            country: 1,
+            startDate: 1,
+            endDate: 1,
+            images: { $slice: 1 }, // Lấy ảnh đầu tiên (nếu có)
+            isOngoing: 1,
+            location: 1
+        };
+        const events = await Event.find(queryStr, projection)
+            .exec() || [];
+
+        return { data: events }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 const getEvent = async (id) => {
     await checkDate()
     try {
@@ -82,5 +126,7 @@ const checkDate = async () => {
 module.exports = {
     addEvent,
     getListEvent,
-    getEvent
+    getEvent,
+    getAllEvent,
+    getListEventByKeyword
 }
