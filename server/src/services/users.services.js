@@ -1,6 +1,10 @@
 // services/userService.js
-
+const fs = require("fs");
+const path = require("path");
 const User = require("../models/user");
+const Image = require("../models/Image");
+const imageService = require("../services/image.services");
+const { use } = require("../routes/userRouter");
 
 const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
@@ -14,20 +18,49 @@ const getUserName = async (id) => {
   }
   return {
     _id: user._id,
-    userName: user.userName
+    userName: user.username
   }
 }
 
-
+//adding image here
 const createUser = async (userDetails) => {
-  const { userName, email, phoneNumber, password } = userDetails;
+  const { username, email, password } = userDetails;
+  // change image into buffer
+  let defaultImage = "../server/public/defautUser.jpeg";
+
+  let imagedata = new ArrayBuffer(64);
+  const imagetype = "image/jpeg";
+  const promise = fs.promises.readFile(path.join(defaultImage));
+  imagedata = (await promise).buffer;
+
+  const avatar = {
+    data: Buffer.from(imagedata),
+    contentType: imagetype
+  };
+
+  const imageId = await imageService.saveImage(avatar);
+  console.log(imageId);
   const user = await User.create({
-    userName,
+    username,
     email,
-    phoneNumber,
     password,
+    avatar: imageId._id.toString()
   });
   return user;
+};
+
+const updateAvatar = async (file, userId) => {
+  const user = await User.findById(userId);
+  const newAvatar = {
+    data: file.buffer,
+    contentType: file.mimetype
+  };
+  const imageId = await imageService.saveImage(newAvatar);
+
+  // delete old avatar
+  const deleteImage = await Image.findByIdAndDelete(user.avatar);
+  user.avatar = imageId._id.toString();
+  return await user.save();
 };
 
 const registerUser = async (userDetails) => {
@@ -38,26 +71,29 @@ const registerUser = async (userDetails) => {
   return await createUser(userDetails);
 };
 
-const updateProfile = async (userId, userDetails) => {
+const updateProfile = async (userId, username, email) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new Error("User not found");
   }
 
-  user.userName = userDetails.userName || user.userName;
-  user.email = userDetails.email || user.email;
-  user.phoneNumber = userDetails.phoneNumber || user.phoneNumber;
+  user.username = username || user.username;
+  user.email = email || user.email;
 
   return await user.save();
 };
 
-const resetPassword = async (email, newPassword) => {
-  const user = await findUserByEmail(email);
+const resetPassword = async (id, oldPassword, newPassword) => {
+  const user = await User.findById(id);
   if (!user) {
     throw new Error("User not found");
   }
-  user.password = newPassword
-  return await user.save();
+  if (await user.comparePassword(oldPassword)) {
+    user.password = newPassword
+    return await user.save();
+  } else {
+    throw new Error("Invalid Password");
+  }
 };
 
 module.exports = {
@@ -65,5 +101,6 @@ module.exports = {
   registerUser,
   updateProfile,
   resetPassword,
-  getUserName
+  getUserName,
+  updateAvatar
 };

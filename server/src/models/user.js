@@ -19,14 +19,12 @@ const user = new Schema({
         required: true
     },
     avatar: {
-        data: {
-            type: Buffer,
-            required: true
-        },
-        contentType: {
-            type: String,
-            required: true
-        }
+        type: String,
+        required: true
+    },
+    googleID: {
+        type: String,
+        default: ""
     }
 }, { timestamps: false });
 

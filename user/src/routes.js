@@ -27,4 +27,34 @@ export const MAIN_NAVIGATION = [
     title: "",
     Component: React.lazy(() => import("./pages/Profile")),
   },
+  {
+    key: "events",
+    path: `/events`,
+    title: "",
+    Component: React.lazy(() => import("./pages/AllEvents")),
+  },
+  {
+    key: "quizstart",
+    path: `/quiz/:id/intro`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizStart")),
+  },
+  {
+    key: "quizmain",
+    path: `/quiz/:id`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizMain")),
+  },
+  {
+    key: "quizend",
+    path: `/quiz/:id/results`,
+    title: "",
+    Component: React.lazy(() => import("./pages/Quiz/QuizEnd")),
+  },
+  {
+    key: "events",
+    path: `/events/:id`,
+    title: "",
+    Component: React.lazy(() => import("./pages/EventBoard")),
+  },
 ];

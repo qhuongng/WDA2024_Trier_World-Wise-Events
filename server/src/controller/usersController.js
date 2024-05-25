@@ -1,11 +1,12 @@
 // controller/usersController.js
-
+const User = require("../models/user");
 const {
     findUserByEmail,
     registerUser,
     updateProfile,
     resetPassword,
-    getUserName
+    getUserName,
+    updateAvatar
 } = require("../services/users.services");
 
 const registerUserController = async (req, res, next) => {
@@ -13,9 +14,8 @@ const registerUserController = async (req, res, next) => {
         const user = await registerUser(req.body);
         return res.status(201).json({
             _id: user._id,
-            userName: user.userName,
+            username: user.username,
             email: user.email,
-            phoneNumber: user.phoneNumber,
             token: await user.generateJWT(),
         });
     } catch (error) {
@@ -38,16 +38,21 @@ const loginUserController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await findUserByEmail(email);
+
         if (!user) {
             throw new Error("Email not found");
+        }
+
+        if (user && user.googleID !== "") {
+            throw new Error("This email is already associated with another account. Try logging in using your Google account");
         }
 
         if (await user.comparePassword(password)) {
             return res.status(201).json({
                 _id: user._id,
-                userName: user.userName,
+                username: user.username,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
+                avatar: user.avatar,
                 token: await user.generateJWT(),
             });
         } else {
@@ -60,14 +65,13 @@ const loginUserController = async (req, res, next) => {
 
 const userProfileController = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.params.id);
         if (user) {
             return res.status(201).json({
                 _id: user._id,
                 avatar: user.avatar,
                 name: user.name,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
             });
         } else {
             throw new Error("User not found");
@@ -79,12 +83,14 @@ const userProfileController = async (req, res, next) => {
 
 const updateProfileController = async (req, res, next) => {
     try {
-        const updatedUser = await updateProfile(req.user._id, req.body);
+        const { id, username, email } = req.body
+        if (!id || !username || !email) throw new Error("Input is required")
+        const updatedUser = await updateProfile(id, username, email);
         return res.status(201).json({
             _id: updatedUser._id,
-            userName: updatedUser.userName,
+            username: updatedUser.username,
             email: updatedUser.email,
-            phoneNumber: updatedUser.phoneNumber,
+            avatar: updatedUser.avatar
         });
     } catch (error) {
         next(error);
@@ -93,75 +99,40 @@ const updateProfileController = async (req, res, next) => {
 
 const resetPasswordController = async (req, res, next) => {
     try {
-        const { email, newPassword } = req.body;
-        if (!email || !newPassword) {
+        const { id, oldPassword, newPassword } = req.body;
+        if (!id || !oldPassword || !newPassword) {
             throw new Error("Inputs are required");
         }
-        const updatedUser = await resetPassword(email, newPassword);
-        return res.status(200).json("true");
+        const updatedUser = await resetPassword(id, oldPassword, newPassword);
+        return res.status(201).json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+        });
     } catch (e) {
         next(e);
     }
 };
 
-const loginAdminController = async (req, res, next) => {
+const updateAvatarController = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const user = await findUserByEmail(email);
-        if (!user) {
-            throw new Error("Email not found");
-        }
-
-        if (await user.comparePassword(password)) {
-            return res.status(201).json({
-                _id: user._id,
-                userName: user.userName,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                token: await user.generateJWTSeller(),
-            });
-        } else {
-            throw new Error("Invalid password");
-        }
-    } catch (error) {
-        next(error);
-    }
-};
-
-const registerAdminController = async (req, res, next) => {
-    try {
-        const { userName, email, phoneNumber, password } = req.body;
-        const user = await findUserByEmail(email);
-        if (user) {
-            throw new Error("Admin already exists");
-        }
-
-        const admin = await User.create({
-            userName,
-            email,
-            phoneNumber,
-            password,
-            role: "admin",
-        });
-
+        const userId = req.params.id;
+        const file = req.file;
+        const updatedAvatar = await updateAvatar(file, userId);
         return res.status(201).json({
-            _id: admin._id,
-            userName: admin.userName,
-            email: admin.email,
-            phoneNumber: admin.phoneNumber,
+            data: updatedAvatar
         });
     } catch (error) {
         next(error);
     }
-};
+}
 
 module.exports = {
     registerUserController,
     loginUserController,
     userProfileController,
     updateProfileController,
-    loginAdminController,
-    registerAdminController,
     resetPasswordController,
-    getUserDetail
+    getUserDetail,
+    updateAvatarController
 };

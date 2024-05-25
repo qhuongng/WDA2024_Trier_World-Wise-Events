@@ -1,15 +1,38 @@
 import React from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FormButton, FormError, FormTitle, FormWrapper } from "./styles";
-import { Form, Input, Button } from "antd";
+import {
+  LoginBox,
+  LoginButton,
+  LoginButtonWrapper,
+  LoginError,
+  Option,
+  LoginForm,
+  LoginLink,
+  LoginLogo,
+  LoginTitle,
+  LoginWrapper,
+  LoginOptionButton
+} from "./styles";
+import {
+  GoogleOutlined,
+  MailOutlined
+} from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../features/user/userSlice";
+import Input from "../../components/Input";
+import { notification, Divider } from "antd";
+
+const signUpWithGoogle = () => {
+
+  window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
+
+}
 
 const loginSchema = yup.object({
   email: yup
     .string()
-    .email("Email should be valid")
+    .email("Invalid email")
     .required("Email address is required"),
   password: yup.string().required("Password is required"),
 });
@@ -27,59 +50,63 @@ const Login = () => {
     },
   });
   return (
-    <FormWrapper>
-      <div style={{ width: "40%", margin: "3rem" }}>
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={formik.handleSubmit}
-          autoComplete="off"
-        >
-          <FormTitle>Login Account</FormTitle>
-          <Form.Item label="Email" name="email">
+    <LoginWrapper>
+      <LoginLogo to={'/'}>
+        <img src="logo.png" alt="" />
+        <div>World-Wise Events</div>
+      </LoginLogo>
+
+      <LoginBox>
+        <Option>
+          <LoginTitle style={{ marginBottom: '3rem' }}>Sign up</LoginTitle>
+          <LoginOptionButton onClick={signUpWithGoogle} style={{ marginBottom: '2rem' }}>
+            <GoogleOutlined style={{ marginRight: '1rem' }} />
+            Continue with Google
+          </LoginOptionButton>
+          <LoginLink to="/register">
+            <MailOutlined style={{ marginRight: '1rem' }} />
+            Sign up with email
+          </LoginLink>
+        </Option>
+
+        <Divider type="vertical" style={{ height: '100%' }} />
+
+        <LoginForm action="" onSubmit={formik.handleSubmit}>
+          <LoginTitle>Welcome back!</LoginTitle>
+          <div>
             <Input
-              values={formik.values.email}
+              type="text"
+              label="Email address"
+              id="email"
+              name="email"
               onChange={formik.handleChange("email")}
-              onPressEnter={formik.handleBlur("email")}
-            />{" "}
-            <FormError>{formik.touched.email && formik.errors.email}</FormError>
-          </Form.Item>
-
-          <Form.Item label="Password" name="password">
-            <Input.Password
-              values={formik.values.password}
-              onChange={formik.handleChange("password")}
-              onPressEnter={formik.handleBlur("password")}
+              value={formik.values.email}
             />
-            <FormError>
-              {formik.touched.password && formik.errors.password}
-            </FormError>
-          </Form.Item>
+            <LoginError>
+              {formik.touched.email && formik.errors.email}
+            </LoginError>
+          </div>
 
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <FormButton type="primary" htmlType="submit">
-              Login
-            </FormButton>
-          </Form.Item>
-        </Form>
-      </div>
-    </FormWrapper>
+          <div>
+            <Input
+              type="password"
+              label="Password"
+              id="password"
+              name="password"
+              onChange={formik.handleChange("password")}
+              value={formik.values.password}
+            />
+            <LoginError>
+              {formik.touched.password && formik.errors.password}
+            </LoginError>
+          </div>
+
+          <LoginButtonWrapper>
+            <LoginButton type="submit">Log in</LoginButton>
+          </LoginButtonWrapper>
+        </LoginForm>
+      </LoginBox>
+    </LoginWrapper>
   );
 };
 
