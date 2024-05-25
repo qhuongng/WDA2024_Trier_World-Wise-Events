@@ -26,13 +26,13 @@ const getUserName = async (id) => {
 const createUser = async (userDetails) => {
   const { username, email, password } = userDetails;
   // change image into buffer
-  let defaultImage = `${process.env.SERVER_URL}/api/picture/defaultUser.jpeg`;
+  let defaultImage = `${process.env.SERVER_PUBLIC_URL}/defaultUser.jpeg`;
 
   let buffer;
   try {
     const response = await fetch(defaultImage);
     if (!response.ok) {
-      throw new Error(`Failed to fetch image from ${defaultImageUrl}: ${response.statusText}`);
+      throw new Error(`Failed to fetch image from ${defaultImage}: ${response.statusText}`);
     }
     buffer = await response.arrayBuffer();
   } catch (error) {
