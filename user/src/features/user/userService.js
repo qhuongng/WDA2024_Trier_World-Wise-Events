@@ -62,6 +62,23 @@ const update = async (updatedUserData) => {
   }
 };
 
+const updateAvatar = async (data) => {
+  const user = getAuthUser();
+
+  const response = await axios.put(
+    `${process.env.REACT_APP_SERVER_API_URL}/user/updateAvatar/${user._id}`,
+    data,
+    {
+      headers: {
+        Authorization: "Bearer " + user.token,
+      },
+    }
+  );
+  if (response) {
+    return response.data;
+  }
+}
+
 const resetPassword = async (resetPasswordData) => {
   const user = getAuthUser();
   const response = await axios.put(
@@ -86,4 +103,5 @@ export const authService = {
   logout,
   update,
   resetPassword,
+  updateAvatar
 };

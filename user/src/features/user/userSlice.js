@@ -83,6 +83,19 @@ export const updateUser = createAsyncThunk(
     }
   }
 );
+//API: Update Avatar
+export const updateAvatar = createAsyncThunk(
+  'auth/updateAvatar',
+  async (updatedUserData, thunkAPI) => {
+    try {
+      const res = await authService.updateAvatar(updatedUserData);
+      console.log(res);
+      return res;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 // API: Reset password
 export const resetPass = createAsyncThunk(
@@ -211,6 +224,27 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.message = action.error;
       })
+      // API: Update Avatar
+      .addCase(updateAvatar.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        const user = getAuthUser();
+        state.isLoading = false;
+        state.message = '';
+        notification.success({
+          message: 'Update avatar successfully',
+          description: 'Your account information has been updated.',
+          duration: '3',
+        });
+        state.user = { ...user, ...action.payload.data };
+        setAuthUser(state.user);
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+      })
+
 
       // API: Reset Password
       .addCase(resetPass.pending, (state) => {
