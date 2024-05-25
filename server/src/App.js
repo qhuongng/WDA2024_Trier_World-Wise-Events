@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const passportSetup = require("./passport")
+const passportSetup = require("./passport");
 const mongoose = require('mongoose');
+const path = require("path");
 
 const session = require("express-session");
 const passport = require("passport");
@@ -100,6 +101,8 @@ passport.deserializeUser((user, done) => {
   console.log("Deserilize");
   done(null, user);
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // initial google ouath login
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
