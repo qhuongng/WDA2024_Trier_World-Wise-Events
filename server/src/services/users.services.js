@@ -26,7 +26,7 @@ const getUserName = async (id) => {
 const createUser = async (userDetails) => {
   const { username, email, password } = userDetails;
   // change image into buffer
-  let defaultImage = path.resolve('./public/defaultUser.jpeg');
+  let defaultImage = path.join(process.cwd(), "public", "defaultUser.jpeg");
 
   let imagedata = new ArrayBuffer(64);
   const imagetype = "image/jpeg";
