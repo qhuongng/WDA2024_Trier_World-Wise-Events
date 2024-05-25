@@ -26,15 +26,24 @@ const getUserName = async (id) => {
 const createUser = async (userDetails) => {
   const { username, email, password } = userDetails;
   // change image into buffer
-  let defaultImage = path.join(process.cwd(), "defaultUser.jpeg");
+  let defaultImage = `${process.env.SERVER_URL}/api/picture/defaultUser.jpeg`;
 
-  let imagedata = new ArrayBuffer(64);
+  let buffer;
+  try {
+    const response = await fetch(defaultImage);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image from ${defaultImageUrl}: ${response.statusText}`);
+    }
+    buffer = await response.arrayBuffer();
+  } catch (error) {
+    console.error('Error fetching default image:', error);
+    // Handle error appropriately, e.g., return null, throw an error, or use a fallback image
+    throw new Error('Default image fetch failed');
+  }
+
   const imagetype = "image/jpeg";
-  const promise = fs.promises.readFile(path.join(defaultImage));
-  imagedata = (await promise).buffer;
-
   const avatar = {
-    data: Buffer.from(imagedata),
+    data: Buffer.from(buffer),
     contentType: imagetype
   };
 
