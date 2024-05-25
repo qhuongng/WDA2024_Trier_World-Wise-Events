@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getPagedEvents } from "../../features/event/eventSlice";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPagedEvents } from '../../features/event/eventSlice';
 import { LoadingOutlined } from '@ant-design/icons';
-import { chunk } from "lodash";
-import { Row, Col, ConfigProvider, Spin } from "antd";
+import { chunk } from 'lodash';
+import { Row, Col, ConfigProvider, Spin } from 'antd';
 import {
   EventsRow,
   EventsPaginator,
   EventsTitle,
-  EventsWrapper,
-  EventsMessage,
-} from "./styles";
-import EventCard from "../../components/EventCard";
+  EventsWrapper
+} from './styles';
+import EventCard from '../../components/EventCard';
 
 const AllEvents = () => {
   const dispatch = useDispatch();
@@ -37,7 +36,7 @@ const AllEvents = () => {
           chunk(pagedEvents.data, 4).map((row) => (
             <Row gutter={[20, 20]} style={{ marginTop: 20 }}>
               {row.map((item) => (
-                <Col span={6} key={item.id} flex={"auto"}>
+                <Col span={6} key={item.id} flex={'auto'}>
                   <EventCard item={item} />
                 </Col>
               ))}
@@ -47,10 +46,10 @@ const AllEvents = () => {
           <ConfigProvider
             theme={{
               token: {
-                colorPrimary: "#bb0070",
+                colorPrimary: '#bb0070',
                 borderRadius: 12,
-                colorBgContainer: "#ffffff",
-                itemActiveBg: "#e1daff",
+                colorBgContainer: '#ffffff',
+                itemActiveBg: '#e1daff',
               },
             }}
           >
@@ -62,10 +61,10 @@ const AllEvents = () => {
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#2000bb",
+            colorPrimary: '#2000bb',
             borderRadius: 12,
-            colorBgContainer: "#ffffff",
-            itemActiveBg: "#e1daff",
+            colorBgContainer: '#ffffff',
+            itemActiveBg: '#e1daff',
           },
         }}
       >
@@ -74,7 +73,6 @@ const AllEvents = () => {
           total={30}
           defaultPageSize={12}
           onChange={onChange}
-          style={{ marginBottom: 36 }}
         />
       </ConfigProvider>
     </EventsWrapper>

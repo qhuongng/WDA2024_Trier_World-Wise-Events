@@ -5,6 +5,7 @@ import { Button, Input } from "antd";
 export const EventBoardWrapper = styled.div`
   padding: 36px;
   background: #fff;
+  min-height: 100vh;
 `;
 
 export const EventIntroductionWrapper = styled.div`

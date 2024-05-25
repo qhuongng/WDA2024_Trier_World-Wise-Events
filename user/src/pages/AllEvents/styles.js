@@ -3,13 +3,13 @@ import { Pagination, Row } from "antd";
 
 export const EventsWrapper = styled.div`
   background: #fff;
-  height: 100vh;
   padding: 36px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  min-height: 100vh;
 `;
 
 export const EventsTitle = styled.div`
@@ -26,7 +26,7 @@ export const EventsMessage = styled.div`
 `;
 
 export const EventsPaginator = styled(Pagination)`
-  padding: 3rem 0;
+  padding: 3rem 0 0 0;
 `;
 
 export const EventsRow = styled(Row)`
