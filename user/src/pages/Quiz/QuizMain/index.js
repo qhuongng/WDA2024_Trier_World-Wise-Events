@@ -267,10 +267,7 @@ const QuizMain = () => {
         <ConfigProvider
           theme={{
             token: {
-              colorPrimary: "#bb0070",
-              borderRadius: 12,
-              colorBgContainer: "#ffffff",
-              itemActiveBg: "#e1daff",
+              colorPrimary: "#bb0070"
             },
           }}
         >

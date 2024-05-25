@@ -51,7 +51,7 @@ const QuizStart = () => {
         </QuizStartInfo>
         <QuizStartImage
           style={{
-            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${item.images[0]}`,
+            backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${item.images[0]})`
           }}
         />
       </QuizStartBox>
@@ -60,10 +60,7 @@ const QuizStart = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#bb0070",
-          borderRadius: 12,
-          colorBgContainer: "#ffffff",
-          itemActiveBg: "#e1daff",
+          colorPrimary: "#bb0070"
         },
       }}
     >
