@@ -26,7 +26,6 @@ const signUpWithGoogle = () => {
   try {
     window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
   } catch (error) {
-    console.log(error);
     notification.error({
       message: error,
       duration: "1",
@@ -55,7 +54,6 @@ const Register = () => {
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
-      console.log(values);
       dispatch(registerUser(values));
     },
   });

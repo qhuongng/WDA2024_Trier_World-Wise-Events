@@ -196,7 +196,6 @@ export const authSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         const user = getAuthUser();
-        console.log(action.payload);
         state.isLoading = false;
         state.message = '';
         notification.success({

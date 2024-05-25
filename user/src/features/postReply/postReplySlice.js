@@ -16,7 +16,6 @@ export const createReply = createAsyncThunk(
   "postReply/createReply",
   async (data, thunkAPI) => {
     try {
-      console.log(data);
       return await postReplyService.createPostReply(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
