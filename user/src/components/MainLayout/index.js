@@ -4,7 +4,7 @@ import Footer from "../Footer";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, ConfigProvider, Affix } from "antd";
 import { getAuthUser } from "../../utils/authStorage";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from "../../features/user/userSlice";
 import {
   HomeOutlined,
@@ -43,6 +43,7 @@ const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(true);
   const [menuItems, setMenuItems] = useState(items);
   const [user, setUser] = useState(getAuthUser());
+  const googleUser = useSelector((state) => state.auth.user);
 
   const navigate = useNavigate();
   let location = useLocation();
@@ -64,13 +65,13 @@ const MainLayout = ({ children }) => {
   }, [location, current]);
 
   useEffect(() => {
-    if (user) {
+    if (user || googleUser) {
       setMenuItems(loggedInItems);
     }
     else {
       setMenuItems(items);
     }
-  }, [user]);
+  }, [user, googleUser]);
 
   const logOut = async () => {
     dispatch(logoutUser());
