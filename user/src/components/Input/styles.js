@@ -6,11 +6,14 @@ export const InputItem = styled.input`
   border-radius: 10px;
   padding: 0.5rem;
   width: 100%;
+  font-family: Inter;
 `;
 
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: Inter;
+  width: 100%;
 `;
 
 export const InputLabelGroup = styled.label`

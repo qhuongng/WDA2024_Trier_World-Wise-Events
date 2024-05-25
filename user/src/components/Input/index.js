@@ -3,7 +3,7 @@ import { InputItem, InputLabel, InputWrapper, InputLabelGroup, InputShowPassword
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 const Input = (props) => {
-  const { type, placeholder, label, id, name, value, onChange, onBlur, disabled } = props;
+  const { type, placeholder, label, id, name, value, onChange, onBlur, disabled, onPressEnter } = props;
   const [visible, setVisible] = useState(false);
   const [inputType, setInputType] = useState(type);
 
@@ -19,6 +19,12 @@ const Input = (props) => {
 
     setVisible(!visible);
   }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && onPressEnter) {
+      onPressEnter(e);
+    }
+  };
 
   return (
     <InputWrapper>
@@ -41,6 +47,7 @@ const Input = (props) => {
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
+        onKeyDown={handleKeyDown}
       />
     </InputWrapper>
   );
