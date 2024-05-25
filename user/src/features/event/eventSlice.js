@@ -23,6 +23,17 @@ export const getPagedEvents = createAsyncThunk(
   }
 );
 
+export const getKeywordEvents = createAsyncThunk(
+  "event/keywordEvents",
+  async (url, thunkAPI) => {
+    try {
+      return await eventService.getKeywordEvents(url);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const getGeoFormattedEvents = createAsyncThunk(
   "event/geoJsonEvents",
   async (url, thunkAPI) => {
@@ -68,6 +79,7 @@ const initialState = {
   allEvents: null,
   pagedEvents: null,
   geoJsonEvents: null,
+  keywordEvents: null,
   eventsById: {},
   message: "",
   isLoading: null,
@@ -104,6 +116,18 @@ export const eventSlice = createSlice({
         state.pagedEvents = action.payload;
       })
       .addCase(getPagedEvents.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+      })
+      .addCase(getKeywordEvents.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getKeywordEvents.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = "";
+        state.keywordEvents = action.payload;
+      })
+      .addCase(getKeywordEvents.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       })
