@@ -5,7 +5,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { getAuthUser } from '../../utils/authStorage';
 import { updateUser, resetPass } from '../../features/user/userSlice';
 import { getUserResult } from '../../features/quiz/quizSlice';
-import { ConfigProvider, Spin } from 'antd';
+import { Button, ConfigProvider, Spin } from 'antd';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import {
@@ -83,6 +83,10 @@ const Profile = () => {
     },
   });
 
+  const updateAvatar = () => {
+
+  }
+
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -95,11 +99,11 @@ const Profile = () => {
     <ProfileWrapper>
       <ProfileLeft>
         <ProfileTitle>Account</ProfileTitle>
-        {user?.googleID === '' ?
+        {(user?.googleID === '' || user?.googleID === null || user?.googleID === undefined) ?
           <ProfilePhoto
             style={{
               backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar})`,
-            }} />
+            }} /> 
           :
           <ProfilePhoto
             style={{
