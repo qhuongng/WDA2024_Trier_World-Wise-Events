@@ -9,4 +9,14 @@ const getPostReply = async (idPost) => {
   }
 };
 
-export const postReplyService = { getPostReply };
+const createPostReply = async (data) => {
+  const response = await axios.post(
+    `${process.env.REACT_APP_SERVER_API_URL}/postReply/createPostReply`,
+    data
+  );
+  if (response.data) {
+    return response.data;
+  }
+};
+
+export const postReplyService = { getPostReply, createPostReply };

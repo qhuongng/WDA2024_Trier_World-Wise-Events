@@ -24,6 +24,7 @@ router.get("/profile/:id", userProfileController);
 router.put("/updateAvatar/:id", upload.single("image"), updateAvatarController);
 router.put("/updateProfile", updateProfileController);
 router.put("/resetPassword", resetPasswordController);
+
 //-----------------------------------------------------
 
 

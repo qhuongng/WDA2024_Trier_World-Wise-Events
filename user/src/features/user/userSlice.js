@@ -44,12 +44,30 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+//API Login google
+export const loginGoogle = createAsyncThunk(
+  'auth/loginGoogle',
+  async (thunkAPI) => {
+    try {
+      const data = await authService.loginGoogle();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 
 // API: Logout
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async (refreshToken, thunkAPI) => {
-    return;
+  async (thunkAPI) => {
+    try {
+      const response = await authService.logout();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 );
 
@@ -134,6 +152,23 @@ export const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
+        state.user = null;
+      })
+      //API: Login Google
+      .addCase(loginGoogle.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginGoogle.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = '';
+        state.user = action.payload;
+        setAuthUser(state.user);
+        setAccessToken(state.user.token);
+
+      })
+      .addCase(loginGoogle.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = "";
         state.user = null;
       })
 

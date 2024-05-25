@@ -10,9 +10,10 @@ import {
   QuizEndCorrectCount,
   QuizEndTimeTaken,
   QuizEndScore,
-  QuizEndMinorStats
+  QuizEndMinorStats,
 } from "./styles";
 import QuizResultItem from "../../../components/QuizResultItem";
+import { setItem } from "../../../features/event/eventSlice";
 
 const QuizEnd = () => {
   const user = getAuthUser();
@@ -26,7 +27,7 @@ const QuizEnd = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [user, navigate]);
 
@@ -38,17 +39,24 @@ const QuizEnd = () => {
         <QuizEndStats>
           <QuizEndMinorStats>
             <QuizEndCorrectCount>{state?.count} / 15</QuizEndCorrectCount>
-            <QuizEndTimeTaken>{mins}m {secs}s</QuizEndTimeTaken>
+            <QuizEndTimeTaken>
+              {mins}m {secs}s
+            </QuizEndTimeTaken>
           </QuizEndMinorStats>
           <QuizEndScore>{score} pts</QuizEndScore>
         </QuizEndStats>
       </QuizEndTopBar>
-      {state?.questions && state?.userAnswers ?
-        state?.questions.map((question, index) =>
-          <QuizResultItem qaPair={question} answer={state?.userAnswers[index]}></QuizResultItem>
-        ) :
-        <></>}
-    </QuizEndWrapper >
+      {state?.questions && state?.userAnswers ? (
+        state?.questions.map((question, index) => (
+          <QuizResultItem
+            qaPair={question}
+            answer={state?.userAnswers[index]}
+          ></QuizResultItem>
+        ))
+      ) : (
+        <></>
+      )}
+    </QuizEndWrapper>
   );
 };
 

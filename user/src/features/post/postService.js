@@ -9,4 +9,14 @@ const getListPost = async (idEvent) => {
   }
 };
 
-export const postService = { getListPost };
+const createPost = async (data) => {
+  const response = await axios.post(
+    `${process.env.REACT_APP_SERVER_API_URL}/post/createPost`,
+    data
+  );
+  if (response.data) {
+    return response.data;
+  }
+};
+
+export const postService = { getListPost, createPost };

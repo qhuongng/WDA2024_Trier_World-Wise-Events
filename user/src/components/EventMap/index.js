@@ -10,6 +10,7 @@ import EventCard from '../EventCard'
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const EventMap = () => {
+
     const [mapRef, setMapRef] = useState(null);
     const [popupInfo, setPopupInfo] = useState(null);
     const dispatch = useDispatch();

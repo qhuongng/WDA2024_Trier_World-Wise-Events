@@ -12,32 +12,22 @@ export const getReply = createAsyncThunk(
   }
 );
 
-// export const getPagedEvents = createAsyncThunk(
-//   "post/functionProduct",
-//   async (url, thunkAPI) => {
-//     try {
-//       return await postService.getPagedEvents(url);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
-
-// export const getOneEvent = createAsyncThunk(
-//   "post/oneEvent",
-//   async (id, thunkAPI) => {
-//     try {
-//       console.log(id);
-//       return await postService.getSingleEvent(id);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+export const createReply = createAsyncThunk(
+  "postReply/createReply",
+  async (data, thunkAPI) => {
+    try {
+      console.log(data);
+      return await postReplyService.createPostReply(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   allReply: {},
   isLoading: null,
+  loading: {},
   // pagedEvents: null,
   // message: "",
 };
@@ -52,16 +42,37 @@ export const postReplySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getReply.pending, (state) => {
+      .addCase(getReply.pending, (state, action) => {
         state.isLoading = true;
         state.allReply = {};
+        state.loading[action.meta.arg] = true;
       })
       .addCase(getReply.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = "";
         state.allReply[action.meta.arg] = action.payload.data;
+        state.loading[action.meta.arg] = false;
       })
       .addCase(getReply.rejected, (state, action) => {
+        state.isLoading = false;
+        state.message = action.error;
+        state.loading[action.meta.arg] = false;
+      })
+      .addCase(createReply.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createReply.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.message = "";
+        state.allReply[action.meta.arg.idPost] = [
+          ...state.allReply[action.meta.arg.idPost],
+          {
+            ...action.payload.data,
+            ...action.meta.arg.user,
+          },
+        ];
+      })
+      .addCase(createReply.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       });

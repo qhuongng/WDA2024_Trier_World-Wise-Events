@@ -49,7 +49,7 @@ export const MAIN_NAVIGATION = [
     key: "quizend",
     path: `/quiz/:id/results`,
     title: "",
-    Component: React.lazy(() => import("./pages/Quiz/QuizEnd"))
+    Component: React.lazy(() => import("./pages/Quiz/QuizEnd")),
   },
   {
     key: "events",

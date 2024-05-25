@@ -7,7 +7,7 @@ const EventComment = ({ post }) => {
   return (
     <EventPost>
       <EventCommentWrapper>
-        {post.image && (
+        {post.image !== "" && post.image.length !== 0 && (
           <Image
             width={"100%"}
             src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${post.image}`}
@@ -15,10 +15,7 @@ const EventComment = ({ post }) => {
         )}
         <div className="text">{post.text}</div>
         <EventCommentPerson>
-          <img
-            src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${post.avatar}`}
-            alt=""
-          />
+          <img src={`${post.avatar}`} alt="" />
           <div className="name">{post.username}</div>
         </EventCommentPerson>
       </EventCommentWrapper>
