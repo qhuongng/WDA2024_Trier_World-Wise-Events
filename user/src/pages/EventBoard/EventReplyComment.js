@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  EventCommentInput,
   EventCommentPerson,
   EventReplyCommentWrapper,
+  EventReplyInputGroup,
+  EventReplyButton
 } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -11,7 +12,9 @@ import {
   setReply,
 } from "../../features/postReply/postReplySlice";
 import { getAuthUser } from "../../utils/authStorage";
-import { Spin } from "antd";
+import Input from "../../components/Input";
+import { LoadingOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { Spin, ConfigProvider } from "antd";
 
 const EventReplyComment = ({ id }) => {
   const user = getAuthUser();
@@ -47,7 +50,17 @@ const EventReplyComment = ({ id }) => {
 
   return (
     <EventReplyCommentWrapper>
-      {isLoading && <Spin />}
+      {isLoading && <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#bb0070"
+          },
+        }}
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 36, marginTop: '3rem' }} spin />} />
+      </ConfigProvider>
+      }
+
       {postReply[id]?.map((reply) => (
         <EventCommentPerson style={{ margin: "1rem 0" }}>
           <div style={{ fontWeight: 700, marginRight: "1rem" }}>
@@ -56,12 +69,20 @@ const EventReplyComment = ({ id }) => {
           <div>{reply.text}</div>
         </EventCommentPerson>
       ))}
-      <EventCommentInput
-        value={commentContent}
-        onChange={(e) => setCommentContent(e.target.value)}
-        placeholder="Comment"
-        onPressEnter={onPressEnter}
-      />
+
+      <EventReplyInputGroup>
+        <Input
+          value={commentContent}
+          onChange={(e) => setCommentContent(e.target.value)}
+          placeholder="Comment"
+          onPressEnter={onPressEnter}
+        />
+
+        <EventReplyButton onClick={onPressEnter}>
+          <ArrowRightOutlined />
+        </EventReplyButton>
+      </EventReplyInputGroup>
+
     </EventReplyCommentWrapper>
   );
 };

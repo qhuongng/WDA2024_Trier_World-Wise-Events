@@ -5,10 +5,12 @@ import {
   EventIntroductionLeft,
   EventIntroductionWrapper,
   EventIntroductionQuizButton,
+  EventBoardTop
 } from "./styles";
 import { Carousel, Row, Col, ConfigProvider, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import EventQuizLeaderboard from "./EventQuizLeaderboard";
 
 function formatDuration(startDate, endDate) {
   const options = { month: "short", day: "numeric", year: "numeric" };
@@ -27,56 +29,61 @@ const EventIntroduction = () => {
   const duration = item ? formatDuration(item.startDate, item.endDate) : "";
 
   return item ? (
-    <EventIntroductionWrapper>
-      <Row wrap={false}>
-        <Col span={12}>
-          <EventIntroductionLeft>
-            <div className="title">{item.eventName}</div>
-            <div className="country">
-              {item.city}, {item.country}
-            </div>
-            <div className="time">
-              {duration}
-              {item.isOngoing ? (
-                <span className="ongoing-glyph">•</span>
+    <EventBoardTop>
+      <EventIntroductionWrapper>
+        <Row wrap={false} style={{ minHeight: '20rem' }}>
+          <Col span={11}>
+            <EventIntroductionLeft>
+              <div className="title">{item.eventName}</div>
+              <div className="country">
+                {item.city}, {item.country}
+              </div>
+              <div className="time">
+                {duration}
+                {item.isOngoing ? (
+                  <span className="ongoing-glyph">•</span>
+                ) : (
+                  <></>
+                )}
+                {item.isOngoing ? (
+                  <span className="ongoing">Ongoing</span>
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="description">{item.description}</div>
+              {user ? (
+                <EventIntroductionQuizButton
+                  item={item}
+                  to={`../../quiz/${item.id}/intro`}
+                >
+                  Take quiz
+                </EventIntroductionQuizButton>
               ) : (
-                <></>
+                <EventIntroductionQuizButton item={null} to={`/login`}>
+                  Take quiz
+                </EventIntroductionQuizButton>
               )}
-              {item.isOngoing ? (
-                <span className="ongoing">Ongoing</span>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="description">{item.description}</div>
-            {user ? (
-              <EventIntroductionQuizButton
-                item={item}
-                to={`../../quiz/${item.id}/intro`}
-              >
-                Take quiz
-              </EventIntroductionQuizButton>
-            ) : (
-              <EventIntroductionQuizButton item={null} to={`/login`}>
-                Take quiz
-              </EventIntroductionQuizButton>
-            )}
-          </EventIntroductionLeft>
-        </Col>
-        <Col>
-          <Carousel autoplay autoplaySpeed={2000} dots={false} infinite>
-            {item.images.map((image) => (
-              <EventIntroductionImage>
-                <img
-                  src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${image}`}
-                  alt=""
-                />
-              </EventIntroductionImage>
-            ))}
-          </Carousel>
-        </Col>
-      </Row>
-    </EventIntroductionWrapper>
+            </EventIntroductionLeft>
+          </Col>
+          <Col>
+            <Carousel autoplay autoplaySpeed={2000} dots={false} infinite>
+              {item.images.map((image) => (
+                <EventIntroductionImage>
+                  <img
+                    src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${image}`}
+                    alt=""
+                  />
+                </EventIntroductionImage>
+              ))}
+            </Carousel>
+          </Col>
+        </Row>
+      </EventIntroductionWrapper>
+
+      <EventQuizLeaderboard id={item.id} />
+
+    </EventBoardTop>
   ) : (
     <ConfigProvider
       theme={{

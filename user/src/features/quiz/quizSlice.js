@@ -37,8 +37,8 @@ export const getUserResult = createAsyncThunk(
   }
 )
 
-export const getLeaderBoard = createAsyncThunk(
-  'quiz/getLeaderBoard',
+export const getLeaderboard = createAsyncThunk(
+  'quiz/getLeaderboard',
   async (id, thunkAPI) => {
     try {
       const response = await quizService.getLeaderBoard(id);
@@ -53,6 +53,7 @@ const initialState = {
   questions: null,
   results: null,
   resultSent: false,
+  leaderboard: null,
   message: "",
   isLoading: false,
 };
@@ -103,15 +104,15 @@ export const quizSlice = createSlice({
         state.isLoading = false;
         state.message = action.error;
       })
-      .addCase(getLeaderBoard.pending, (state) => {
+      .addCase(getLeaderboard.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getLeaderBoard.fulfilled, (state, action) => {
+      .addCase(getLeaderboard.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.leaderBoard = action.payload;
+        state.leaderboard = action.payload;
         state.message = '';
       })
-      .addCase(getLeaderBoard.rejected, (state, action) => {
+      .addCase(getLeaderboard.rejected, (state, action) => {
         state.isLoading = false;
         state.message = action.error;
       })
