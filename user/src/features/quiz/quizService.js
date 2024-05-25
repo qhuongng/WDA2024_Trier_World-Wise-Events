@@ -42,8 +42,18 @@ const getAllResult = async (id) => {
     }
 }
 
+const getLeaderBoard = async (id) => {
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_API_URL}/quiz/getListResult/${id}`);
+    if (response.data) {
+        return response.data;
+    } else {
+        throw new Error('No data received from API');
+    }
+}
+
 export const quizService = {
     getQuestions,
     addResult,
-    getAllResult
+    getAllResult,
+    getLeaderBoard
 };
