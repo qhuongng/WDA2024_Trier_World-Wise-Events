@@ -12,7 +12,7 @@ export const EventBoardTop = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  height: 30rem;
+  height: 35rem;
 `;
 
 export const EventIntroductionWrapper = styled.div`
@@ -64,7 +64,7 @@ export const EventIntroductionLeft = styled.div`
 
   .description {
     color: #434343;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin: 2rem 0;
   }
 
@@ -80,7 +80,7 @@ export const EventIntroductionLeft = styled.div`
 `;
 
 export const EventIntroductionImage = styled.div`
-  height: 30rem;
+  height: 35rem;
   
   &>img {
     object-fit: cover;
@@ -143,8 +143,8 @@ export const EventReplyButton = styled.button`
   font-family: Inter;
   font-weight: 600;
   border: none;
-  border-radius: 2rem;
-  width: 2rem;
+  border-radius: 12px;
+  width: 2.5rem;
   height: 2rem;
   color: #fff;
   font-size: 1rem;
