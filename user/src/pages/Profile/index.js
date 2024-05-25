@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { getAuthUser } from '../../utils/authStorage';
-import { updateUser, resetPass } from '../../features/user/userSlice';
+import { updateUser, resetPass, updateAvatar } from '../../features/user/userSlice';
 import { getUserResult } from '../../features/quiz/quizSlice';
-import { ConfigProvider, Spin } from 'antd';
+import { ConfigProvider, notification, Spin, Modal, Upload } from 'antd';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { ModalButton, ModalSecondaryButton } from '../EventBoard/styles';
 import {
   ProfilePhoto,
   ProfileTitle,
@@ -20,6 +21,17 @@ import {
 } from './styles';
 import QuizHistoryItem from '../../components/QuizHistoryItem';
 import Input from '../../components/Input';
+
+
+
+const imgTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/webp', 'image/bmp', 'image/tiff'];
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const updateProfileSchema = yup.object({
   username: yup
@@ -55,6 +67,63 @@ const Profile = () => {
   const [updateButtonDisabled, setUpdateButtonDisabled] = useState(true);
   const [updatePasswordButtonDisabled, setUpdatePasswordButtonDisabled] = useState(true);
   const [updateEmailDisabled, setUpdateEmailDisabled] = useState(user?.googleID !== "" ? true : false);
+  const [fileList, setFileList] = useState([]);
+  const [on, setOn] = useState(false);
+
+  const handleOk = () => {
+    const formData = new FormData();
+    if (fileList.length === 1) {
+      formData.append("image", fileList[0]);
+    }
+    dispatch(updateAvatar(formData));
+    setOn(false);
+  };
+  const handleCancel = () => {
+    setOn(false);
+    setFileList([]);
+  };
+  const props = {
+    listType: "picture-circle",
+    showUploadList: { showPreviewIcon: false },
+    maxCount: 1,
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
+    beforeUpload: async (file) => {
+      const isImg = imgTypes.includes(file.type);
+
+      if (!isImg) {
+        notification.error({
+          message: 'Incorrect file type',
+          description: `${file.name} is not an image file.`,
+          duration: '3'
+        });
+      }
+      else {
+        file.url = await getBase64(file);
+        setFileList([...fileList, file]);
+      }
+
+      return false;
+    },
+    fileList,
+  };
+  const uploadButton = (
+    <button
+      type="button"
+      style={{
+        border: 0,
+        background: "none",
+      }}
+    >
+      <PlusOutlined />
+      <div>Upload a photo</div>
+    </button>
+  );
+
 
   const updateProfileFormik = useFormik({
     initialValues: {
@@ -95,18 +164,51 @@ const Profile = () => {
     <ProfileWrapper>
       <ProfileLeft>
         <ProfileTitle>Account</ProfileTitle>
-        {user?.googleID === '' ?
+        {(user?.googleID === '' || user?.googleID === null || user?.googleID === undefined) ?
           <ProfilePhoto
             style={{
-              backgroundImage: `url(${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${user?.avatar})`,
-            }} />
+              backgroundImage: `url(${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user?.avatar})`,
+            }}
+            onClick={() => { setOn(!on) }} />
           :
           <ProfilePhoto
             style={{
               backgroundImage: `url(${user?.avatar})`,
-            }} />
+            }}
+
+          >
+
+          </ProfilePhoto>
         }
 
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: '#2000bb',
+              borderRadius: 12,
+              titleColor: '#2000bb',
+              fontFamily: 'Inter',
+              titleFontSize: '1.1rem'
+            },
+          }}>
+          <Modal
+            title="Change avatar"
+            style={{ fontFamily: 'Inter' }}
+            open={on}
+            onCancel={handleCancel}
+            footer={[
+              <ModalSecondaryButton onClick={handleCancel}>
+                Cancel
+              </ModalSecondaryButton>,
+              <ModalButton onClick={handleOk}>
+                Post
+              </ModalButton>
+            ]}>
+            <Upload {...props}>
+              {fileList.length < 1 ? uploadButton : null}
+            </Upload>
+          </Modal>
+        </ConfigProvider >
         <div style={{ marginBottom: '1rem' }}>
           <Input
             type='text'

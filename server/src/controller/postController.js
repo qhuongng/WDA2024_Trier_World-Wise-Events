@@ -39,4 +39,19 @@ const getListPost = async (req, res, next) => {
     }
 }
 
-module.exports = { createPost, getListPost }
+const deletePost = async (req, res, next) => {
+    try {
+        const listIdPost = req.body.listId;
+        if (!listIdPost) throw new Error('The PostId is required');
+        const check = await listIdPost.map(async (idPost) => {
+            const checkDelete = await postService.deletePost(idPost);
+            return checkDelete;
+        })
+
+        res.status(200).json(check);
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { createPost, getListPost, deletePost }

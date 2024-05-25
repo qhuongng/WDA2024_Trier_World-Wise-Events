@@ -33,6 +33,10 @@ export const ProfilePhoto = styled.div`
   align-self: center;
   background-color: #e1daff;
   margin: 1rem 0;
+  &: hover {
+  cursor: pointer;
+  border: 4px solid #2000bb
+  }
 `;
 
 export const ProfileLeft = styled.div`

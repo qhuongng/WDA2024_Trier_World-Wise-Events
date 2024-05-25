@@ -35,4 +35,15 @@ const getListReply = async (idPost) => {
         throw new Error(error)
     }
 }
-module.exports = { createPostReply, getListReply }
+
+const deleteReply = async (idReply) => {
+    try {
+        const reply = PostReply.findById(idReply);
+        if (!reply) throw new Error("Reply not found");
+        const checkDel = PostReply.findByIdAndDelete(idReply);
+        return checkDel;
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+module.exports = { createPostReply, getListReply, deleteReply }

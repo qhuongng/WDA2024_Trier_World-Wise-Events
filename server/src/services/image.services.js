@@ -26,4 +26,15 @@ const getImage = async (id) => {
     }
 }
 
-module.exports = { saveImage, getImage }
+const deleteImage = async (idImage) => {
+    try {
+        const image = Image.findById(idImage);
+        if (!image) throw new Error("Image not found");
+        const checkDel = Image.findByIdAndDelete(idImage);
+        return checkDel;
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+module.exports = { saveImage, getImage, deleteImage }

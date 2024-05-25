@@ -10,7 +10,7 @@ const EventComment = ({ post }) => {
         {post.image !== "" && post.image.length !== 0 && (
           <Image
             width={"100%"}
-            src={`${process.env.REACT_APP_SERVER_API_URL}/image/getImage/${post.image}`}
+            src={`${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${post.image}`}
           />
         )}
         <div className="text">{post.text}</div>

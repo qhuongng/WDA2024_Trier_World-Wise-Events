@@ -120,10 +120,7 @@ const updateAvatarController = async (req, res, next) => {
         const file = req.file;
         const updatedAvatar = await updateAvatar(file, userId);
         return res.status(201).json({
-            _id: updatedAvatar._id,
-            username: updatedAvatar.username,
-            email: updatedAvatar.email,
-            avatar: updatedAvatar.avatar
+            data: updatedAvatar
         });
     } catch (error) {
         next(error);
