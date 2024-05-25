@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../Footer";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, ConfigProvider, Affix } from "antd";
-import { getAuthUser } from "../../utils/authStorage";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from "../../features/user/userSlice";
 import {
@@ -24,7 +23,6 @@ function getItem(label, key, icon, children) {
   };
 }
 
-
 const loggedInItems = [
   getItem('Home', '/', <HomeOutlined />),
   getItem('All Events', 'events', <CalendarOutlined />),
@@ -39,9 +37,11 @@ const items = [
 ];
 
 const MainLayout = ({ children }) => {
-  const user = getAuthUser();
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+
   const [collapsed, setCollapsed] = useState(true);
+  const [menuItems, setMenuItems] = useState(items);
 
   const navigate = useNavigate();
   let location = useLocation();
@@ -61,6 +61,15 @@ const MainLayout = ({ children }) => {
       }
     }
   }, [location, current]);
+
+  useEffect(() => {
+    if (user) {
+      setMenuItems(loggedInItems);
+    }
+    else {
+      setMenuItems(items);
+    }
+  }, [user]);
 
   const logOut = async () => {
     dispatch(logoutUser());
@@ -113,7 +122,7 @@ const MainLayout = ({ children }) => {
                   <Menu
                     selectedKeys={current}
                     mode="inline"
-                    items={user ? loggedInItems : items}
+                    items={menuItems}
                     style={{ width: '100%' }}
                     onClick={({ key }) => {
                       if (key === "signout") {
