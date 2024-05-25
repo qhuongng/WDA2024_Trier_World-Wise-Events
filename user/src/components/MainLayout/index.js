@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Footer from "../Footer";
 import { Outlet } from "react-router-dom";
 import { Layout, Menu, ConfigProvider, Affix } from "antd";
-import { useDispatch, useSelector } from 'react-redux';
+import { getAuthUser } from "../../utils/authStorage";
+import { useDispatch } from 'react-redux';
 import { logoutUser } from "../../features/user/userSlice";
 import {
   HomeOutlined,
@@ -37,11 +38,11 @@ const items = [
 ];
 
 const MainLayout = ({ children }) => {
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const [collapsed, setCollapsed] = useState(true);
   const [menuItems, setMenuItems] = useState(items);
+  const [user, setUser] = useState(getAuthUser());
 
   const navigate = useNavigate();
   let location = useLocation();
