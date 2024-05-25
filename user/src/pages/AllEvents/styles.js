@@ -19,6 +19,18 @@ export const EventsTitle = styled.div`
   margin: 0 auto 1rem 0;
 `;
 
+export const CoverHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  width: 800px;
+  margin: 0 auto 1rem 0; 
+
+`;
+
 export const EventsMessage = styled.div`
   font-size: 1rem;
   color: #434343;

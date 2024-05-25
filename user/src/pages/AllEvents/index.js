@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getPagedEvents } from '../../features/event/eventSlice';
 import { LoadingOutlined } from '@ant-design/icons';
 import { chunk } from 'lodash';
-import { Row, Col, ConfigProvider, Spin } from 'antd';
+import { Row, Col, ConfigProvider, Spin, Input } from 'antd';
 import {
   EventsRow,
   EventsPaginator,
   EventsTitle,
-  EventsWrapper
+  EventsWrapper,
+  CoverHeader,
+  InputContainer
 } from './styles';
 import EventCard from '../../components/EventCard';
 
@@ -17,11 +19,18 @@ const AllEvents = () => {
   const pagedEvents = useSelector((state) => state.event.pagedEvents) || [];
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [keyword, setKeyword] = useState("");
 
-  const onChange = (page) => {
+  const onChangePage = (page) => {
     document.documentElement.scrollTo(0, 0);
     setCurrentPage(page);
   };
+
+  const onPressEnter = (e) => {
+    setKeyword(e.target.value)
+    dispatch(getPagedEvents(`?page=${currentPage}&limit=12&keyword=${keyword}`));
+    setKeyword("");
+  }
 
   useEffect(() => {
     dispatch(getPagedEvents(`?page=${currentPage}&limit=12`));
@@ -29,7 +38,16 @@ const AllEvents = () => {
 
   return (
     <EventsWrapper>
-      <EventsTitle>All Events</EventsTitle>
+      <CoverHeader>
+        <EventsTitle>All Events</EventsTitle>
+        <InputContainer>
+          <Input
+            onChange={(e) => setKeyword(e.target.value)}
+            value={keyword}
+            onPressEnter={onPressEnter}
+          />
+        </InputContainer>
+      </CoverHeader>
 
       <EventsRow>
         {pagedEvents && pagedEvents.length !== 0 ? (
@@ -72,7 +90,7 @@ const AllEvents = () => {
           current={currentPage}
           total={30}
           defaultPageSize={12}
-          onChange={onChange}
+          onChange={onChangePage}
         />
       </ConfigProvider>
     </EventsWrapper>
