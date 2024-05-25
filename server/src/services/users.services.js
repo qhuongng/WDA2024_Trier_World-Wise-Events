@@ -37,7 +37,6 @@ const createUser = async (userDetails) => {
     buffer = await response.arrayBuffer();
   } catch (error) {
     console.error('Error fetching default image:', error);
-    // Handle error appropriately, e.g., return null, throw an error, or use a fallback image
     throw new Error('Default image fetch failed');
   }
 
