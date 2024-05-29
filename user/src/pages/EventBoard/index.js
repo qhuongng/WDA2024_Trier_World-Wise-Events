@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { EventBoardWrapper, ModalButton, ModalSecondaryButton } from "./styles";
 import EventIntroduction from "./EventIntroduction";
 import EventCommentsList from "./EventCommentsList";
@@ -24,6 +24,7 @@ const getBase64 = (file) =>
 
 const EventBoard = () => {
   const user = getAuthUser();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [on, setOn] = useState(false);
   const [value, setValue] = useState("");
@@ -162,7 +163,14 @@ const EventBoard = () => {
               tooltip={<div>Create post</div>}
               type="primary"
               icon={<PlusOutlined />}
-              onClick={() => setOn(!on)}
+              onClick={() => {
+                if (!user) {
+                  navigate('/login');
+                  return;
+                }
+
+                setOn(!on);
+              }}
               style={{ width: '3.5rem', height: '3.5rem', marginRight: '1rem', marginBottom: '1rem' }}
             />
           </ConfigProvider>

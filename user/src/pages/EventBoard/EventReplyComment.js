@@ -11,6 +11,7 @@ import {
   getReply,
   setReply,
 } from "../../features/postReply/postReplySlice";
+import { useNavigate } from "react-router";
 import { getAuthUser } from "../../utils/authStorage";
 import Input from "../../components/Input";
 import { LoadingOutlined, ArrowRightOutlined } from "@ant-design/icons";
@@ -19,6 +20,7 @@ import { Spin, ConfigProvider } from "antd";
 const EventReplyComment = ({ id }) => {
   const user = getAuthUser();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const postReply = useSelector((state) => state.postReply.allReply) || {};
   const [commentContent, setCommentContent] = useState("");
   const isLoading = useSelector((state) => state.postReply.loading?.[id]) ?? false;
@@ -31,7 +33,11 @@ const EventReplyComment = ({ id }) => {
   }, [dispatch, id]);
 
   const onPressEnter = (e) => {
-    if (!user) return;
+    if (!user) {
+      navigate('/login');
+      return;
+    };
+
     setCommentContent(e.target.value);
 
     const data = {
