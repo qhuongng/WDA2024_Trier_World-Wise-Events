@@ -12,8 +12,8 @@ const createPost = async (data) => {
         if (!user) throw new Error("User not found")
         const newPost = await Post.create(data)
         let apiString = ""
-        if (!user.avatar.startsWith("http")) {
-            apiString = `${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user.avatar}`
+        if (!user.avatar.includes("http")) {
+            apiString = `${process.env.SERVER_URL}/api/image/getImage/${user.avatar}`;
         } else {
             apiString = user.avatar
         }
@@ -37,8 +37,8 @@ const getListPost = async (idEvent) => {
         const data = await Promise.all(existPosts.map(async (post) => {
             const user = await User.findById(post.idUser);
             let apiString = ""
-            if (!user.avatar.startsWith("http")) {
-                apiString = `${process.env.REACT_APP_SERVER_BASE_URL}/api/image/getImage/${user.avatar}`
+            if (!user.avatar.includes("http")) {
+                apiString = `${process.env.SERVER_URL}/api/image/getImage/${user.avatar}`;
             } else {
                 apiString = user.avatar
             }
