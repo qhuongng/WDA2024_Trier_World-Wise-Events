@@ -55,12 +55,7 @@ app.use(session({
   secret: 'secret',
   resave: false,
   saveUninitialized: true,
-  proxy: true,
-  cookie: {
-    secure: isProduction,
-    maxAge: 1000 * 60 * 60 * 24,
-    sameSite: isProduction ? 'none' : 'lax'
-  },
+  proxy: true
 }))
 
 app.use(passport.session());
