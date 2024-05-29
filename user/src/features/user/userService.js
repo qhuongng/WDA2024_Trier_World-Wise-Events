@@ -1,101 +1,93 @@
 import axios from "axios";
-import Cookies from "js-cookie";
-import {
-  getAuthUser
-} from "../../utils/authStorage";
+import { getAuthUser } from "../../utils/authStorage";
+
+const api = axios.create({
+  baseURL: process.env.REACT_APP_SERVER_BASE_URL,
+  withCredentials: true,
+});
 
 const register = async (userData) => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/register`,
-    userData
-  );
-  if (response.data) {
+  try {
+    const response = await api.post('/api/user/register', userData);
     return response.data;
+  } catch (error) {
+    handleError(error);
   }
 };
 
 const login = async (userData) => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/login`,
-    userData
-  );
-  if (response.data) {
+  try {
+    const response = await api.post('/api/user/login', userData);
     return response.data;
+  } catch (error) {
+    handleError(error);
   }
 };
 
 const loginGoogle = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/login/success`,
-    { withCredentials: true }
-  );
-
-  if (response) {
+  try {
+    const response = await api.get('/login/success');
     return response.data.user;
+  } catch (error) {
+    handleError(error);
   }
-}
+};
 
 const logout = async () => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/logout`,
-    {
-      withCredentials: true,
-    }
-  );
-  if (response.data) {
+  try {
+    const response = await api.get('/logout');
     return response.data;
+  } catch (error) {
+    handleError(error);
   }
 };
 
 const update = async (updatedUserData) => {
-  const user = getAuthUser();
-  const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/updateProfile`,
-    updatedUserData,
-    {
-      headers: {
-        Authorization: "Bearer " + user.token,
-      },
-    }
-  );
-  if (response.data) {
+  try {
+    const user = getAuthUser();
+    const response = await api.put('/api/user/updateProfile', updatedUserData, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
     return response.data;
+  } catch (error) {
+    handleError(error);
   }
 };
 
 const updateAvatar = async (data) => {
-  const user = getAuthUser();
-
-  const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_API_URL}/user/updateAvatar/${user._id}`,
-    data,
-    {
-      headers: {
-        Authorization: "Bearer " + user.token,
-      },
-    }
-  );
-  if (response) {
+  try {
+    const user = getAuthUser();
+    const response = await api.put(`/user/updateAvatar/${user._id}`, data, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
     return response.data;
-  }
-}
-
-const resetPassword = async (resetPasswordData) => {
-  const user = getAuthUser();
-  const response = await axios.put(
-    `${process.env.REACT_APP_SERVER_BASE_URL}/api/user/resetPassword`,
-    resetPasswordData,
-    {
-      headers: {
-        Authorization: "Bearer " + user.token,
-      },
-    }
-  );
-  if (response.data) {
-    return response.data;
+  } catch (error) {
+    handleError(error);
   }
 };
 
+const resetPassword = async (resetPasswordData) => {
+  try {
+    const user = getAuthUser();
+    const response = await api.put('/api/user/resetPassword', resetPasswordData, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+const handleError = (error) => {
+  console.error("API call error:", error);
+  if (error.response && error.response.data) {
+    throw new Error(error.response.data.message || "An error occurred");
+  } else if (error.request) {
+    throw new Error("No response received from server");
+  } else {
+    throw new Error(error.message || "An unexpected error occurred");
+  }
+};
 
 export const authService = {
   register,
@@ -103,6 +95,6 @@ export const authService = {
   loginGoogle,
   logout,
   update,
+  updateAvatar,
   resetPassword,
-  updateAvatar
 };

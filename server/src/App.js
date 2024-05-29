@@ -49,16 +49,17 @@ app.use('/api/post', postRoute);
 app.use('/api/postReply', postPeplyRoute);
 app.use('/api/picture', express.static('public'));
 //-----------------------------------
-// google api
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   proxy: true,
   cookie: {
-    secure: 'auto',
-    maxAge: 10000,
-    sameSite: 'none'
+    secure: isProduction,
+    maxAge: 1000 * 60 * 60 * 24,
+    sameSite: isProduction ? 'none' : 'lax'
   },
 }))
 
@@ -75,34 +76,28 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleID: profile.id });
-        if (user) {
-          return done(null, user);
-        }
-        else {
+        if (!user) {
           user = new User({
             googleID: profile.id,
             username: profile.displayName,
             email: profile.emails[0].value,
             avatar: profile.photos[0].value,
-            password: 'ahihi'
+            password: 'ahihi',
           });
-
           await user.save();
         }
-
         return done(null, user);
-      }
-      catch (error) {
+      } catch (error) {
         return done(error, null);
       }
     }
   )
-)
+);
 
 passport.serializeUser((user, done) => {
   console.log('Serialize');
   done(null, user);
-})
+});
 
 passport.deserializeUser((user, done) => {
   console.log('Deserilize');
@@ -111,34 +106,39 @@ passport.deserializeUser((user, done) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// initial google ouath login
+// initial google oauth login
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: `${process.env.USER_URL}`,
   failureRedirect: `${process.env.USER_URL}/login`
-}))
+}));
 
 app.get('/login/success', async (req, res) => {
   if (req.user) {
     const user = req.user;
-    const existUser = await User.findById(user._id);
-    const currentUser = {
-      ...user,
-      token: await existUser.generateJWT()
+    try {
+      const existUser = await User.findById(user._id);
+      const currentUser = {
+        ...user, // Convert mongoose document to plain object
+        token: await existUser.generateJWT(),
+      };
+      res.status(200).json({ message: 'User login successful', user: currentUser });
+    } catch (error) {
+      res.status(500).json({ message: 'Error generating token', error: error.message });
     }
-    //res.status(200).json({ message: 'user Login', user: currentUser })
-    res.status(200).json({ message: 'user Login', user: currentUser })
   } else {
-    res.status(400).json({ message: 'Not Authorized' })
+    res.status(400).json({ message: 'Not Authorized' });
   }
-})
+});
+
 app.get('/logout', (req, res, next) => {
   req.logout(function (err) {
     if (err) { return next(err) }
     res.status(200).json({ message: 'logout success' });
-  })
-})
+  });
+});
+
 app.use(invalidPathHandler);
 app.use(errorResposerHandler);
 //-----------------------------------

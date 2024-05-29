@@ -24,9 +24,7 @@ import Input from "../../components/Input";
 import { notification, Divider } from "antd";
 
 const signUpWithGoogle = () => {
-
-  window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self")
-
+  window.open(`${process.env.REACT_APP_SERVER_BASE_URL}/auth/google/callback`, "_self");
 }
 
 const loginSchema = yup.object({
@@ -49,6 +47,7 @@ const Login = () => {
       dispatch(loginUser(values));
     },
   });
+  
   return (
     <LoginWrapper>
       <LoginLogo to={'/'}>
