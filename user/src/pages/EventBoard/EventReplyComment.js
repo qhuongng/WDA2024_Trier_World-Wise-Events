@@ -21,8 +21,7 @@ const EventReplyComment = ({ id }) => {
   const dispatch = useDispatch();
   const postReply = useSelector((state) => state.postReply.allReply) || {};
   const [commentContent, setCommentContent] = useState("");
-  const isLoading =
-    useSelector((state) => state.postReply.loading?.[id]) ?? false;
+  const isLoading = useSelector((state) => state.postReply.loading?.[id]) ?? false;
 
   useEffect(() => {
     dispatch(getReply(id));
@@ -33,18 +32,21 @@ const EventReplyComment = ({ id }) => {
 
   const onPressEnter = (e) => {
     if (!user) return;
-    const content = e.target.value;
+    setCommentContent(e.target.value);
+
     const data = {
       idPost: id,
       idUser: user._id,
-      text: content,
+      text: commentContent,
     };
+
     dispatch(
       createReply({
         ...data,
         user,
       })
     );
+
     setCommentContent("");
   };
 
