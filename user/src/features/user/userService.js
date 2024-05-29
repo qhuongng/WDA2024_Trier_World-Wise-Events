@@ -29,6 +29,7 @@ const loginGoogle = async () => {
     `${process.env.REACT_APP_SERVER_BASE_URL}/login/success`,
     { withCredentials: true }
   );
+
   if (response) {
     return response.data.user;
   }
