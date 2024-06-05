@@ -1,4 +1,4 @@
-# World-Wise Events - Learn About World-wide Cultural Festival Through Fun Quizzes And Communities
+# World-Wise Events - Learn About World-wide Cultural Festivals Through Fun Quizzes And Communities
 
 This is a Top-6 entry for **2024 WebDev Adventure**, a contest hosted by the Web Development Club at VNU-HCM, University of Information Technology.
 
